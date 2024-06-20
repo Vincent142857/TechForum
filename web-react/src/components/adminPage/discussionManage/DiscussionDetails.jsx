@@ -27,6 +27,7 @@ import {
 //Modal
 import ModalUpdateDiscussion from "./ModalUpdateDiscussion";
 import ModalUpdateComment from "./ModalUpdateComment";
+import ModalDeleteDiscussion from "./ModalDeleteDiscussion";
 
 //Modal
 import Avatar from "../../avatar/Avatar";
@@ -60,15 +61,9 @@ const TagsManage = () => {
 	};
 
 	const handleEditDiscussion = (data) => {
-		console.log("handleEditDiscussion");
-		console.log(data);
 		let cloneDiscussion = _.cloneDeep(data);
 		cloneDiscussion = data;
-		console.log("cloneDiscussion");
-		console.log(cloneDiscussion);
 		setDiscussion(cloneDiscussion);
-		console.log("discussion");
-		console.log(discussion);
 	};
 
 	//All Tags
@@ -274,6 +269,9 @@ const TagsManage = () => {
 		fetchAllCommentData();
 	};
 
+	const [showModelDeleteDiscussion, setShowModelDeleteDiscussion] =
+		useState(false);
+
 	useEffect(() => {
 		fetchAllCommentData();
 	}, [discussionId]);
@@ -463,7 +461,7 @@ const TagsManage = () => {
 				</div>
 				<div>
 					<button
-						onClick={() => handleUpdateDataDiscussion(discussion, "delete")}
+						onClick={() => setShowModelDeleteDiscussion(true)}
 						style={{
 							background: "red",
 							color: "white",
@@ -537,6 +535,11 @@ const TagsManage = () => {
 				handleClose={() => setShowModelDeleteComment(false)}
 				commentDelete={commentDelete}
 				handleEditDeleteCommentModel={handleEditDeleteCommentModel}
+			/>
+			<ModalDeleteDiscussion
+				show={showModelDeleteDiscussion}
+				handleClose={() => setShowModelDeleteDiscussion(false)}
+				discussion={discussion}
 			/>
 		</div>
 	);
