@@ -342,19 +342,13 @@ const ForumManage = () => {
 														<Row key={forum.id}>
 															<Col>
 																<ListGroup.Item
-																	as="li"
 																	key={forum.id}
 																	className="d-flex justify-content-between align-items-start"
 																>
-																	<div className="d-flex align-items-center col-md-4">
-																		<div className="my-2">
+																	<div className="col-12 col-md-12 col-lg-5 d-block">
+																		<div className="d-flex justify-content-start align-items-center">
 																			{renderIcon(forum.icon)}
-																		</div>
-																		<div className="ms-2 me-auto">
-																			<div
-																				className="fw-bold d-flex"
-																				style={{ color: forum.color }}
-																			>
+																			<div className="link-body d-flex">
 																				{forum.title}
 																				<span
 																					style={{
@@ -377,6 +371,9 @@ const ForumManage = () => {
 																					</span>
 																				</span>
 																			</div>
+																		</div>
+
+																		<div className="col-12 text-muted">
 																			{forum.description}
 																		</div>
 																	</div>

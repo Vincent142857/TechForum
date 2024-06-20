@@ -38,12 +38,11 @@ const ModelAddForumGroup = (props) => {
 	const [color, setColor] = useState("#ffffff");
 	const [roleName, setRoleName] = useState("");
 
-	const [listModerator, setListModerator] = useState([]);
-
 	const dispatch = useDispatch();
 	const currentUser = useSelector((state) => state.auth.login?.currentUser);
 	let axiosJWT = createAxios(currentUser, dispatch, logOutSuccess);
 
+	const [listModerator, setListModerator] = useState([]);
 	const ListUserModerator = async () => {
 		let res = await getUserModerator(currentUser?.accessToken, axiosJWT);
 		if (res && +res.status === 200) {

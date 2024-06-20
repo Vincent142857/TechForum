@@ -160,10 +160,7 @@ const ModelUpdateForumGroup = (props) => {
 						className="form-control mb-3"
 						id="roleName"
 						value={roleName}
-						onChange={(event) => {
-							setTitle(event.target.value);
-							setTitleError("");
-						}}
+						onChange={(event) => setRoleName(event.target.value)}
 					>
 						{listModerator.map((item) => (
 							<option key={item.id} value={item.username}>
@@ -181,7 +178,10 @@ const ModelUpdateForumGroup = (props) => {
 						id="title"
 						type="text"
 						value={title}
-						onChange={(event) => setTitle(event.target.value)}
+						onChange={(event) => {
+							setTitle(event.target.value);
+							setTitleError("");
+						}}
 						placeholder="Enter Title"
 					/>
 					{titleError && <div className="text-danger mt-1">{titleError}</div>}
