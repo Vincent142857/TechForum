@@ -38,10 +38,11 @@ class DiscussionRepoImpl implements DiscussionRepo {
     required String title,
     required String content,
     required int forumId,
+    required String author,
   }) async {
     try {
-      final result =
-          await discussionDataSource.createDiscussion(title, content, forumId);
+      final result = await discussionDataSource.createDiscussion(
+          title, content, forumId, author);
       if (result == null) return Left(ServerFailure());
       return Right(result);
     } on ServerException {

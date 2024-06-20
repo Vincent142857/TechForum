@@ -160,6 +160,9 @@ const EmailOption = () => {
 
 
 	const handleSendEmail = async () => {
+
+		//validation
+
 		if (errFrom === "" && errTo === "" && errMsg === "") {
 			const emailOption = {
 				emails: selectedEmail.map(item => item.value),

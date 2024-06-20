@@ -328,9 +328,10 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget _buildImage(DiscussionEntity discussion) {
+    String imagePath = discussion.imageUrl ??
+        'https://lh3.googleusercontent.com/a/ACg8ocIKA_Jkp2pWe0wuRjRJvAGJ0_tdjLSK2iBDmIVGTjRAe6B6EJDW=s96-c';
     return buildAvatar(
-      imageUrl: discussion.imageUrl,
-      avatar: discussion.avatar,
+      imagePath: imagePath,
       width: 42,
       height: 42,
     );

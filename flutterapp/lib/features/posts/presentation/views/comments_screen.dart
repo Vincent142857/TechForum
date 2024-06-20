@@ -151,11 +151,12 @@ class _CommentsScreenState extends State<CommentsScreen> {
   }
 
   Widget _buildImage(CommentEntity comment) {
+    String imagePath = comment.author.imageUrl ??
+        'https://lh3.googleusercontent.com/a/ACg8ocIKA_Jkp2pWe0wuRjRJvAGJ0_tdjLSK2iBDmIVGTjRAe6B6EJDW=s96-c';
     return buildAvatar(
-      imageUrl: comment.author.imageUrl,
-      avatar: comment.author.avatar,
-      width: 50,
-      height: 50,
+      imagePath: imagePath,
+      width: 42,
+      height: 42,
     );
   }
 }

@@ -12,8 +12,12 @@ abstract class DiscussionRepo {
   Future<Either<Failure, List<CommentEntity>>> getAllCommentBy(
       int discussionId);
 
-  Future<Either<Failure, String>> createDiscussion(
-      {required String title, required String content, required int forumId});
+  Future<Either<Failure, String>> createDiscussion({
+    required String title,
+    required String content,
+    required int forumId,
+    required String author,
+  });
 
   Future<Either<Failure, CommentEntity>> createComment(
       {required String content,

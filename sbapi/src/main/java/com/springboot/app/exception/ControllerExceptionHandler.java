@@ -3,6 +3,7 @@ package com.springboot.app.exception;
 import com.springboot.app.security.exception.ResourceNotFoundException;
 import com.springboot.app.security.exception.TokenRefreshException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -39,10 +40,13 @@ public class ControllerExceptionHandler {
 				request.getDescription(false));
 	}
 
+
+
+
 	/**
 	 * Handle Resource Not Found Exception
 	 */
-	@ExceptionHandler(ResourceNotFoundException.class)
+	@ExceptionHandler({ResourceNotFoundException.class,UsernameNotFoundException.class})
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
 	public ErrorMessage handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
 		return new ErrorMessage(

@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutterapp/core/network/api_urls.dart';
 
-Widget buildAvatar(
-    {String? imageUrl, String? avatar, double? width, double? height}) {
-  final imagePath = imageUrl != '' ? imageUrl : '${ApiUrls.avatarUrl}/$avatar';
-
-  if (imagePath == null) {
-    return Container(
-      width: width,
-      height: height,
-      color: Colors.grey,
-      child: const Icon(Icons.person),
-    );
-  }
+Widget buildAvatar({String? imagePath, double? width, double? height}) {
+  imagePath ??=
+      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
   final image = NetworkImage(imagePath);
   return ClipOval(
     child: Material(

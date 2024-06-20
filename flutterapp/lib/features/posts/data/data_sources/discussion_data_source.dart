@@ -10,7 +10,8 @@ import '../models/comment_model.dart';
 
 abstract class DiscussionDataSource {
   //create a new discussion
-  Future<String?> createDiscussion(String title, String content, int forumId);
+  Future<String?> createDiscussion(
+      String title, String content, int forumId, String author);
 
   //create  a new comment
   Future<CommentModel?> createComment(
@@ -48,10 +49,14 @@ class DiscussionDataSourceImpl implements DiscussionDataSource {
 
   @override
   Future<String?> createDiscussion(
-      String title, String content, int forumId) async {
+      String title, String content, int forumId, String author) async {
     try {
-      http.Response res = await client.post('$uri/discussions/add',
-          {'title': title, 'content': content, 'forum_id': forumId.toString()});
+      http.Response res = await client.post('$uri/discussions/add', {
+        'title': title,
+        'content': content,
+        'forumId': forumId,
+        'author': author
+      });
       List jsonResponse = json.decode(res.body);
       print(res.body);
       if (res.statusCode == 200) {
