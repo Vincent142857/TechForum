@@ -10,8 +10,8 @@ import { Link } from "react-router-dom";
 //Service
 import { getDiscussionById } from "../../../services/forumService/DiscussionService";
 import { createAxios } from "../../../services/createInstance";
-import { getAllTags } from "../../../services/tagService/tagService";
 import { loginSuccess } from "../../../redux/authSlice";
+import { getAllTags } from "../../../services/tagService/tagService";
 import { setDataListTags } from "../../../services/forumService/DiscussionService";
 import { upVote, downVote } from "../../../services/voteService/voteService";
 import { getAllCommentByDiscussionId } from "../../../services/forumService/DiscussionViewService";
@@ -248,7 +248,6 @@ const TagsManage = () => {
 	};
 
 	const handleEditCommentFromModel = (comment) => {
-		console.log(`Check`, comment);
 		let cloneListComments = _.cloneDeep(listComment);
 		let index = cloneListComments.findIndex((c) => c.id === comment.id);
 		cloneListComments[index] = comment;
@@ -329,18 +328,16 @@ const TagsManage = () => {
 									</small>
 								</span>
 
-								{currentUser?.username === comment?.author?.username && (
-									<small className="ml-auto me-0 d-inline-block">
-										<button
-											onClick={() => handleEditComment(comment)}
-											className="mx-2 fa-solid fa-edit fa-2x"
-										></button>
-										<button
-											className="mx-2 fa-solid fa-xmark fa-2x"
-											onClick={() => handleClickDelete(comment)}
-										></button>
-									</small>
-								)}
+								<small className="ml-auto me-0 d-inline-block">
+									<button
+										onClick={() => handleEditComment(comment)}
+										className="mx-2 fa-solid fa-edit fa-2x"
+									></button>
+									<button
+										className="mx-2 fa-solid fa-xmark fa-2x"
+										onClick={() => handleClickDelete(comment)}
+									></button>
+								</small>
 							</>
 						)}
 					</div>
@@ -400,11 +397,11 @@ const TagsManage = () => {
 
 	return (
 		<div className="content container mt-4 ">
-			<p>
+			<p className="text-center">
 				Started by <strong>{discussion?.createdBy}</strong> -{" "}
 				{formatDate(discussion?.createdAt)}
 			</p>
-			<p>
+			<p className="text-center">
 				In forum <strong>{discussion?.forum?.title}</strong>{" "}
 			</p>
 			<div className="d-flex justify-content-center align-items-center">
@@ -474,8 +471,10 @@ const TagsManage = () => {
 					</button>
 				</div>
 			</div>
-			<div className="mb-3">
-				<label>Tags</label>
+			<div className="my-3 d-flex justify-content-center align-items-center">
+				<label className="mx-2" style={{ fontWeight: "bold" }}>
+					Select Tags
+				</label>
 				<SelectMulti
 					tagOptions={tagOptions}
 					selectedTags={selectedTags}
@@ -483,7 +482,6 @@ const TagsManage = () => {
 				/>
 				<button
 					onClick={() => handleUpdateTags()}
-					className="mt-2"
 					style={{
 						background: "green",
 						color: "white",
@@ -494,7 +492,7 @@ const TagsManage = () => {
 					<i className="fa-solid fa-check"></i> Apply
 				</button>
 			</div>
-			<hr />
+			<hr style={{ width: "100%", border: "2px solid black" }} />
 			<p>
 				There are {discussion?.stat?.commentCount} comments in this discussion.
 				This discussion has been viewed {discussion?.stat?.viewCount} times

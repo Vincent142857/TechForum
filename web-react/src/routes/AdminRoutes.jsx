@@ -27,6 +27,19 @@ function AdminRoutes() {
 	return (
 		<Routes>
 			<Route exact path="/" element={<Layout route="routesAdmin" />}>
+				<Route element={<RequireAuth allowedRoles={[ROLES.MOD, ROLES.USER]} />}>
+					<Route exact path="/" element={<DashBoard />} />
+					<Route exact path="/dashboard" element={<DashBoard />} />
+					<Route exact path="/tags" element={<TagsManage />} />
+					<Route exact path="/discussions" element={<DiscussionManage />} />
+
+					<Route
+						exact
+						path="/discussion/:discussionId"
+						element={<DiscussionDetails />}
+					/>
+
+				</Route>
 				<Route
 					element={<RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.MOD]} />}
 				>
