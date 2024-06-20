@@ -1,7 +1,8 @@
 import Avatar from "../avatar/Avatar";
-import { Row, Col } from "react-bootstrap";
+import { Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import _ from "lodash";
+import { fetchImage } from "../../services/userService/UserService";
 
 import { formatDifferentUpToNow } from "../../utils/FormatDateTimeHelper";
 import { getLastCommentServiceResponseForum } from "../../services/forumService/ForumService";
@@ -34,6 +35,17 @@ const LastCommentInfo = (props) => {
 		}
 	};
 
+
+	function getAvatar(user) {
+		if (user?.imageUrl) {
+			return user.imageUrl;
+		}
+		if (user?.avatar) {
+			return fetchImage(user.avatar);
+		}
+		return "";
+	}
+
 	useEffect(() => {
 		getLastComment();
 	}, []);
@@ -42,13 +54,7 @@ const LastCommentInfo = (props) => {
 		<div className="row d-flex">
 			<Col lg={3} sm={6}>
 				<Avatar
-					src={
-						comment?.author?.avatar
-							? comment?.author?.avatar
-							: comment?.author?.imageUrl
-							? comment?.author?.imageUrl
-							: ""
-					}
+					src={getAvatar(comment?.author)}
 					height={40}
 					width={40}
 				/>

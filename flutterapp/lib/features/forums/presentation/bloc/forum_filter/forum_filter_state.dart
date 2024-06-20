@@ -17,7 +17,7 @@ class ForumFilterLoaded extends ForumFilterState {
 
   const ForumFilterLoaded({
     required this.forums,
-    this.filter = -1,
+    this.filter = 0,
   });
 
   @override

@@ -118,10 +118,10 @@ public class AuthController {
 		log.info("User logout: {}", sessionUser.getId());
 
 		ServiceResponse<Void> response = refreshTokenService.deleteByToken(refreshToken, sessionUser.getId());
-		if (response.getAckCode() != AckCodeType.SUCCESS) {
-			String errorMessage = String.join(", ", response.getMessages());
-			return ResponseEntity.badRequest().body(new ObjectResponse("400","User not logged out. "+errorMessage,null));
-		}
+//		if (response.getAckCode() != AckCodeType.SUCCESS) {
+//			String errorMessage = String.join(", ", response.getMessages());
+//			return ResponseEntity.badRequest().body(new ObjectResponse("400","User not logged out. "+errorMessage,null));
+//		}
 		ResponseCookie jwtCookie = jwtUtils.getCleanJwtCookie();
 		ResponseCookie jwtRefreshCookie = jwtUtils.getCleanJwtRefreshCookie();
 

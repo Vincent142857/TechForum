@@ -96,10 +96,65 @@ class HomeScreen extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '${(forum.title)?.toUpperCase()}',
+                      style: const TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => CreateDiscussion(
+                              forumId: forum.id ?? 1,
+                              title: forum.title ?? 'Discussion',
+                            ),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.add_circle_sharp),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                const Text('No discussions found'),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8.0),
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey,
+            width: 1,
+          ),
+        ),
+      ),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     '${(forum.title)?.toUpperCase()}',
@@ -126,63 +181,16 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(
                 height: 4,
               ),
-              const Text('No discussions found'),
+              //list of discussions
+              ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: forum.discussions.length,
+                  itemBuilder: (context, index) {
+                    return _discussionItemCard(
+                        context, forum.discussions[index], forum.id);
+                  }),
             ],
           ),
-        ),
-      );
-    }
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8.0),
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.grey,
-            width: 1,
-          ),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Row(
-              children: [
-                Text(
-                  '${(forum.title)?.toUpperCase()}',
-                  style: const TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => CreateDiscussion(
-                          forumId: forum.id ?? 1,
-                          title: forum.title ?? 'Discussion',
-                        ),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.add_circle_sharp),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 4,
-            ),
-            //list of discussions
-            ListView.builder(
-                shrinkWrap: true,
-                itemCount: forum.discussions.length,
-                itemBuilder: (context, index) {
-                  return _discussionItemCard(
-                      context, forum.discussions[index], forum.id);
-                }),
-          ],
         ),
       ),
     );
@@ -192,63 +200,68 @@ class HomeScreen extends StatelessWidget {
       BuildContext context, DiscussionEntity discussion, int? forumId) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8.0),
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: _buildImage(discussion),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: [
-                    Text(
-                      '#${discussion.discussionTitle}',
-                      style: const TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        context.read<CommentsBloc>().add(LoadCommentsEvent(
-                              discussionId: discussion.discussionId!,
-                            ));
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => CommentsScreen(
-                              discussionId: discussion.discussionId ?? 1,
-                              discussionTitle:
-                                  discussion.discussionTitle ?? 'Discussion',
-                            ),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.arrow_forward),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                buildCreatedAt(discussion),
-                const SizedBox(
-                  height: 8,
-                ),
-                //list of discussions
-              ],
+      child: SingleChildScrollView(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: _buildImage(discussion),
             ),
-          ),
-          Container(
-            height: 1,
-            color: Colors.grey,
-            margin: const EdgeInsets.symmetric(vertical: 8),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          '${discussion.discussionTitle}',
+                          style: const TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          context.read<CommentsBloc>().add(LoadCommentsEvent(
+                                discussionId: discussion.discussionId!,
+                              ));
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => CommentsScreen(
+                                discussionId: discussion.discussionId ?? 1,
+                                discussionTitle:
+                                    discussion.discussionTitle ?? 'Discussion',
+                              ),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.arrow_forward),
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  buildCreatedAt(discussion),
+                  //list of discussions
+                ],
+              ),
+            ),
+            Container(
+              height: 1,
+              color: Colors.grey,
+              margin: const EdgeInsets.symmetric(vertical: 8),
+            ),
+          ],
+        ),
       ),
     );
   }

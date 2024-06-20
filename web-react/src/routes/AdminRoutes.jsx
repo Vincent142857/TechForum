@@ -15,6 +15,7 @@ import "../assets/scss/paper-dashboard.scss?v=1.3.0";
 import EmailOption from "../components/adminPage/emailOptionManage/EmailOptionPage";
 import TagsManage from "../components/adminPage/tagManage/TagsManage";
 import BadgeManage from "../components/adminPage/badgeManage/badgeManage";
+import ConfigAvatar from "../components/adminPage/ConfigAvatar/ConfigAvatar";
 
 const ROLES = {
 	ADMIN: "ROLE_ADMIN",
@@ -48,6 +49,8 @@ function AdminRoutes() {
 
 					<Route path="email-option" element={<EmailOption />} />
 					<Route path="badges" element={<BadgeManage />} />
+					<Route path="avatar-option" element={<ConfigAvatar />} />
+
 				</Route>
 
 				<Route exact path="*" element={<NotFound />} />

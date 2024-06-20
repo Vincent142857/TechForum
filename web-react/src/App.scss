@@ -104,6 +104,18 @@ body {
     }
   }
 
+  .change-pass {
+    .input-password {
+      position: relative;
+
+      button {
+        position: absolute;
+        top: 35px;
+        right: 15px;
+      }
+    }
+  }
+
   .btn-auth {
     width: 100% !important;
     margin-top: 15px;

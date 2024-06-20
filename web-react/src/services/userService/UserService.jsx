@@ -47,6 +47,18 @@ export const updateStatusUser = async (id, status, axiosJWT, accessToken) => {
 		}
 	);
 };
+// use in adminPage/userManage
+export const updateNewRoleForUser = async (dataRole, axiosJWT, accessToken) => {
+	try {
+		let res = await axiosJWT.post(`admin/users/role/update`, dataRole, {
+			headers: { Authorization: `Bearer ${accessToken}` },
+		});
+		return res;
+	} catch (err) {
+		console.log(err);
+	}
+}
+
 
 // use in adminPage/userManage
 export const deleteUser = async (accessToken, id, axiosJWT) => {
@@ -54,7 +66,6 @@ export const deleteUser = async (accessToken, id, axiosJWT) => {
 		let res = await axiosJWT.delete(`admin/users/delete/${id}`, {
 			headers: { Authorization: `Bearer ${accessToken}` },
 		});
-		// console.log(`Here api`, JSON.stringify(res));
 		return res;
 	} catch (err) {
 		console.log(err);

@@ -29,6 +29,8 @@ public class AvatarOptionServiceImpl implements AvatarOptionService {
 	}
 
 	public ServiceResponse<Void> updateAvatarOption(AvatarOptionRequest option) {
+		logger.info("update avatar option {}, {}, {}",
+				option.getMaxFileSize(), option.getMaxHeight(), option.getMaxWidth());
 		logger.info("update avatar option");
 		ServiceResponse<Void> response = new ServiceResponse<>();
 		List<String> errors = validateAvatarOption(option);
@@ -48,14 +50,14 @@ public class AvatarOptionServiceImpl implements AvatarOptionService {
 
 	private List<String> validateAvatarOption(AvatarOptionRequest option) {
 		List<String> errors = new ArrayList<String>(); //
-		if(option.getMaxFileSize() < 0 || option.getMaxFileSize() > 1000000){
-			errors.add("Max file size must be between 0 and 1000000") ;
+		if(option.getMaxFileSize() < 100 || option.getMaxFileSize() > 1000000){
+			errors.add("Max file size must be between 100 and 1000000") ;
 		}
-		if(option.getMaxHeight() < 0 || option.getMaxHeight() > 500){
-			errors.add("Max height must be between 0 and 500");
+		if(option.getMaxHeight() < 100 || option.getMaxHeight() > 1200){
+			errors.add("Max height must be between 100 and 1200");
 		}
-		if(option.getMaxWidth() < 0 || option.getMaxWidth() > 500){
-			errors.add("Max width must be between 0 and 500");
+		if(option.getMaxWidth() < 100 || option.getMaxWidth() > 1200){
+			errors.add("Max width must be between 100 and 1200");
 		}
 		return errors;
 	}

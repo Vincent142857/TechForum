@@ -17,6 +17,7 @@ import { loginSuccess } from "../../../redux/authSlice";
 import {
   deleteUser,
   updateStatusUser,
+  updateNewRoleForUser,
   createNewUser
 } from "../../../services/userService/UserService";
 
@@ -79,10 +80,8 @@ function UserListManage() {
   let currentUser = useSelector(state => state.auth.login?.currentUser);
   // const usersData = useSelector((state) => state.users.users?.allUsers);
 
-  // const msg = useSelector((state) => state.users?.msg);
 
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
   let axiosJWT = createAxios(currentUser, dispatch, loginSuccess);
 
   const getAllUsersData = async (value) => {
@@ -149,8 +148,18 @@ function UserListManage() {
     }
   }
 
-  const handleUpdateRole = (dataRole) => {
-    console.log(`Update role`,dataRole);
+  const handleUpdateRole = async(dataRole) => {
+    let res = await updateNewRoleForUser(dataRole, axiosJWT, currentUser?.accessToken);
+    console.log(`Update role`, JSON.stringify(res.data));
+    if (+res?.status === 200 || +res?.data?.status === 200) {
+      toast.success("Updated new role successfully");
+      setShowModalRole(false);
+      setUserEdit({});
+      getAllUsersData("");
+    } else {
+      toast.error(res?.data?.message)
+    }
+
   }
 
 

@@ -27,7 +27,6 @@ public class BadgeController {
 	private UserRepository userRepository;
 
 	@GetMapping
-	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<ObjectResponse> getAllBadges() {
 		logger.info("Get all badges success");
 		ServiceResponse<List<Badge>> response = badgeService.getAllBadges();

@@ -28,15 +28,23 @@ const convertRoleToArray = (role) => {
 const ModalEditRole = (props) => {
 
   const { show, handleClose, handleUpdateRole, user } = props;
+  console.log(`User Role`, JSON.stringify(user));
 
-  const [roles, setRoles] = useState(user.roles);
   const [role, setRole] = useState(null);
+  const [errMsg, setErrMsg] = useState(null);
 
   const handleEditRole = async () => {
+    if (role === null) {
+      setErrMsg("Please choose a new role!");
+      return;
+    }
     const roles = convertRoleToArray(role);
-    console.log(`Roles`, roles);
-    await handleUpdateRole(user.id, roles);
-    setRoles(user.roles);
+    const dataRole = {
+      userId: user.id,
+      roles
+    }
+    await handleUpdateRole(dataRole);
+    setErrMsg(null);
   }
 
 
@@ -51,6 +59,7 @@ const ModalEditRole = (props) => {
       </Modal.Header>
 
       <Modal.Body>
+        {errMsg != null && <p className='alert alert-danger'>{errMsg}</p>}
         <Form>
           <FormGroup>
             Username: {user.username}
@@ -59,7 +68,11 @@ const ModalEditRole = (props) => {
             Email: {user.email}
           </FormGroup>
           <FormGroup>
-            <Label for="roles">Account Status:</Label>
+            Account Status: {user.accountStatus}
+          </FormGroup>
+
+          <FormGroup>
+            <Label for="roles">New Role:</Label>
             <Input type="select" name="roles" id="roles"
               onChange={(e) => setRole(e.target.value)}
               value={role}>

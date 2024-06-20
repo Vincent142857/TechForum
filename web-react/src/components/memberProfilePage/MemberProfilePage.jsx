@@ -1,4 +1,4 @@
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Tab, Tabs, Col, Row } from 'react-bootstrap';
@@ -11,7 +11,9 @@ import {
   getFollowingByUserId,
   postRegisterFollow
 } from "../../services/followService/followService";
+
 import { getUserInfoByUsername, postUpdateInfo, fetchImage } from '../../services/userService/UserService';
+
 import { createAxios } from '../../services/createInstance';
 import { loginSuccess } from '../../redux/authSlice';
 import noAvatar from "../../assets/img/default-avatar.png";
@@ -156,7 +158,7 @@ const MemberProfile = () => {
 
   const fetchAllBadge = async () => {
     let res = await getAllBadge(currentUser?.accessToken, axiosJWT);
-    if (+res.status === 200 || +res.data.status === 200) {
+    if (+res?.status === 200 || +res?.data?.status === 200) {
       setBadges(res?.data?.data);
     } else {
       console.log(res?.data?.message);
@@ -284,10 +286,6 @@ const MemberProfile = () => {
                 </div>
                 <div className="d-flex justify-content-end mt-3">
                   {buttonFollow()}
-                  <button className='btn'>
-                    <i className="fa-solid fa-message fa-xl"></i>
-                    <span className="d-none d-lg-inline-block mx-2">Chat</span>
-                  </button>
                 </div>
               </Col>
             </Row>

@@ -113,7 +113,7 @@ function Header() {
 	}
 
 	function getAvatar() {
-		if (avatarUser && avatarUser !== null) {
+		if (avatarUser && avatarUser !== '') {
 			return fetchImage(avatarUser);
 		}
 		if (currentUser?.imageUrl) {

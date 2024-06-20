@@ -132,7 +132,7 @@ const ChangePassword = () => {
 
 
   return (
-    <div className='content'>
+    <div className='content change-pass'>
       <div className='col-12'>
         <BannerTop
           bannerName={bannerName}
@@ -159,11 +159,11 @@ const ChangePassword = () => {
             onBlur={() => setOldPwdFocus(false)}
             valid={+(oldPwd.length === 0 || oldValidPwd)}
           />
-          <i
+          <button
             className={isShowOldPwd ? "fa-solid fa-eye" : "fa-solid fa-eye-slash"}
             onClick={() => setIsShowOldPwd(!isShowOldPwd)}
             onKeyDown={() => setIsShowOldPwd(!isShowOldPwd)}
-          ></i>
+          ></button>
         </div>
         <small id="email-err" className={oldPwdFocus && oldPwd || !oldValidPwd ? "text-danger" : "invalid-feedback"} role="alert" hidden={oldValidPwd || !oldPwdFocus}>
           <i className="fa fa-info-circle" aria-hidden="true"></i>{" "}
@@ -192,11 +192,11 @@ const ChangePassword = () => {
             onBlur={() => setPwdFocus(false)}
             valid={+(password.length === 0 || validPwd)}
           />
-          <i
+          <button
             className={isShowPassword ? "fa-solid fa-eye" : "fa-solid fa-eye-slash"}
             onClick={() => setIsShowPassword(!isShowPassword)}
             onKeyDown={() => setIsShowPassword(!isShowPassword)}
-          ></i>
+          ></button>
         </div>
         <small id="password-err"
           className={pwdFocus && password || !validPwd ? "text-danger" : "invalid-feedback"}
@@ -229,11 +229,11 @@ const ChangePassword = () => {
             onBlur={() => setConfirmFocus(false)}
             valid={+(confirm.length === 0 || validConfirm)}
           />
-          <i
+          <button
             className={isShowPassword ? "fa-solid fa-eye" : "fa-solid fa-eye-slash"}
             onClick={() => setIsShowPassword(!isShowPassword)}
             onKeyDown={() => setIsShowPassword(!isShowPassword)}
-          ></i>
+          ></button>
         </div>
         <small id="confirm-err"
           className={confirmFocus && confirm || !validConfirm ? "text-danger" : "invalid-feedback"}

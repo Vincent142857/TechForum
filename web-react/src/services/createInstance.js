@@ -1,7 +1,8 @@
 import jwt_decode from "jwt-decode";
-// import axios from "./customize-axios";
 import axios from "axios";
 import { API_BASE_URL } from "../constants";
+
+import { logOutSuccess } from "../redux/authSlice";
 
 const URL = "http://localhost:8080/api/";
 
@@ -9,7 +10,7 @@ const BASE_URL = `${API_BASE_URL}/api/` ?? URL;
 
 axios.defaults.baseURL = BASE_URL;
 
-const refreshToken = async () => {
+const refreshToken = async (dispatch) => {
 	try {
 		const res = await axios.post("/auth/refreshtoken", null, {
 			withCredentials: true,
@@ -17,11 +18,8 @@ const refreshToken = async () => {
 		return res.data;
 	} catch (err) {
 		console.log(err.message);
-		if (err?.response?.status === 403) {
-			localStorage.clear();
-			return (window.location.href = "/login");
-		}
-		return null;
+		dispatch(logOutSuccess());
+		return (window.location.href = "/login");
 	}
 };
 
@@ -32,7 +30,7 @@ export const createAxios = (user, dispatch, stateSuccess) => {
 			let date = new Date();
 			const decodedToken = jwt_decode(user?.accessToken);
 			if (decodedToken.exp < date.getTime() / 1000) {
-				const result = await refreshToken();
+				const result = await refreshToken(dispatch);
 				if (result !== null) {
 					const refreshUser = {
 						...user,
@@ -45,6 +43,7 @@ export const createAxios = (user, dispatch, stateSuccess) => {
 			return config;
 		},
 		(err) => {
+
 			return Promise.reject(err);
 		}
 	);
