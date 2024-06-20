@@ -27,7 +27,7 @@ import DiscussionInfo from "./DiscussionInfo";
 import Avatar from "../avatar/Avatar";
 import "./stylecomment.scss";
 import ModalUpdateComment from "./ModalUpdateComment";
-
+import ModalDeleteDiscussion from "./ModalDeleteDiscussion";
 import ModalAddNewReply from "./ModalAddNewReply";
 import Pagination from "../pagination/Pagination";
 import ModalDeleteComment from "./ModalDeleteComment";
@@ -375,6 +375,9 @@ const DiscussionDetails = () => {
 		fetchAllCommentData();
 	};
 
+	const [showModelDeleteDiscussion, setShowModelDeleteDiscussion] =
+		useState(false);
+
 	useEffect(() => {
 		fetchFirstCommentData();
 		fetchAllCommentData();
@@ -449,14 +452,18 @@ const DiscussionDetails = () => {
 											onClick={() => handleEditDiscussion(comment)}
 											className="mx-2 fa-solid fa-edit fa-2x"
 										></button>
-										{comment?.title !== titleDisc.title &&
-											(console.log(comment?.title),
-											(
-												<button
-													className="mx-2 fa-solid fa-xmark fa-2x"
-													onClick={() => handleClickDelete(comment)}
-												></button>
-											))}
+										{comment?.title !== titleDisc.title && (
+											<button
+												className="mx-2 fa-solid fa-xmark fa-2x"
+												onClick={() => handleClickDelete(comment)}
+											></button>
+										)}
+										{/* {comment?.title === titleDisc.title && (
+											<button
+												className="mx-2 fa-solid fa-xmark fa-2x"
+												onClick={() => setShowModelDeleteDiscussion(true)}
+											></button>
+										)} */}
 									</small>
 								)}
 							</>
@@ -658,6 +665,11 @@ const DiscussionDetails = () => {
 				handleClose={() => setShowModelDeleteComment(false)}
 				commentDelete={commentDelete ? commentDelete : null}
 				handleEditDeleteCommentModel={handleEditDeleteCommentModel}
+			/>
+			<ModalDeleteDiscussion
+				show={showModelDeleteDiscussion}
+				handleClose={() => setShowModelDeleteDiscussion(false)}
+				titleDisc={titleDisc}
 			/>
 		</section>
 	);

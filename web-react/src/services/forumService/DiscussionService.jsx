@@ -137,6 +137,17 @@ const setDataListTags = async (
 	return res;
 };
 
+const deleteDiscussion = async (id, accessToken, axiosJWT) => {
+	const res = await axiosJWT.delete(`/discussions/delete/${id}`, {
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${accessToken}`,
+		},
+	});
+	//
+	return res;
+};
+
 export {
 	createDiscussion,
 	getAllDiscussion,
@@ -146,4 +157,5 @@ export {
 	updateDetailsDiscussion,
 	updateViews,
 	setDataListTags,
+	deleteDiscussion,
 };

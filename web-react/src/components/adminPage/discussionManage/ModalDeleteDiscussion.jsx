@@ -2,26 +2,25 @@ import { Button, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 //Service
-import { deleteComment } from "../../../services/forumService/CommentService";
+import { deleteDiscussion } from "../../../services/forumService/DiscussionService";
 import { logOutSuccess } from "../../../redux/authSlice";
 import { createAxios } from "../../../services/createInstance";
 import { useParams } from "react-router-dom";
 
-const ModalDeleteComment = (props) => {
+const ModalDeleteDiscussion = (props) => {
 	const { discussionId } = useParams();
-	const { show, handleClose, commentDelete, handleEditDeleteCommentModel } =
-		props;
+	const { show, handleClose, discussion } = props;
 
-	// const navigate = useNavigate();
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const currentUser = useSelector((state) => state.auth.login?.currentUser);
 	let axiosJWT = createAxios(currentUser, dispatch, logOutSuccess);
 
 	const handleSaveDelete = async () => {
-		let res = await deleteComment(
-			commentDelete.commentId,
+		let res = await deleteDiscussion(
 			discussionId,
 			currentUser?.accessToken,
 			axiosJWT
@@ -29,8 +28,8 @@ const ModalDeleteComment = (props) => {
 
 		if (res && +res.data?.status === 200) {
 			handleClose();
-			handleEditDeleteCommentModel();
 			toast.success(res.data.message);
+			navigate("/admin/discussions");
 		} else if (+res.data?.status === 202) {
 			toast.error(res.data.message);
 		} else {
@@ -47,13 +46,15 @@ const ModalDeleteComment = (props) => {
 			keyboard={false}
 		>
 			<Modal.Header closeButton>
-				<Modal.Title>Delete Comment</Modal.Title>
+				<Modal.Title>Delete Discussion</Modal.Title>
 			</Modal.Header>
 
 			<Modal.Body>
 				<div>
-					<p>This action can not be undone! Do want to delete this Comment?</p>
-					<b>Title: {commentDelete?.title}</b>
+					<p>
+						This action can not be undone! Do want to delete this Discussion?
+					</p>
+					<b>Title: {discussion?.title}</b>
 				</div>
 			</Modal.Body>
 
@@ -69,11 +70,10 @@ const ModalDeleteComment = (props) => {
 	);
 };
 
-ModalDeleteComment.propTypes = {
+ModalDeleteDiscussion.propTypes = {
 	show: PropTypes.bool.isRequired,
 	handleClose: PropTypes.func.isRequired,
-	commentDelete: PropTypes.object,
-	handleEditDeleteCommentModel: PropTypes.func.isRequired,
+	discussion: PropTypes.object.isRequired,
 };
 
-export default ModalDeleteComment;
+export default ModalDeleteDiscussion;

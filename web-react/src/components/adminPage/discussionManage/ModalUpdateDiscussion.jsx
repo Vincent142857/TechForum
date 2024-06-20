@@ -28,8 +28,6 @@ const ModalUpdateDiscussion = (props) => {
 		dataDiscussion: PropTypes.object.isRequired,
 	};
 
-	console.log(`dataDiscussion`, dataDiscussion);
-
 	const discussion = {
 		id: dataDiscussion.id,
 		closed: action === "closed" ? dataUpdateDiscussion : dataDiscussion.closed,
