@@ -23,7 +23,7 @@ const BadgeManage = () => {
 
   const fetchAllBadge = async () => {
     let res = await getAllBadge(currentUser?.accessToken, axiosJWT);
-    if (+res.status === 200 || +res.data.status === 200) {
+    if (+res?.status === 200 || +res?.data?.status === 200) {
       setBadges(res?.data?.data);
     } else {
       console.log(res?.data?.message);
@@ -39,7 +39,7 @@ const BadgeManage = () => {
   const handleEditBadge = async (newBadges) => {
     console.log(newBadges);
     let res = await putUpdateBadge(newBadges, currentUser.accessToken, axiosJWT);
-    if (+res.status === 200 || +res.data.status === 200) {
+    if (+res?.status === 200 || +res?.data?.status === 200) {
       toast.success("Update badge success");
       fetchAllBadge();
     } else {
@@ -49,7 +49,7 @@ const BadgeManage = () => {
 
   const handleSetBadgeAllUser = async () => {
     let res = await setBadgeForAllUser(currentUser.accessToken, axiosJWT);
-    if (+res.status === 200 || +res.data.status === 200) {
+    if (+res?.status === 200 || +res?.data?.status === 200) {
       toast.success("Set badge success");
     } else {
       toast.error(res?.data?.message);
