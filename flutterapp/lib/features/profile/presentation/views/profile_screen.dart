@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:flutterapp/config/theme/theme_manager.dart';
 import 'package:flutterapp/core/network/api_urls.dart';
 
 import 'package:flutterapp/core/utils/user_preferences.dart';
 import 'package:flutterapp/features/profile/domain/entities/user_pro_entity.dart';
 import 'package:flutterapp/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:flutterapp/features/profile/presentation/widgets/profile_drawer_widget.dart';
-import 'package:flutterapp/features/profile/presentation/widgets/editProfileScreen_widget.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
-import '../../data/models/user_pre_model.dart';
 import '../widgets/appbar_widget.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/numbers_widget.dart';

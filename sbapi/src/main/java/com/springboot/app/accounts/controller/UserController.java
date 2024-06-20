@@ -113,10 +113,10 @@ public class UserController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<ObjectResponse> updateRoleUser(@Valid @RequestBody UpdateRoleRequest updateRoleRequest) {
 		// check user has role admin
-		if (updateRoleRequest.getRoles().stream().anyMatch(role -> role.equals("ROLE_ADMIN"))) {
-			return ResponseEntity.status(400)
-					.body(new ObjectResponse("400", "Cannot update user with role admin", null));
-		}
+//		if (updateRoleRequest.getRoles().stream().anyMatch(role -> role.equals("ROLE_ADMIN"))) {
+//			return ResponseEntity.status(400)
+//					.body(new ObjectResponse("400", "Cannot update user with role admin", null));
+//		}
 		boolean isRoleValid = updateRoleRequest.getRoles().stream().allMatch(Validators::isValidRole);
 		if (!isRoleValid) {
 			return ResponseEntity.badRequest().body(new ObjectResponse("400", "Invalid role", null));

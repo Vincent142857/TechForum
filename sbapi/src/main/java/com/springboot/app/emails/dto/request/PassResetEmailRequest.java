@@ -1,13 +1,15 @@
-package com.springboot.app.emails.dto;
+package com.springboot.app.emails.dto.request;
 
-public class RegistationEmailRequest {
+public class PassResetEmailRequest {
 	private String subject;
 	private String template;
 
-	public RegistationEmailRequest() {
+	public PassResetEmailRequest() {
+		super();
 	}
 
-	public RegistationEmailRequest(String subject, String template) {
+	public PassResetEmailRequest(String subject, String template) {
+		super();
 		this.subject = subject;
 		this.template = template;
 	}

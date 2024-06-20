@@ -6,13 +6,6 @@ public class UpdateRoleRequest {
 	private Long userId;
 	private Set<String> roles;
 
-	public UpdateRoleRequest() {
-	}
-
-	public UpdateRoleRequest(Long userId, Set<String> roles) {
-		this.userId = userId;
-		this.roles = roles;
-	}
 
 	public Long getUserId() {
 		return userId;

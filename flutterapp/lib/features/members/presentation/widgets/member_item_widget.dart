@@ -18,7 +18,9 @@ class MemberItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final avatar = user.imageUrl != ""
         ? user.imageUrl
-        : '${ApiUrls.API_BASE_URL}/user-stat/images/${user.avatar}';
+        : user.avatar != ""
+            ? '${ApiUrls.API_BASE_URL}/user-stat/images/${user.avatar}'
+            : "https://lh3.googleusercontent.com/a/ACg8ocIKA_Jkp2pWe0wuRjRJvAGJ0_tdjLSK2iBDmIVGTjRAe6B6EJDW=s96-c";
     return Container(
       height: 500,
       padding: const EdgeInsets.all(4.0),

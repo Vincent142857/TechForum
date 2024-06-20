@@ -1,12 +1,14 @@
 package com.springboot.app.emails.service;
 
+import com.springboot.app.accounts.entity.User;
+import com.springboot.app.accounts.repository.UserRepository;
 import com.springboot.app.dto.response.AckCodeType;
 import com.springboot.app.dto.response.ServiceResponse;
 import com.springboot.app.emails.EmailSender;
-import com.springboot.app.emails.dto.DataEmailRequest;
+import com.springboot.app.emails.dto.request.DataEmailRequest;
+import com.springboot.app.emails.dto.response.DataEmailResponse;
 import com.springboot.app.emails.entity.EmailOption;
 import com.springboot.app.emails.repository.EmailOptionRepository;
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class EmailOptionServiceImpl implements EmailOptionsService {
 
 	@Autowired
 	private EmailOptionRepository emailOptionRepository;
+
+	@Autowired
+	private UserRepository userRepository;
 
 	@Override
 	public ServiceResponse<EmailOption> getEmailOptionById(Long id) {
@@ -120,6 +125,7 @@ public class EmailOptionServiceImpl implements EmailOptionsService {
 			// send email
 			emailData(dataEmailRequest);
 
+
 		}catch(Exception e){
 			logger.error("Error sending email", e);
 			response.setAckCode(AckCodeType.FAILURE);
@@ -128,7 +134,7 @@ public class EmailOptionServiceImpl implements EmailOptionsService {
 			return response;
 		}
 
-		return null;
+		return response;
 	}
 
 	private void emailData(DataEmailRequest dataEmailRequest) throws Exception {
@@ -143,8 +149,8 @@ public class EmailOptionServiceImpl implements EmailOptionsService {
 				.tlsEnabled(emailOption.getTlsEnable())
 				.defaultEncoding("UTF-8").authentication(emailOption.getAuthentication()).build();
 
-		String toEmails = String.join(",", dataEmailRequest.getEmails());
-		emailSender.sendEmail(emailOption.getUsername(),toEmails,
+		String[] toEmails = dataEmailRequest.getEmails().toArray(new String[0]);
+		emailSender.sendEmailToList(emailOption.getUsername(),toEmails,
 				dataEmailRequest.getSubject(),
 				dataEmailRequest.getTemplate(),
 				true
@@ -166,5 +172,20 @@ public class EmailOptionServiceImpl implements EmailOptionsService {
 			errors.add("Content is required");
 		}
 		return errors;
+	}
+
+	public ServiceResponse<List<DataEmailResponse>> getAllEmail(){
+		ServiceResponse<List<DataEmailResponse>> response = new ServiceResponse<>();
+		List<User> users = userRepository.findAll();
+		List<DataEmailResponse> dataEmailResponses = users.stream().map(this::mapUserToDataEmailResponse).collect(Collectors.toList());
+		response.setDataObject(dataEmailResponses);
+		return response;
+	}
+
+	private DataEmailResponse mapUserToDataEmailResponse(User user) {
+		DataEmailResponse dataEmailResponse = new DataEmailResponse();
+		dataEmailResponse.setUsername(user.getUsername());
+		dataEmailResponse.setEmail(user.getEmail());
+		return dataEmailResponse;
 	}
 }

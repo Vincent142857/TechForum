@@ -51,7 +51,7 @@ const UserCardItem = (props) => {
             </Col>
             <Col md="8" xs="7">
               <div style={{ color: 'black' }}>
-                <Link to="/admin/user-profile/1" className='text-decoration-none'>
+                <Link to={`/admin/member-profile/${user?.username}`} className='text-decoration-none'>
                   <strong>{user.name ?? user.username}</strong> <br />
                   <span>Email: {user.email}</span> <br />
                 </Link>

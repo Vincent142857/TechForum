@@ -412,8 +412,8 @@ public class DatabaseInit {
 			avatarOption = new AvatarOption();
 			avatarOption.setId(1L);
 			avatarOption.setMaxFileSize(5 * 1024); // ~500KB
-			avatarOption.setMaxWidth(800);
-			avatarOption.setMaxHeight(800);
+			avatarOption.setMaxWidth(1000);
+			avatarOption.setMaxHeight(1000);
 
 			avatarOption.setCreatedBy("admin");
 			avatarOption.setUpdatedBy("admin");

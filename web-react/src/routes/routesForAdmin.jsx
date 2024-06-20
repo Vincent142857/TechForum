@@ -6,6 +6,7 @@ import TableUsers from "../components/adminPage/userManage/UsersListManagePage";
 
 import EmailOption from "../components/adminPage/emailOptionManage/EmailOptionPage";
 import BadgeManage from "../components/adminPage/badgeManage/badgeManage";
+import ConfigAvatar from "../components/adminPage/ConfigAvatar/ConfigAvatar";
 
 const routes = [
 	{
@@ -55,6 +56,13 @@ const routes = [
 		name: "Config email",
 		icon: "fa-solid fa-envelope",
 		component: <EmailOption />,
+		layout: "/admin",
+	},
+	{
+		path: "/avatar-option",
+		name: "Config Avatar Option",
+		icon: "fa-solid fa-gear",
+		component: <ConfigAvatar />,
 		layout: "/admin",
 	},
 ];

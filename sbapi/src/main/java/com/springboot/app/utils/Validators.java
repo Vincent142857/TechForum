@@ -21,6 +21,7 @@ public class Validators {
 	}
 
 	public static boolean isValidRole(String role) {
-		return role.equals("ADMIN") || role.equals("USER") || role.equals("MODERATOR");
+		String roleUp = role.toUpperCase();
+		return roleUp.equals("ADMIN") || roleUp.equals("USER") || roleUp.equals("MOD");
 	}
 }

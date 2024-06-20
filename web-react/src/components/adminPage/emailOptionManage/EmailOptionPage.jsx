@@ -8,10 +8,14 @@ import { Button, Col, Row, Card, ListGroup } from "react-bootstrap";
 
 import {
 	getEmailOptionById,
-	putUpdateEmailOption,
+	updateEmailOption,
+	getAllEmail,
+	sendEmail
 } from "../../../services/emailService/EmailOptionService";
 import { createAxios } from "../../../services/createInstance";
 import { loginSuccess } from "../../../redux/authSlice";
+
+import SelectMulti from "../selectMulti/SelectMulti";
 
 const EmailOption = () => {
 	const [emailOption, setEmailOption] = useState({});
@@ -24,7 +28,9 @@ const EmailOption = () => {
 	const [authentication, setAuthentication] = useState(true);
 
 	const [show, setShow] = useState(false);
-	// const [showTest, setShowTest] = useState(false);
+	const [showTest, setShowTest] = useState(false);
+
+	const [listEmail, setListEmail] = useState([]);
 
 	let currentUser = useSelector((state) => state.auth.login?.currentUser);
 
@@ -54,18 +60,17 @@ const EmailOption = () => {
 	};
 
 	const handleUpdateEmailOption = async () => {
-		console.log(`Check`);
 
 		const emailOption = {
 			host: host,
-			port: port,
+			port: +port,
 			username: username,
 			password: password,
 			tlsEnable: tlsEnable,
 			authentication: authentication,
 		};
 		const accessToken = currentUser?.accessToken;
-		let res = await putUpdateEmailOption(emailOption, accessToken, axiosJWT);
+		let res = await updateEmailOption(emailOption, accessToken, axiosJWT);
 		console.log(`Check res`, res.data);
 		if (+res.status === 200) {
 			setEmailOption(res.data);
@@ -74,6 +79,22 @@ const EmailOption = () => {
 			console.log(`Error: `, res?.data?.message);
 		}
 	};
+
+
+	const fetchAllEmail = async () => {
+		let res = await getAllEmail(currentUser?.accessToken, axiosJWT);
+		if (+res?.status === 200 || +res?.data?.status === 200) {
+			setListEmail(res?.data?.data);
+		} else {
+			console.log(`Error`);
+		}
+	}
+
+	// Format tags for react-select
+	const tagOptions = listEmail?.map((item) => ({
+		value: item.email,
+		label: item.username,
+	}));
 
 	const toolbarOptions = [
 		["bold", "italic", "underline", "strike"], // toggled buttons
@@ -101,22 +122,74 @@ const EmailOption = () => {
 	};
 
 	//Text Mail
-	const [fromData, setFromData] = useState("");
-	const [toData, setToData] = useState("");
-	const [message, setMessage] = useState("");
+	const [subject, setSubject] = useState("");
+	const [errFrom, setErrFrom] = useState("");
 
-	const handleSendEmail = () => {
-		console.log(`Send Email`);
-		console.log(`From: ${fromData}`);
-		console.log(`To: ${toData}`);
-		console.log(`Message: ${message}`);
+
+	const [message, setMessage] = useState("");
+	const [errMsg, setErrMsg] = useState("");
+
+	const [selectedEmail, setSelectedEmail] = useState([]);
+	const [errTo, setErrTo] = useState("");
+
+	const handleSelectChange = (selectedEmail) => {
+		setSelectedEmail(selectedEmail);
+	}
+
+
+	useEffect(() => {
+		setErrFrom("");
+		if (subject === "" || subject === null) {
+			setErrFrom("Please enter title from email!");
+		}
+	}, [subject]);
+
+	useEffect(() => {
+		setErrTo("");
+		if (selectedEmail.length <= 0 || selectedEmail === null) {
+			setErrTo("Please select from email!");
+		}
+	}, [selectedEmail]);
+
+	useEffect(() => {
+		setErrMsg("");
+		if (message === "" || message === null) {
+			setErrMsg("Please enter body of email!");
+		}
+	}, [message]);
+
+
+	const handleSendEmail = async () => {
+		if (errFrom === "" && errTo === "" && errMsg === "") {
+			const emailOption = {
+				emails: selectedEmail.map(item => item.value),
+				subject: subject,
+				template: message,
+			};
+
+			console.log(`Here`, JSON.stringify(emailOption.emails));
+			const accessToken = currentUser?.accessToken;
+
+			let res = await sendEmail(emailOption, accessToken, axiosJWT);
+			if (+res?.status === 200 || +res?.data?.status === 200) {
+				toast.success("Sent email successfully");
+				setSubject("");
+				setMessage("");
+				setSelectedEmail([]);
+			} else {
+				toast.error(res?.data?.message);
+			}
+		}
 	};
+
+
 
 	useEffect(() => {
 		if (!currentUser.accessToken) {
 			createAxios(currentUser, dispatch, loginSuccess);
 		}
 		getEmailOption();
+		fetchAllEmail();
 	}, []);
 
 	return (
@@ -142,17 +215,28 @@ const EmailOption = () => {
 					</div>
 				)}
 
-				{!show && (
-					<Row className="d-flex justify-content-end">
-						<Button
-							className="col-md-2 me-3"
-							variant="secondary"
-							onClick={() => setShow(!show)}
-						>
-							{show ? "Close" : "Update"}
-						</Button>
-					</Row>
-				)}
+				<Row>
+					<div className="d-flex justify-content-between">
+						{!showTest && (
+							<Button
+								className="col-2 me-3"
+								variant="secondary"
+								onClick={() => setShowTest(!showTest)}
+							>
+								{show ? "Close" : "Test"}
+							</Button>
+						)}
+						{!show && (
+							<Button
+								className="col-2 me-3"
+								variant="info"
+								onClick={() => setShow(!show)}
+							>
+								{show ? "Close" : "Update New Email"}
+							</Button>
+						)}
+					</div>
+				</Row>
 
 				{show && (
 					<Card className="my-3">
@@ -176,6 +260,7 @@ const EmailOption = () => {
 								</label>
 								<input
 									value={port}
+									type="number"
 									name="port"
 									className="form-control"
 									required
@@ -224,56 +309,72 @@ const EmailOption = () => {
 					</Card>
 				)}
 			</Col>
+
 			<Col>
-				<Card>
-					<Card.Header>
-						<Card.Title as="h5">Text Email Option</Card.Title>
-					</Card.Header>
-					<Card.Body>
-						<div className="row mb-3">
-							<div className="col-12 col-lg-6 col-md-6 fw-bold">
-								<label className="ms-2 me-auto form-label">From :</label>
-								<input
-									type="text"
-									className="form-control me-2"
-									placeholder="Enter from here ...."
-									onChange={(e) => setFromData(e.target.value)}
-								/>
+				{showTest && (
+					<Card>
+						<Card.Header>
+							<Card.Title as="h5">Text Email Option</Card.Title>
+						</Card.Header>
+						<Card.Body>
+							<div className="row mb-3">
+								<div className="col-12 col-lg-6 col-md-6 fw-bold">
+									<label htmlFor="subject" className="ms-2 me-auto form-label">Subject (*):</label>
+									<input
+										type="text"
+										id="subject"
+										className="form-control p-2 me-2"
+										placeholder="Enter here ...."
+										onChange={(e) => setSubject(e.target.value)}
+									/>
+									{errFrom && errFrom != "" && <small className="text-danger">{errFrom}</small>}
+								</div>
+								<div className="col-12 col-lg-6 col-md-6  fw-bold">
+									<label htmlFor="" className="ms-2 me-auto form-label">To (*):</label>
+
+									<SelectMulti
+										tagOptions={tagOptions}
+										selectedTags={selectedEmail}
+										handleTagChange={handleSelectChange}
+									/>
+
+
+									{errTo && errTo != "" && <small className="text-danger">{errTo}</small>}
+								</div>
 							</div>
-							<div className="col-12 col-lg-6 col-md-6  fw-bold">
-								<label className="ms-2 me-auto form-label">To :</label>
-								<input
-									type="text"
-									placeholder="Enter to here ...."
-									className="form-control me-2"
-									onChange={(e) => setToData(e.target.value)}
-								/>
+							<div className="row">
+								<div className="col-12">
+									<label htmlFor="message" className="ms-2 me-auto label-control">Message (*):</label>
+									<ReactQuill
+										theme="snow"
+										modules={module}
+										value={message}
+										onChange={(value) => setMessage(value)}
+										id="message"
+										placeholder="Enter message here ...."
+										className="content-editor"
+									/>
+									{errMsg && errMsg != "" && <small className="text-danger">{errMsg}</small>}
+								</div>
 							</div>
-						</div>
-						<div className="row">
-							<div className="col-12">
-								<label className="ms-2 me-auto label-control">Message :</label>
-								<ReactQuill
-									theme="snow"
-									modules={module}
-									value={message}
-									onChange={(value) => setMessage(value)}
-									id="message"
-									placeholder="Enter message here ...."
-									className="content-editor"
-								/>
+							<div className="d-flex justify-content-end">
+								<button
+									className="btn btn-secondary col-md-2 me-5"
+									onClick={() => setShowTest(false)}
+								>
+									Cancel
+								</button>
+
+								<button
+									className="col-md-2 me-3 btn btn-group-vertical align-items-center"
+									onClick={handleSendEmail}
+								>
+									Send
+								</button>
 							</div>
-						</div>
-						<div className="d-flex justify-content-end">
-							<button
-								className="col-md-2 me-3 btn btn-group-vertical align-items-center"
-								onClick={handleSendEmail}
-							>
-								Send
-							</button>
-						</div>
-					</Card.Body>
-				</Card>
+						</Card.Body>
+					</Card>
+				)}
 			</Col>
 		</div>
 	);

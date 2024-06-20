@@ -1,4 +1,4 @@
-package com.springboot.app.emails.dto;
+package com.springboot.app.emails.dto.request;
 
 import java.util.Set;
 

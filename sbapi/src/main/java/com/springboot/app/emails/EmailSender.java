@@ -103,7 +103,7 @@ public class EmailSender {
 	/**
 	 * Send email to multiple email addresses
 	 */
-	public void sendEmail(String fromAddress,
+	public void sendEmailToList(String fromAddress,
 	                      String[] toAddress,
 	                      String subject, String body,
 	                      boolean sendAsHtml)

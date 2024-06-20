@@ -142,7 +142,7 @@ const UpdatePassword = () => {
         onClick={() => handleUpdatePassword()}
       >
         {isLoading && <i className="fas fa-sync fa-spin"></i>}
-        &nbsp;Register
+        &nbsp;Save change
       </button>
 
       <p className="login-subtitle">Do you have an account? <Link to="/login">Sign in</Link></p>
