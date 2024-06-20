@@ -160,9 +160,7 @@ const ModelUpdateForumGroup = (props) => {
 						className="form-control mb-3"
 						id="roleName"
 						value={roleName}
-						onChange={(event) => {
-							setRoleName(event.target.value);
-						}}
+						onChange={(event) => setRoleName(event.target.value)}
 					>
 						{listModerator.map((item) => (
 							<option key={item.id} value={item.username}>

@@ -34,7 +34,7 @@ import Avatar from "../../avatar/Avatar";
 import "../../../components/discussions/stylecomment.scss";
 import ModalDeleteComment from "./ModalDeleteComment";
 
-const TagsManage = () => {
+const DiscussionDetails = () => {
 	//Discussion
 	const { discussionId } = useParams();
 
@@ -543,4 +543,4 @@ const TagsManage = () => {
 	);
 };
 
-export default TagsManage;
+export default DiscussionDetails;

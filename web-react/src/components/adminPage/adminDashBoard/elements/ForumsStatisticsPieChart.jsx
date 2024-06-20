@@ -79,8 +79,6 @@ const renderActiveShape = (props) => {
 const ForumsStatisticsPieChart = (props) => {
 	const { dataChart, updateData } = props;
 
-	console.log(`dataChart`, dataChart);
-
 	const [activeIndex, setActiveIndex] = useState(0);
 	const onPieEnter = useCallback(
 		(_, index) => {
