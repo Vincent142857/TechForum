@@ -4,6 +4,7 @@ import com.springboot.app.accounts.entity.User;
 import com.springboot.app.accounts.repository.UserRepository;
 import com.springboot.app.dto.response.AckCodeType;
 import com.springboot.app.dto.response.ServiceResponse;
+import com.springboot.app.forums.dto.request.MobileCommentRequest;
 import com.springboot.app.forums.dto.request.MobileDiscussionRequest;
 import com.springboot.app.forums.dto.response.MobileGroupResponse;
 import com.springboot.app.forums.dto.response.MobileDiscussionResponse;
@@ -135,6 +136,13 @@ public class MobileForumsServiceImpl implements MobileForumsService{
 		MobileForumResponse mobileForumResponse = new MobileForumResponse();
 		mobileForumResponse.setId(forum.getId());
 		mobileForumResponse.setTitle(forum.getTitle());
+
+		//group
+		ForumGroup forumGroup = forum.getForumGroup();
+		if(forumGroup != null) {
+			mobileForumResponse.setGroupId(forumGroup.getId());
+			mobileForumResponse.setGroupName(forumGroup.getTitle());
+		}
 		//discussion
 		List<Discussion> discussions = forum.getDiscussions();
 		if(discussions == null || discussions.isEmpty()) {
@@ -203,6 +211,32 @@ public class MobileForumsServiceImpl implements MobileForumsService{
 		MobileDiscussionResponse mobileDiscussionResponse = mapDiscussionToMobileDiscussionResponse(result.getDataObject());
 		response.setDataObject(mobileDiscussionResponse);
 		logger.info("Discussion created successfully");
+		return response;
+	}
+
+	@Override
+	public ServiceResponse<ViewCommentResponse> addNewComment(MobileCommentRequest newComment) {
+		ServiceResponse<ViewCommentResponse> response = new ServiceResponse<>();
+		//find discussion
+		Discussion discussion = discussionRepository.findById(newComment.getDiscussionId()).orElse(null);
+		if(discussion == null) {
+			response.setAckCode(AckCodeType.FAILURE);
+			response.addMessage(String.format("Discussion with id %d not found", newComment.getDiscussionId()));
+			return response;
+		}
+
+		Comment comment = new Comment();
+		comment.setContent(newComment.getContent());
+
+		ServiceResponse<Comment> result = commentService.addComment(discussion.getId(), comment, newComment.getAuthor(), null);
+		if(result.getAckCode()!=AckCodeType.SUCCESS){
+			response.setAckCode(AckCodeType.FAILURE);
+			response.setMessages(result.getMessages());
+			return response;
+		}
+		ViewCommentResponse viewCommentResponse = commentService.mapCommentToViewCommentResponse(result.getDataObject());
+		response.setDataObject(viewCommentResponse);
+
 		return response;
 	}
 }

@@ -18,10 +18,8 @@ class LoadCommentsEvent extends CommentsEvent {
 class AddCommentEvent extends CommentsEvent {
   final int discussionId;
   final String content;
-  final File? imageURL;
 
-  const AddCommentEvent(
-      {required this.discussionId, required this.content, this.imageURL});
+  const AddCommentEvent({required this.discussionId, required this.content});
 
   @override
   List<Object> get props => [discussionId, content];

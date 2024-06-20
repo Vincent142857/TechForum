@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapp/features/posts/presentation/bloc/comments_bloc.dart';
+import 'package:flutterapp/features/posts/presentation/widgets/input_text_widget.dart';
+import 'package:flutterapp/features/posts/presentation/widgets/input_widget.dart';
 
 class CreateDiscussion extends StatelessWidget {
   const CreateDiscussion(
@@ -45,8 +47,8 @@ class CreateDiscussion extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                _inputField('Title', titleController),
-                _inputField('Description', contentController),
+                buildInputField('Title', titleController),
+                buildInputFieldTextArea('Description', contentController),
                 ElevatedButton(
                   onPressed: () {
                     // create discussion
@@ -90,6 +92,37 @@ class CreateDiscussion extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 10.0),
           width: double.infinity,
           child: TextFormField(
+            decoration: InputDecoration(
+              hintText: 'Enter $label',
+            ),
+            controller: controller,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column _inputFieldTextArea(String label, TextEditingController controller) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '$label: ',
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18.0,
+          ),
+        ),
+        Container(
+          height: 200,
+          margin: const EdgeInsets.only(bottom: 10.0),
+          width: double.infinity,
+          child: TextField(
+            keyboardType: TextInputType.multiline,
+            maxLines: 10,
+            decoration: InputDecoration(
+              hintText: 'Enter $label',
+            ),
             controller: controller,
           ),
         ),

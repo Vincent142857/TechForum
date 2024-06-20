@@ -10,11 +10,10 @@ class CreateCommentUseCase implements CreateCommentParams<void, ParamsComment> {
   CreateCommentUseCase({required this.repository});
 
   @override
-  Future<Either<Failure, CommentEntity>> call(ParamsComment params) async {
+  Future<Either<Failure, String>> call(ParamsComment params) async {
     return await repository.createComment(
-      content: params.content,
-      discussionId: params.discussionId,
-      imageURL: params.imageURL,
-    );
+        content: params.content,
+        discussionId: params.discussionId,
+        author: params.author);
   }
 }

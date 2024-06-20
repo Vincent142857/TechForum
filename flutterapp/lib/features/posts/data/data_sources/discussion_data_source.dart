@@ -14,8 +14,8 @@ abstract class DiscussionDataSource {
       String title, String content, int forumId, String author);
 
   //create  a new comment
-  Future<CommentModel?> createComment(
-      String content, int discussionId, File? imageURL);
+  Future<String?> createComment(
+      String content, int discussionId, String author);
 
   //get all Comments
   Future<List<CommentModel>> getAllCommentsBy(int discussionId);
@@ -51,16 +51,18 @@ class DiscussionDataSourceImpl implements DiscussionDataSource {
   Future<String?> createDiscussion(
       String title, String content, int forumId, String author) async {
     try {
-      http.Response res = await client.post('$uri/discussions/add', {
-        'title': title,
-        'content': content,
-        'forumId': forumId,
-        'author': author
-      });
-      List jsonResponse = json.decode(res.body);
+      http.Response res = await client.post(
+          '$uri/discussions/add',
+          jsonEncode({
+            'title': title,
+            'content': content,
+            'forumId': forumId,
+            'author': author
+          }));
+      Map jsonResponse = json.decode(res.body);
       print(res.body);
       if (res.statusCode == 200) {
-        return res.body;
+        return "Add Discussion Successfully";
       }
     } catch (err) {
       print('Error createDiscussion: ${err.toString()}');
@@ -70,16 +72,20 @@ class DiscussionDataSourceImpl implements DiscussionDataSource {
   }
 
   @override
-  Future<CommentModel?> createComment(
-      String content, int discussionId, File? imageURL) async {
+  Future<String?> createComment(
+      String content, int discussionId, String author) async {
     try {
       http.Response res = await client.post(
-          '$uri/discussions/$discussionId/comments',
-          {'content': content, 'discussionId': discussionId.toString()});
+          '$uri/comments/add',
+          jsonEncode({
+            'content': content,
+            'discussionId': discussionId,
+            'author': author
+          }));
       Map jsonResponse = json.decode(res.body);
       print(res.body);
       if (res.statusCode == 200) {
-        return CommentModel.fromJson(jsonResponse);
+        return "Add Comment Successfully";
       }
     } catch (err) {
       print('Error createComment: ${err.toString()}');

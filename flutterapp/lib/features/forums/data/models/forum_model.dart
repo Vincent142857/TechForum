@@ -6,6 +6,8 @@ class ForumModel extends ForumEntity {
   const ForumModel(
       {required super.id,
       required super.title,
+      required super.groupId,
+      required super.groupName,
       required super.totalComments,
       required super.discussions});
 
@@ -17,6 +19,8 @@ class ForumModel extends ForumEntity {
     return ForumModel(
       id: (json['id'] ?? 0) as int,
       title: (json['title'] ?? '') as String,
+      groupId: (json['groupId'] ?? 0) as int,
+      groupName: (json['groupName'] ?? '') as String,
       totalComments: (json['totalComments'] ?? 0) as int,
       discussions: discussions,
     );
@@ -26,6 +30,8 @@ class ForumModel extends ForumEntity {
     return {
       "id": id,
       "title": title,
+      "groupId": groupId,
+      "groupName": groupName,
       "totalComments": totalComments,
       "discussions": discussions,
     };

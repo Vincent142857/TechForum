@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapp/features/posts/presentation/bloc/comments_bloc.dart';
+import 'package:flutterapp/features/posts/presentation/widgets/input_text_widget.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddComment extends StatefulWidget {
@@ -66,14 +67,13 @@ class _AddCommentState extends State<AddComment> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                _inputField('Description', contentController),
+                buildInputFieldTextArea('Description', contentController),
                 ElevatedButton(
                   onPressed: () {
                     // create Comment
                     context.read<CommentsBloc>().add(AddCommentEvent(
                           content: contentController.text,
                           discussionId: widget.discussionId,
-                          imageURL: image,
                         ));
                     //to home
                     Navigator.pop(context);
@@ -91,29 +91,6 @@ class _AddCommentState extends State<AddComment> {
           ),
         ),
       ),
-    );
-  }
-
-  Column _inputField(String label, TextEditingController controller) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '$label: ',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18.0,
-          ),
-        ),
-        Container(
-          height: 50,
-          margin: const EdgeInsets.only(bottom: 10.0),
-          width: double.infinity,
-          child: TextFormField(
-            controller: controller,
-          ),
-        ),
-      ],
     );
   }
 }

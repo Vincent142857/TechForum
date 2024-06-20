@@ -66,7 +66,7 @@ class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
           .call(ParamsComment(
         content: event.content,
         discussionId: event.discussionId,
-        imageURL: event.imageURL,
+        author: await _getUserId(),
       ))
           .then((comment) {
         comment.fold(
