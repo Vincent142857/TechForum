@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) =>
-                serviceLocator<ForumBloc>()..add(GetAllForumsEvent()),
+                serviceLocator<ForumBloc>()..add(const GetAllForumsEvent()),
           ),
           BlocProvider(
             create: (context) => ForumFilterBloc(
@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) =>
-                serviceLocator<CommentsBloc>()..add(LoadCommentsEvent()),
+                serviceLocator<CommentsBloc>()..add(const LoadCommentsEvent()),
           ),
         ],
         child: ChangeNotifierProvider<ThemeService>(

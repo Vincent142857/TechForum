@@ -1,5 +1,3 @@
-const badWords = ["badword1", "badword2", "badword3"];
-
 export const validateTitle = (title, existing) => {
 	if (!title.trim()) {
 		return "Title is required";
@@ -8,13 +6,6 @@ export const validateTitle = (title, existing) => {
 	const isDuplicate = existing.some((group) => group.title === title);
 	if (isDuplicate) {
 		return "Title already in use";
-	}
-
-	const containsBadWords = badWords.some((badWord) =>
-		title.toLowerCase().includes(badWord)
-	);
-	if (containsBadWords) {
-		return "Title contains inappropriate language";
 	}
 
 	return "";
@@ -27,13 +18,6 @@ export const validateLabel = (label, existing) => {
 	const isDuplicate = existing.some((group) => group.label === label);
 	if (isDuplicate) {
 		return "Label already in use";
-	}
-
-	const containsBadWords = badWords.some((badWord) =>
-		label.toLowerCase().includes(badWord)
-	);
-	if (containsBadWords) {
-		return "Title contains inappropriate language";
 	}
 
 	return "";
@@ -71,13 +55,6 @@ export const validateDescription = (description, existing) => {
 		return "Description already in use";
 	}
 
-	const containsBadWords = badWords.some((badWord) =>
-		description.toLowerCase().includes(badWord)
-	);
-	if (containsBadWords) {
-		return "Title contains inappropriate language";
-	}
-
 	return "";
 };
 
@@ -97,13 +74,6 @@ export const validateContentDiscussion = (content, existing) => {
 		return "Content already in use";
 	}
 
-	const containsBadWords = badWords.some((badWord) =>
-		content.toLowerCase().includes(badWord)
-	);
-	if (containsBadWords) {
-		return "Title contains inappropriate language";
-	}
-
 	return "";
 };
 
@@ -121,12 +91,16 @@ export const validateContent = (content, existing) => {
 		return "Content already in use";
 	}
 
-	const containsBadWords = badWords.some((badWord) =>
-		content.toLowerCase().includes(badWord)
-	);
-	if (containsBadWords) {
-		return "Title contains inappropriate language";
+	return "";
+};
+
+export const validateKeyword = (keyword, existing) => {
+	if (!keyword.trim()) {
+		return "Keyword is required";
 	}
 
-	return "";
+	const isDuplicate = existing.some((a) => a.keyword === keyword);
+	if (isDuplicate) {
+		return "Keyword already in use";
+	}
 };

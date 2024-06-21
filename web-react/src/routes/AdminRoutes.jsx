@@ -14,6 +14,7 @@ import "../assets/scss/paper-dashboard.scss?v=1.3.0";
 
 import EmailOption from "../components/adminPage/emailOptionManage/EmailOptionPage";
 import TagsManage from "../components/adminPage/tagManage/TagsManage";
+import BannedKeyword from "../components/adminPage/bannedKeyword/BannedKeyword";
 import BadgeManage from "../components/adminPage/badgeManage/badgeManage";
 import ConfigAvatar from "../components/adminPage/ConfigAvatar/ConfigAvatar";
 
@@ -38,7 +39,6 @@ function AdminRoutes() {
 						path="/discussion/:discussionId"
 						element={<DiscussionDetails />}
 					/>
-
 				</Route>
 				<Route
 					element={<RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.MOD]} />}
@@ -50,6 +50,7 @@ function AdminRoutes() {
 					<Route exact path="/discussions" element={<DiscussionManage />} />
 
 					<Route exact path="/tags" element={<TagsManage />} />
+					<Route exact path="/banned-keywords" element={<BannedKeyword />} />
 
 					<Route
 						exact
@@ -63,7 +64,6 @@ function AdminRoutes() {
 					<Route path="email-option" element={<EmailOption />} />
 					<Route path="badges" element={<BadgeManage />} />
 					<Route path="avatar-option" element={<ConfigAvatar />} />
-
 				</Route>
 
 				<Route exact path="*" element={<NotFound />} />

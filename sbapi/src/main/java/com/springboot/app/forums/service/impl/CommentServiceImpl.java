@@ -5,6 +5,7 @@ import java.util.*;
 
 import com.springboot.app.accounts.repository.UserRepository;
 import com.springboot.app.accounts.service.UserStatService;
+import com.springboot.app.bagdes.Badge;
 import com.springboot.app.dto.response.PaginateResponse;
 import com.springboot.app.follows.dto.response.BookmarkResponse;
 import com.springboot.app.follows.entity.Bookmark;
@@ -131,6 +132,12 @@ public class CommentServiceImpl implements CommentService {
 			author.setReputation(user.getStat().getReputation());
 			author.setTotalDiscussions(user.getStat().getDiscussionCount());
 			author.setTotalComments(user.getStat().getCommentCount());
+			Badge badge = user.getStat().getBadge();
+			if(badge != null){
+				author.setBadgeName(badge.getName());
+				author.setBadgeIcon(badge.getIcon());
+				author.setBadgeColor(badge.getColor());
+			}
 		}
 		viewCommentResponse.setAuthor(author);
 
@@ -357,7 +364,7 @@ public class CommentServiceImpl implements CommentService {
 		if (discussionCommentInfo != null ) {
 			List<Comment> commentsForDiscussion = commentRepository.findByDiscussionOrderByCreatedAtDesc(discussion);
 			if (!commentsForDiscussion.isEmpty()) {
-				Comment commentForDiscussion = commentsForDiscussion.get(0);
+				Comment commentForDiscussion = commentsForDiscussion.getFirst();
 				discussionCommentInfo.setCommentId(commentForDiscussion.getId());
 				discussionCommentInfo.setCommenter(commentForDiscussion.getCreatedBy());
 				discussionCommentInfo.setTitle(commentForDiscussion.getTitle());
@@ -376,7 +383,7 @@ public class CommentServiceImpl implements CommentService {
 		if (forumCommentInfo != null) {
 			List<Comment> commentsForForum = commentRepository.findAllByForumIdOrderByCreatedAtDesc(forum.getId());
 			if (!commentsForForum.isEmpty()) {
-				Comment commentForForum = commentsForForum.get(0);
+				Comment commentForForum = commentsForForum.getFirst();
 				forumCommentInfo.setCommentId(commentForForum.getId());
 				forumCommentInfo.setCommenter(commentForForum.getCreatedBy());
 				forumCommentInfo.setTitle(commentForForum.getTitle());
@@ -395,7 +402,7 @@ public class CommentServiceImpl implements CommentService {
 		if (user != null) {
 			CommentInfo userCommentInfo = user.getStat().getLastComment();
 			if (userCommentInfo != null) {
-				Comment commentForUser = commentRepository.findAllByCreatedByOrderByCreatedAtDesc(username).get(0);
+				Comment commentForUser = commentRepository.findAllByCreatedByOrderByCreatedAtDesc(username).getFirst();
 				if (commentForUser != null) {
 					userCommentInfo.setCommentId(commentForUser.getId());
 					userCommentInfo.setCommenter(commentForUser.getCreatedBy());
@@ -421,7 +428,6 @@ public class CommentServiceImpl implements CommentService {
 	private void deleteChildComments(Comment parentComment) {
 		List<Comment> childComments = commentRepository.findByReplyTo(parentComment);
 		for (Comment childComment : childComments) {
-			logger.info("Deleting comment 13 ");
 			commentRepository.delete(childComment);
 			updateDiscussionAndForum(childComment.getId());
 			updateUserLastComment(childComment.getCreatedBy(), childComment.getId());

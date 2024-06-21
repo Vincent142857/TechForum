@@ -104,14 +104,15 @@ const Discussion = () => {
 							<Table striped hover>
 								<thead>
 									<tr>
-										<th className="col-12 lg-9">Discussion Title</th>
-										<th className="col-12 lg-1">Replies</th>
-										<th className="col-12 lg-1">Views</th>
-										<th className="col-12 lg-3">Last Post</th>
+										<th>Discussion Title</th>
+										<th>Replies</th>
+										<th>Views</th>
+										<th>Last Post</th>
 									</tr>
 								</thead>
 								<tbody>
 									{listDiscussions?.map((item) => {
+										console.log(item);
 										return (
 											<tr key={item.id} className="m-2">
 												<td>
@@ -139,7 +140,7 @@ const Discussion = () => {
 														</span>
 													))}
 												</td>
-												<td>{item.stat.commentCount}</td>
+												<td>{item.comments?.length}</td>
 												<td>{item.stat.viewCount}</td>
 												<td style={{ maxWidth: "300px" }}>
 													<LastCommentInfo id={item.id} type="discussion" />

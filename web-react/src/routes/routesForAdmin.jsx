@@ -8,6 +8,8 @@ import EmailOption from "../components/adminPage/emailOptionManage/EmailOptionPa
 import BadgeManage from "../components/adminPage/badgeManage/badgeManage";
 import ConfigAvatar from "../components/adminPage/ConfigAvatar/ConfigAvatar";
 
+import BannedKeyword from "../components/adminPage/bannedKeyword/BannedKeyword";
+
 const routes = [
 	{
 		path: "/dashboard",
@@ -42,6 +44,13 @@ const routes = [
 		name: "tags manage",
 		icon: "fa-solid fa-tags",
 		component: <TagsStat />,
+		layout: "/admin",
+	},
+	{
+		path: "/banned-keywords",
+		name: "banned keywords",
+		icon: "fa-solid fa-file-word",
+		component: <BannedKeyword />,
 		layout: "/admin",
 	},
 	{
