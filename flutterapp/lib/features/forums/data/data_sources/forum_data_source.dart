@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 
 abstract class ForumDataSource {
   Future<List<ForumModel>> getAllForum();
+
   Future<List<ForumModel>> getAllForumByGroup(int groupId);
 
   Future<List<ForumsGroupModel>> getAllForumGroup(); //top heading
@@ -66,19 +67,26 @@ class ForumDataSourceImp implements ForumDataSource {
   //---------------------------------------------------------
   @override
   Future<List<ForumsGroupModel>> getAllForumGroup() async {
+    print("Getting all forum groups");
     List<ForumsGroupModel> groups = [];
     try {
       http.Response res = await client.get('$uri/groups');
       List jsonResponse = json.decode(res.body);
       print(res.body);
       if (res.statusCode == 200) {
-        groups = jsonResponse.map((e) => ForumsGroupModel.fromJson(e)).toList();
+        print("Found groups");
+        groups = jsonResponse.map((e) => ForumsGroupModel.fromMap(e)).toList();
+        print(groups.length);
       } else {
+        print("Error other getting groups");
         throw ServerException('Server error');
       }
     } catch (err) {
+      print("Error getting groups");
+      print(err.toString());
       throw ServerException(err.toString());
     }
+    print(groups.length);
     return groups;
   }
 }

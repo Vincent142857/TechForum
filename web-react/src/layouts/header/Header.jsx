@@ -25,7 +25,7 @@ import Avatar from "../../components/avatar/Avatar";
 
 import routes from "../../routes/routesForAdmin";
 import SearchFormHeader from "../../components/search/SearchFormHeader";
-
+import { ROLES } from "../../constants";
 function Header() {
 	let currentUser = useSelector((state) => state.auth.login?.currentUser);
 	const accessToken = currentUser?.accessToken;
@@ -111,7 +111,10 @@ function Header() {
 			return "";
 		}
 	}
-
+	const isShowRouteAdminMod = () => {
+		const rolesOfCurrentUser = currentUser?.roles;
+		return rolesOfCurrentUser?.map(role => [ROLES.ADMIN, ROLES.MOD].includes(role));
+	}
 	function getAvatar() {
 		if (avatarUser && avatarUser !== '') {
 			return fetchImage(avatarUser);
@@ -177,6 +180,7 @@ function Header() {
 					className="justify-content-end me-lg-5 align-items-center"
 				>
 					<Nav navbar>
+						{isShowRouteAdminMod() && (
 						<NavItem>
 							<Link to="/admin" className="nav-link btn-magnify">
 								<i className="fa-solid fa-chart-simple fa-xl d-lg-inline-block d-none"></i>
@@ -185,6 +189,8 @@ function Header() {
 								</p>
 							</Link>
 						</NavItem>
+						)}
+
 						{/*<Dropdown*/}
 						<Dropdown
 							nav

@@ -75,6 +75,11 @@ class _AddCommentState extends State<AddComment> {
                           content: contentController.text,
                           discussionId: widget.discussionId,
                         ));
+
+                    //reload state
+                    context.read<CommentsBloc>().add(LoadCommentsEvent(
+                          discussionId: widget.discussionId,
+                        ));
                     //to home
                     Navigator.pop(context);
                   },

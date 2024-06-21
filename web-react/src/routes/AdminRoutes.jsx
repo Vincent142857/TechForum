@@ -16,40 +16,27 @@ import EmailOption from "../components/adminPage/emailOptionManage/EmailOptionPa
 import TagsManage from "../components/adminPage/tagManage/TagsManage";
 import BadgeManage from "../components/adminPage/badgeManage/badgeManage";
 import ConfigAvatar from "../components/adminPage/ConfigAvatar/ConfigAvatar";
+import { ROLES } from "../constants/index";
 
-const ROLES = {
-	ADMIN: "ROLE_ADMIN",
-	USER: "ROLE_USER",
-	MOD: "ROLE_MOD",
-};
+// const ROLES = {
+// 	ADMIN: "ROLE_ADMIN",
+// 	USER: "ROLE_USER",
+// 	MOD: "ROLE_MOD",
+// };
 
 function AdminRoutes() {
 	return (
 		<Routes>
 			<Route exact path="/" element={<Layout route="routesAdmin" />}>
-				<Route element={<RequireAuth allowedRoles={[ROLES.MOD, ROLES.USER]} />}>
-					<Route exact path="/" element={<DashBoard />} />
-					<Route exact path="/dashboard" element={<DashBoard />} />
-					<Route exact path="/tags" element={<TagsManage />} />
-					<Route exact path="/discussions" element={<DiscussionManage />} />
-
-					<Route
-						exact
-						path="/discussion/:discussionId"
-						element={<DiscussionDetails />}
-					/>
-
-				</Route>
+				
 				<Route
 					element={<RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.MOD]} />}
 				>
 					<Route exact path="/" element={<DashBoard />} />
 					<Route exact path="/dashboard" element={<DashBoard />} />
-
-					<Route exact path="/forums" element={<ForumManage />} />
-					<Route exact path="/discussions" element={<DiscussionManage />} />
-
 					<Route exact path="/tags" element={<TagsManage />} />
+
+					<Route exact path="/discussions" element={<DiscussionManage />} />
 
 					<Route
 						exact
@@ -57,12 +44,16 @@ function AdminRoutes() {
 						element={<DiscussionDetails />}
 					/>
 
-					<Route exact path="/users" element={<UsersListManage />} />
-					<Route path="/member-profile/:username" element={<MemberProfile />} />
-
-					<Route path="email-option" element={<EmailOption />} />
-					<Route path="badges" element={<BadgeManage />} />
-					<Route path="avatar-option" element={<ConfigAvatar />} />
+					<Route
+						element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}
+					>
+						<Route exact path="/forums" element={<ForumManage />} />
+						<Route exact path="/users" element={<UsersListManage />} />
+						<Route path="/member-profile/:username" element={<MemberProfile />} />
+						<Route path="email-option" element={<EmailOption />} />
+						<Route path="badges" element={<BadgeManage />} />
+						<Route path="avatar-option" element={<ConfigAvatar />} />
+					</Route>
 
 				</Route>
 

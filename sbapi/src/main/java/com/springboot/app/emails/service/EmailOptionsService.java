@@ -17,4 +17,6 @@ public interface EmailOptionsService {
 	ServiceResponse<Void> sendDataEmail(DataEmailRequest dataEmailRequest);
 
 	ServiceResponse<List<DataEmailResponse>> getAllEmail();
+
+	ServiceResponse<Void> sendNotificationChangePassword(String name,String email);
 }

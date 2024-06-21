@@ -15,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -188,4 +190,38 @@ public class EmailOptionServiceImpl implements EmailOptionsService {
 		dataEmailResponse.setEmail(user.getEmail());
 		return dataEmailResponse;
 	}
+
+	//Another method to send email
+
+	public ServiceResponse<Void> sendNotificationChangePassword(String name,String email) {
+		DataEmailRequest dataEmailRequest = new DataEmailRequest();
+		dataEmailRequest.setEmails(Set.of(email));
+		dataEmailRequest.setSubject("Notification");
+		//change password
+		String template = "<h4>Hello "+name+",</h4>\n\n" +
+				"Your password has been changed.\n\n" +
+				"Now you can login with your new password.\n\n" +
+				"Thanks"
+				+ "\n\n" +"<h4>TechForums team<h4>";
+		dataEmailRequest.setTemplate(template);
+		return sendDataEmail(dataEmailRequest);
+	}
+
+
+	public ServiceResponse<Void> sendNotificationChangeInfo(String name,String email) {
+		DataEmailRequest dataEmailRequest = new DataEmailRequest();
+		dataEmailRequest.setEmails(Set.of(email));
+		dataEmailRequest.setSubject("Notification");
+		//change password
+		String template = "<h4>Hello "+name+",</h4>\n\n" +
+				"Your info account has been updated.\n\n" +
+				"Now you can login with your new info.\n\n" +
+				"Thanks"
+				+ "\n\n" +"<h4>TechForums team<h4>";
+		dataEmailRequest.setTemplate(template);
+		return sendDataEmail(dataEmailRequest);
+	}
+
+
+
 }

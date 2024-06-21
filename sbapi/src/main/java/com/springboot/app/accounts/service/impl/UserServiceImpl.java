@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.springboot.app.emails.dto.request.DataEmailRequest;
+import com.springboot.app.emails.service.EmailOptionsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +66,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private FollowUserRepository followUserRepository;
+
+	@Autowired
+	private EmailOptionsService emailOptionsService;
 
 	@Override
 	public Optional<User> findById(Long id) {
@@ -328,6 +333,7 @@ public class UserServiceImpl implements UserService {
 
 		user.setPassword(encoder.encode(newPasswordRequest.getNewPassword()));
 		userRepository.save(user);
+		emailOptionsService.sendNotificationChangePassword(user.getUsername(),user.getEmail());
 		return response;
 	}
 

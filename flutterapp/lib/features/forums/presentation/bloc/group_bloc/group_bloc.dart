@@ -11,16 +11,19 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
   //domain
   final GetAllGroupsUseCase _getAllGroups;
 
-  GroupBloc({required GetAllGroupsUseCase getAllGroupsUseCase})
-      : _getAllGroups = getAllGroupsUseCase,
+  GroupBloc({
+    required GetAllGroupsUseCase getAllGroupsUseCase,
+  })  : _getAllGroups = getAllGroupsUseCase,
         super(GroupLoading()) {
     on<GetGroupsEvent>((event, emit) async {
       emit(GroupLoading());
       try {
-        await _getAllGroups.call(NoParams()).then((value) {
-          value.fold(
-            (l) => emit(const GroupFailure(message: "Error")),
-            (groups) => emit(GroupSuccess(groups: groups)),
+        await _getAllGroups.call(NoParams()).then((groups) {
+          groups.fold(
+            (l) => emit(const GroupFailure(message: "Error loading groups")),
+            (group) {
+              emit(GroupSuccess(groups: group));
+            },
           );
         });
       } catch (err) {

@@ -247,7 +247,7 @@ const ChangePassword = () => {
           </Link>
         </div>
         <button
-          className={isAction() ? "active mx-auto" : "mx-auto"}
+          className={isAction() ? "active mx-auto btn-auth" : "mx-auto btn-auth"}
           disabled={isAction() ? +false : +true}
           onClick={handleChangePwd}
         >

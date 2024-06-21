@@ -60,8 +60,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     hintStyle: TextStyle(color: Colors.white),
                     filled: true,
                     fillColor: _isFocusedUsername
-                        ? Color.fromARGB(156, 104, 151, 187)
-                        : Color.fromARGB(172, 110, 114, 117),
+                        ? const Color.fromARGB(156, 104, 151, 187)
+                        : const Color.fromARGB(172, 110, 114, 117),
                     border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(8.0)),
                       borderSide: BorderSide.none,
