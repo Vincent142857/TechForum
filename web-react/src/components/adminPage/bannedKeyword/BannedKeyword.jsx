@@ -117,26 +117,25 @@ const BannedKeyword = () => {
 				>
 					New Banned Keyword
 				</button>
-
-				<div className="filter-item">
-					<select
-						className="form-control"
-						onChange={(e) => setSize(e.target.value)}
-						value={size}
-					>
-						<option value="5">5</option>
-						<option value="8">8</option>
-						<option value="10">10</option>
-					</select>
-				</div>
-
-				<div>
+				<div className="d-flex col-6">
 					<input
 						type="text"
 						className="form-control"
-						placeholder="Search"
+						placeholder="Search....."
 						onChange={(e) => setSearch(e.target.value)}
 					/>
+					<div className="ms-2 col-2">
+						<select
+							className="form-control"
+							onChange={(e) => setSize(e.target.value)}
+							value={size}
+						>
+							<option value="5">5 per page</option>
+							<option value="8">8 per page</option>
+							<option value="10">10 per page</option>
+							<option value="15">15 per page</option>
+						</select>
+					</div>
 				</div>
 			</div>
 			<Table striped bordered hover size="sm">

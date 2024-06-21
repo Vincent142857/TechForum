@@ -11,11 +11,13 @@ import { createAxios } from "../../services/createInstance";
 import { updateComment } from "../../services/forumService/CommentService";
 import "./Discussion.scss";
 import { getAllComments } from "../../services/forumService/CommentService";
+import { getAllBannedKeywords } from "../../services/bannedKeywordService/BannedKeywordService";
 
 //Utils
 import {
 	validateTitle,
 	validateContent,
+	replaceBannedWords,
 } from "../../utils/validForumAndDiscussionUtils";
 
 const ModalUpdateComment = (props) => {
@@ -121,6 +123,33 @@ const ModalUpdateComment = (props) => {
 	const module = {
 		toolbar: toolbarOptions,
 	};
+	const [list, setList] = useState([]);
+
+	const getBannedKeywords = async () => {
+		try {
+			const res = await getAllBannedKeywords(
+				currentUser?.accessToken,
+				axiosJWT
+			);
+			if (res && res.data) {
+				setList(res.data);
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const handleTitleChange = (event) => {
+		const filteredTitle = replaceBannedWords(event.target.value, list);
+		setTitle(filteredTitle);
+		setTitleError(""); // Reset titleError when title changes
+	};
+
+	const handleContentChange = (value) => {
+		const filteredContent = replaceBannedWords(value, list);
+		setContent(filteredContent);
+		setContentError(""); // Reset contentError when content changes
+	};
 
 	useEffect(() => {
 		if (show) {
@@ -128,6 +157,7 @@ const ModalUpdateComment = (props) => {
 			setContent(dataUpdateComment.content);
 			getAllDataComments();
 		}
+		getBannedKeywords();
 	}, [dataUpdateComment, show]);
 
 	return (
@@ -152,10 +182,7 @@ const ModalUpdateComment = (props) => {
 						id="title"
 						type="text"
 						value={title}
-						onChange={(value) => {
-							setTitle(value.target.value);
-							setTitleError("");
-						}}
+						onChange={handleTitleChange}
 						placeholder="Enter Title"
 					/>
 					{titleError && <div className="text-danger mt-1">{titleError}</div>}
@@ -167,10 +194,7 @@ const ModalUpdateComment = (props) => {
 						theme="snow"
 						modules={module}
 						value={content}
-						onChange={(value) => {
-							setContent(value);
-							setContentError("");
-						}}
+						onChange={handleContentChange}
 						id="content"
 						placeholder="Enter content here"
 						className="content-editor"

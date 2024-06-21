@@ -12,11 +12,13 @@ import { loginSuccess } from "../../redux/authSlice";
 import { createAxios } from "../../services/createInstance";
 import { createDiscussion } from "../../services/forumService/DiscussionService";
 import { getPageDiscussion } from "../../services/forumService/DiscussionService";
+import { getAllBannedKeywords } from "../../services/bannedKeywordService/BannedKeywordService.jsx";
 
 //Utils
 import {
 	validateTitle,
 	validateContentDiscussion,
+	replaceBannedWords,
 } from "../../utils/validForumAndDiscussionUtils";
 
 const ModalAddDiscussion = (props) => {
@@ -116,8 +118,37 @@ const ModalAddDiscussion = (props) => {
 		}
 	};
 
+	const [list, setList] = useState([]);
+
+	const getBannedKeywords = async () => {
+		try {
+			const res = await getAllBannedKeywords(
+				currentUser?.accessToken,
+				axiosJWT
+			);
+			if (res && res.data) {
+				setList(res.data);
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const handleTitleChange = (event) => {
+		const filteredTitle = replaceBannedWords(event.target.value, list);
+		setTitle(filteredTitle);
+		setTitleError(""); // Reset titleError when title changes
+	};
+
+	const handleContentChange = (value) => {
+		const filteredContent = replaceBannedWords(value, list);
+		setContent(filteredContent);
+		setContentError(""); // Reset contentError when content changes
+	};
+
 	useEffect(() => {
 		listDiscussions();
+		getBannedKeywords();
 	}, []);
 
 	const toolbarOptions = [
@@ -168,10 +199,7 @@ const ModalAddDiscussion = (props) => {
 							id="title"
 							type="text"
 							value={title}
-							onChange={(event) => {
-								setTitle(event.target.value);
-								setTitleError("");
-							}}
+							onChange={handleTitleChange}
 							placeholder="Enter Title"
 						/>
 						{titleError && <div className="text-danger mt-1">{titleError}</div>}
@@ -183,10 +211,7 @@ const ModalAddDiscussion = (props) => {
 							theme="snow"
 							modules={module}
 							value={content}
-							onChange={(value) => {
-								setContent(value);
-								setContentError(""); // Reset contentError when content changes
-							}}
+							onChange={handleContentChange}
 							id="content"
 							placeholder="Enter content here"
 							className="content-editor"

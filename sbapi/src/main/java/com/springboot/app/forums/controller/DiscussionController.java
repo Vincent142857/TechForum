@@ -3,6 +3,7 @@ package com.springboot.app.forums.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.springboot.app.forums.dto.request.DiscussionCheckRole;
 import com.springboot.app.forums.dto.request.DiscussionUpdateDTO;
 import com.springboot.app.forums.repository.DiscussionRepository;
 import org.modelmapper.ModelMapper;
@@ -226,4 +227,14 @@ public class DiscussionController {
 			}
 			return ResponseEntity.ok(new ObjectResponse("404", "Discussion not found", null));
 		}
+
+		@GetMapping("/checkRole/{discussionId}")
+		public ResponseEntity<ObjectResponse> checkRole(@PathVariable Long discussionId) {
+			ServiceResponse<DiscussionCheckRole> response = discussionService.checkRole(discussionId);
+			if (response.getDataObject() != null && response.getDataObject().getDiscussionId() != null) {
+				return ResponseEntity.ok(new ObjectResponse("200", "Role found", response.getDataObject()));
+			}
+			return ResponseEntity.ok(new ObjectResponse("404", "Role not found", null));
+		}
+
 }

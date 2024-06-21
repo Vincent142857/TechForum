@@ -21,6 +21,7 @@ import { fetchImage } from "../../services/userService/UserService";
 import { registerBookmark } from "../../services/bookmarkService/bookmarkService";
 import { getDiscussionById } from "../../services/forumService/DiscussionService";
 import { getAllComments } from "../../services/forumService/CommentService";
+import { getAllBannedKeywords } from "../../services/bannedKeywordService/BannedKeywordService";
 
 //Modal
 import DiscussionInfo from "./DiscussionInfo";
@@ -37,6 +38,7 @@ import { formatLongDate } from "../../utils/FormatDateTimeHelper";
 import {
 	validateTitle,
 	validateContent,
+	replaceBannedWords,
 } from "../../utils/validForumAndDiscussionUtils";
 
 const toolbarOptions = [
@@ -326,6 +328,7 @@ const DiscussionDetails = () => {
 		setComments(cloneComments);
 		fetchFirstCommentData();
 		fetchAllCommentData();
+		getDiscussionByIdInfo();
 	};
 
 	//update Comment
@@ -378,12 +381,40 @@ const DiscussionDetails = () => {
 
 	const [showModelDeleteDiscussion, setShowModelDeleteDiscussion] =
 		useState(false);
+	const [list, setList] = useState([]);
+
+	const getBannedKeywords = async () => {
+		try {
+			const res = await getAllBannedKeywords(
+				currentUser?.accessToken,
+				axiosJWT
+			);
+			if (res && res.data) {
+				setList(res.data);
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const handleTitleChange = (event) => {
+		const filteredTitle = replaceBannedWords(event.target.value, list);
+		setTitle(filteredTitle);
+		setTitleError(""); // Reset titleError when title changes
+	};
+
+	const handleContentChange = (value) => {
+		const filteredContent = replaceBannedWords(value, list);
+		setContent(filteredContent);
+		setContentError(""); // Reset contentError when content changes
+	};
 
 	useEffect(() => {
 		fetchFirstCommentData();
 		fetchAllCommentData();
 		getDiscussionByIdInfo();
 		getAllDataComments();
+		getBannedKeywords();
 	}, [discussionId]);
 
 	useEffect(() => {
@@ -468,12 +499,6 @@ const DiscussionDetails = () => {
 												onClick={() => handleClickDelete(comment)}
 											></button>
 										)}
-										{/* {comment?.title === titleDisc.title && (
-											<button
-												className="mx-2 fa-solid fa-xmark fa-2x"
-												onClick={() => setShowModelDeleteDiscussion(true)}
-											></button>
-										)} */}
 									</small>
 								)}
 							</>
@@ -506,14 +531,18 @@ const DiscussionDetails = () => {
 								className={`d-block ${isLastReply ? "" : "reply-container"}`}
 								style={{ marginLeft: "20px" }}
 							>
-								<div className="d-flex" style={{ paddingTop: "10px" }}>
-									<span
+								<div style={{ paddingTop: "10px" }}>
+									<div
 										dangerouslySetInnerHTML={{ __html: reply?.content }}
-									></span>
-									<span style={{ marginLeft: "6px" }}>
-										- {reply?.author?.username}{" "}
-										{formatLongDate(reply?.createdAt)}
-									</span>
+									></div>
+									<div
+										style={{
+											fontSize: "12px",
+											textAlign: "right",
+										}}
+									>
+										{reply?.author?.username} {formatLongDate(reply?.createdAt)}
+									</div>
 								</div>
 							</div>
 						);
@@ -585,10 +614,7 @@ const DiscussionDetails = () => {
 													id="title"
 													type="text"
 													value={title}
-													onChange={(value) => {
-														setTitle(value.target.value);
-														setTitleError("");
-													}}
+													onChange={handleTitleChange}
 													placeholder="Enter Title"
 												/>
 												{titleError && (
@@ -602,10 +628,7 @@ const DiscussionDetails = () => {
 													theme="snow"
 													modules={module}
 													value={content}
-													onChange={(value) => {
-														setContent(value);
-														setContentError("");
-													}}
+													onChange={handleContentChange}
 													id="content"
 													placeholder="Enter content here"
 													className="content-editor"
