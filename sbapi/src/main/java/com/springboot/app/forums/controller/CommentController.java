@@ -34,9 +34,6 @@ public class CommentController {
 	private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
 
 	@Autowired
-	private DiscussionService discussionService;
-
-	@Autowired
 	private GenericService genericService;
 
 	@Autowired

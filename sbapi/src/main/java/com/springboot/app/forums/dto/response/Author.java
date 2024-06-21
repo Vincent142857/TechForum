@@ -7,6 +7,9 @@ public class Author {
 	private Long reputation;
 	private Long totalDiscussions;
 	private Long totalComments;
+	private String badgeName;
+	private String badgeIcon;
+	private  String badgeColor;
 
 	public String getUsername() {
 		return username;
@@ -54,5 +57,29 @@ public class Author {
 
 	public void setTotalComments(Long totalComments) {
 		this.totalComments = totalComments;
+	}
+
+	public String getBadgeName() {
+		return badgeName;
+	}
+
+	public void setBadgeName(String badgeName) {
+		this.badgeName = badgeName;
+	}
+
+	public String getBadgeIcon() {
+		return badgeIcon;
+	}
+
+	public void setBadgeIcon(String badgeIcon) {
+		this.badgeIcon = badgeIcon;
+	}
+
+	public String getBadgeColor() {
+		return badgeColor;
+	}
+
+	public void setBadgeColor(String badgeColor) {
+		this.badgeColor = badgeColor;
 	}
 }

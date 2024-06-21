@@ -128,6 +128,7 @@ const DiscussionDetails = () => {
 		let res = await getAllCommentByDiscussionId(pageData);
 		if (res?.data?.length > 0) {
 			setListComment(res.data);
+			console.log(res.data);
 			setPageSize(res.pageSize);
 			setTotalPages(res.totalPages);
 		} else {
@@ -438,11 +439,20 @@ const DiscussionDetails = () => {
 									<small>
 										post at:
 										{comment?.createdAt && formatLongDate(comment?.createdAt)}
-										<br />
-										<i className="fa-solid fa-star" alt="reputation"></i>
-										{comment?.author?.reputation}{" "}
-										<i className="fa-solid fa-pen"></i>{" "}
-										{comment?.author?.totalDiscussions}
+										<div className="d-flex justify-content-start align-items-center">
+											<div>
+												<i className="fa-solid fa-star" alt="reputation"></i>
+												{comment?.author?.reputation}{" "}
+											</div>
+											<div className="mx-2">
+												<i className="fa-solid fa-pen"></i>{" "}
+												{comment?.author?.totalDiscussions}
+											</div>
+											<div style={{ color: comment?.author?.badgeColor }}>
+												<i className={comment?.author?.badgeIcon} />
+												{comment?.author?.badgeName}
+											</div>
+										</div>
 									</small>
 								</span>
 

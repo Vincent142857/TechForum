@@ -66,7 +66,10 @@ const ModalUpdateTags = (props) => {
 			axiosJWT
 		);
 		if (res && +res.status === 201) {
-			setListTags(res.data.data);
+			const listData = res.data.data.filter(
+				(data) => data.title !== dataEditTag.title
+			);
+			setListTags(listData);
 			toast.success(res?.data?.message);
 		} else {
 			toast.error(res?.data?.message);

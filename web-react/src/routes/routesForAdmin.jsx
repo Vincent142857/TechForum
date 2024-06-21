@@ -9,6 +9,8 @@ import BadgeManage from "../components/adminPage/badgeManage/badgeManage";
 import ConfigAvatar from "../components/adminPage/ConfigAvatar/ConfigAvatar";
 import { ROLES } from "../constants/";
 
+import BannedKeyword from "../components/adminPage/bannedKeyword/BannedKeyword";
+
 const routes = [
 	{
 		path: "/dashboard",
@@ -49,6 +51,13 @@ const routes = [
 		component: <TagsStat />,
 		layout: "/admin",
 		roles: [ROLES.ADMIN, ROLES.MOD]
+	},
+	{
+		path: "/banned-keywords",
+		name: "banned keywords",
+		icon: "fa-solid fa-file-word",
+		component: <BannedKeyword />,
+		layout: "/admin",
 	},
 	{
 		path: "/badges",

@@ -1,19 +1,15 @@
 package com.springboot.app.config;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.springboot.app.forums.dto.UploadedFileData;
+import com.springboot.app.bannedKeyword.BannedKeyword;
 import com.springboot.app.forums.entity.*;
-import com.springboot.app.forums.repository.CommentRepository;
-import com.springboot.app.forums.repository.CommentVoteRepository;
-import com.springboot.app.service.FileInfoHelper;
+import com.springboot.app.forums.repository.ForumGroupRepository;
+import com.springboot.app.bannedKeyword.BannedKeyWordService;
 import com.springboot.app.utils.JSFUtils;
-import jakarta.transaction.Transactional;
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +64,12 @@ public class DatabaseInit {
 	@Autowired
 	private BadgeService badgeService;
 
+	@Autowired
+	private BannedKeyWordService bannedKeyWordService;
+
+	@Autowired
+	private ForumGroupRepository forumGroupRepository;
+
 	@Bean
 	CommandLineRunner initDatabase(RoleRepository roleRepository, UserRepository userRepository) {
 		return new CommandLineRunner() {
@@ -77,7 +79,7 @@ public class DatabaseInit {
 				addRoles(roleRepository);
 				addAdmin(userRepository, roleRepository);
 
-				if(genericService.getEntity(ForumGroup.class, 1L).getDataObject() == null){
+				if(forumGroupRepository.findAll().isEmpty()){
 					createForumGroup("admin");
 				}
 
@@ -86,7 +88,12 @@ public class DatabaseInit {
 				createCommentOption();
 				createAvatarOption();
 				createBadgeDefault();
-			}
+
+				if(bannedKeyWordService.getAllBannedKeywords().getDataObject().isEmpty()){
+					createBannedKeyword();
+				}
+
+				}
 		};
 	}
 
@@ -135,6 +142,22 @@ public class DatabaseInit {
 
 		userRepository.save(ad);
 
+	}
+
+	private void createBannedKeyword () {
+		BannedKeyword bannedKeyword = new BannedKeyword();
+		bannedKeyword.setKeyword("fuck");
+		bannedKeyWordService.saveBannedKeyword(bannedKeyword);
+
+		BannedKeyword bannedKeyword2 = new BannedKeyword();
+		bannedKeyword2.setKeyword("lol");
+		bannedKeyWordService.saveBannedKeyword(bannedKeyword2);
+
+		BannedKeyword bannedKeyword3 = new BannedKeyword();
+		bannedKeyword3.setKeyword("dcm");
+		bannedKeyWordService.saveBannedKeyword(bannedKeyword3);
+
+		logger.info("Bulletin tag created.");
 	}
 
 	private void createBulletinTag(Discussion discussion) {

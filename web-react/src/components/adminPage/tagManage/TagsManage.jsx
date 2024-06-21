@@ -245,14 +245,14 @@ const TagsManage = () => {
 								<i
 									className="fa-solid fa-arrow-down-long"
 									onClick={() => {
-										setOrderBy("id");
+										setOrderBy("label");
 										setSort("desc");
 									}}
 								></i>
 								<i
 									className="fa-solid fa-arrow-up-long"
 									onClick={() => {
-										setOrderBy("id");
+										setOrderBy("label");
 										setSort("asc");
 									}}
 								></i>

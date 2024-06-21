@@ -1,7 +1,7 @@
 import DashBoard from "../components/adminPage/adminDashBoard/DashBoardPage";
 import DiscussionManage from "../components/adminPage/discussionManage/DiscussionManage";
 import TagsStat from "../components/adminPage/tagManage/TagsManage";
-
+import BannedKeyword from "../components/adminPage/bannedKeyword/BannedKeyword";
 
 const routesForMod = [
 	{
@@ -23,6 +23,13 @@ const routesForMod = [
 		name: "tags manage",
 		icon: "fa-solid fa-tags",
 		component: <TagsStat />,
+		layout: "/admin",
+	},
+	{
+		path: "/banned-keywords",
+		name: "banned keywords",
+		icon: "fa-solid fa-file-word",
+		component: <BannedKeyword />,
 		layout: "/admin",
 	},
 ];
