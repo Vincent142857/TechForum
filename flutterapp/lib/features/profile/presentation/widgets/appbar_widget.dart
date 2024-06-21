@@ -7,7 +7,11 @@ AppBar buildAppBar(BuildContext context) {
   final icon = CupertinoIcons.moon_stars;
 
   return AppBar(
-    // leading: BackButton(),
+    leading: BackButton(
+      onPressed: () {
+        // Navigator.pop(context);
+      },
+    ),
     backgroundColor: Colors.transparent,
     elevation: 0,
     actions: [

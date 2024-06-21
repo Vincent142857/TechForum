@@ -43,7 +43,6 @@ class _ProfileScreenState extends State<ProfileScreen>
   Widget build(BuildContext context) {
     const user = UserPreferences.myUser;
     return Scaffold(
-      drawer: ProfileDrawerWidget(),
       appBar: buildAppBar(context),
       body: BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, state) {

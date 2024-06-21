@@ -121,6 +121,8 @@ class _ProfileDrawerWidgetState extends State<ProfileDrawerWidget> {
                     TextButton(
                       onPressed: () {
                         context.read<AuthBloc>().add(LoggedOut());
+                        // Navigator.pushNamed(context, '/login');
+                        Navigator.pushReplacementNamed(context, '/login');
                       },
                       child: const Text('Log out'),
                     ),

@@ -19,11 +19,6 @@ import BadgeManage from "../components/adminPage/badgeManage/badgeManage";
 import ConfigAvatar from "../components/adminPage/ConfigAvatar/ConfigAvatar";
 import { ROLES } from "../constants/index";
 
-// const ROLES = {
-// 	ADMIN: "ROLE_ADMIN",
-// 	USER: "ROLE_USER",
-// 	MOD: "ROLE_MOD",
-// };
 
 function AdminRoutes() {
 	return (

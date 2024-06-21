@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -59,7 +60,8 @@ public class MobileForumsServiceImpl implements MobileForumsService{
 	public ServiceResponse<List<MobileGroupResponse>> getAllForumGroups() {
 		ServiceResponse<List<MobileGroupResponse>> response = new ServiceResponse<>();
 		List<MobileGroupResponse> forumGroups = forumGroupRepository.findAll()
-				.stream().map(this::mapForumGroupToForumsGroupResponse).toList();
+				.stream().sorted(Comparator.comparing(ForumGroup::getSortOrder))
+				.map(this::mapForumGroupToForumsGroupResponse).toList();
 		response.setDataObject(forumGroups);
 		return response;
 	}
@@ -107,6 +109,7 @@ public class MobileForumsServiceImpl implements MobileForumsService{
 			return response;
 		}
 		List<ViewCommentResponse> viewCommentResponses = comments.stream()
+				.sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()))
 				.map(commentService::mapCommentToViewCommentResponse).toList();
 		response.setDataObject(viewCommentResponses);
 

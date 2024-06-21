@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapp/core/storage/storage.dart';
-import 'package:flutterapp/features/feed/presentation/views/home_page.dart';
+import 'package:flutterapp/features/feed/presentation/views/home_screen.dart';
 import 'package:flutterapp/features/members/presentation/views/member_list_screen.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -58,11 +58,6 @@ class _AppDrawerState extends State<AppDrawer> {
     return Drawer(
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
-          // if (state is ProfPicLoading) {
-          //   return const CircularProgressIndicator();
-          // } else if (state is ProfPicSuccess) {
-          //   return
-          // }
           return ListView(
             children: [
               ListTile(
@@ -128,7 +123,7 @@ class _AppDrawerState extends State<AppDrawer> {
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => const HomePage(),
+                            builder: (context) => const HomeScreen(),
                           ),
                         );
                       },

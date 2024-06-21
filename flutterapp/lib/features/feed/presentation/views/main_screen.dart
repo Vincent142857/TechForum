@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterapp/core/storage/storage.dart';
-import 'package:flutterapp/features/feed/presentation/views/home_page.dart';
 import 'package:flutterapp/features/feed/presentation/views/home_screen.dart';
+import 'package:flutterapp/features/feed/presentation/widgets/app_drawer_widget.dart';
 import 'package:flutterapp/features/forums/presentation/views/search_screen.dart';
 import 'package:flutterapp/features/members/presentation/views/member_list_screen.dart';
 
@@ -41,9 +41,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   static const List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
     HomeScreen(),
-    // ForumScreen(),
+    ForumScreen(),
     MemberListScreen(),
     ProfileScreen(ownerId: ''),
   ];
