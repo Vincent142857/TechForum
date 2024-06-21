@@ -18,14 +18,14 @@ class DiscussionRepoImpl implements DiscussionRepo {
   DiscussionRepoImpl({required this.discussionDataSource});
 
   @override
-  Future<Either<Failure, CommentEntity>> createComment({
+  Future<Either<Failure, String>> createComment({
     required String content,
     required int discussionId,
-    required File? imageURL,
+    required String author,
   }) async {
     try {
       final result = await discussionDataSource.createComment(
-          content, discussionId, imageURL);
+          content, discussionId, author);
       if (result == null) return Left(ServerFailure());
       return Right(result);
     } on ServerException {
@@ -38,10 +38,11 @@ class DiscussionRepoImpl implements DiscussionRepo {
     required String title,
     required String content,
     required int forumId,
+    required String author,
   }) async {
     try {
-      final result =
-          await discussionDataSource.createDiscussion(title, content, forumId);
+      final result = await discussionDataSource.createDiscussion(
+          title, content, forumId, author);
       if (result == null) return Left(ServerFailure());
       return Right(result);
     } on ServerException {

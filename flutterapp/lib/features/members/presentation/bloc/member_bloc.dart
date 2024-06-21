@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutterapp/features/members/domain/entities/member_entity.dart';
 
-import '../../../../core/usecases/get_all_member.dart';
+import '../../../../core/usecases/members/get_all_member.dart';
 import '../../domain/usecases/get_all_memeber.dart';
 
 part 'member_event.dart';

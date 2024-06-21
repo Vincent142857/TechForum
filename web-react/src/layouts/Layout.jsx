@@ -4,9 +4,11 @@ import PerfectScrollbar from "perfect-scrollbar";
 
 import { Outlet, useLocation } from "react-router-dom"
 import Sidebar from "./sidebar/Sidebar"
-
+import { useSelector } from 'react-redux';
+import { ROLES } from "../constants";
 import routes from "../routes/routes";
 import routesAdmin from "../routes/routesForAdmin";
+import routesForMod from "../routes/routesForMod";
 
 import Header from './header/Header';
 import Footer from "./footer/Footer";
@@ -51,9 +53,16 @@ const Layout = (props) => {
     setBackgroundColor(color);
   }
 
+  const currentUser = useSelector(state => state.auth.login?.currentUser);
+  const isShowRouteAdmin = () => {
+    const rolesOfCurrentUser = currentUser?.roles;
+    return rolesOfCurrentUser.includes(ROLES.ADMIN);
+  }
+
   const routesSidebar = (route) => {
     if (route === "routesAdmin") {
-      return routesAdmin;
+      return isShowRouteAdmin() ? routesAdmin : routesForMod;
+      // return routesAdmin;
     }
     return routes;
   }

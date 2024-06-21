@@ -3,6 +3,7 @@ package com.springboot.app.accounts.controller;
 import java.util.List;
 import java.util.Objects;
 
+import com.springboot.app.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -112,11 +113,11 @@ public class UserController {
 	@PostMapping("role/update")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<ObjectResponse> updateRoleUser(@Valid @RequestBody UpdateRoleRequest updateRoleRequest) {
+		var session = JwtUtils.getSession();
+		if(updateRoleRequest.getUserId().equals(session.getId())) {
+			return ResponseEntity.badRequest().body(new ObjectResponse("400", "Cannot update your own role", null));
+		}
 		// check user has role admin
-//		if (updateRoleRequest.getRoles().stream().anyMatch(role -> role.equals("ROLE_ADMIN"))) {
-//			return ResponseEntity.status(400)
-//					.body(new ObjectResponse("400", "Cannot update user with role admin", null));
-//		}
 		boolean isRoleValid = updateRoleRequest.getRoles().stream().allMatch(Validators::isValidRole);
 		if (!isRoleValid) {
 			return ResponseEntity.badRequest().body(new ObjectResponse("400", "Invalid role", null));
@@ -125,7 +126,7 @@ public class UserController {
 		if (response.getAckCode().equals(AckCodeType.SUCCESS)) {
 			return ResponseEntity.ok(new ObjectResponse("200", "User role updated", response.getDataObject()));
 		}
-		return ResponseEntity.ok(new ObjectResponse("500", "Failed to update user role", null));
+		return ResponseEntity.badRequest().body(new ObjectResponse("400", "Failed to update user role", null));
 	}
 
 }

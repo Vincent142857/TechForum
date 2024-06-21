@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutterapp/core/exceptions/failure.dart';
-import 'package:flutterapp/core/usecases/get_all_member.dart';
+import 'package:flutterapp/core/usecases/members/get_all_member.dart';
 import 'package:flutterapp/features/members/domain/entities/member_entity.dart';
 
 import '../repository/member_repo.dart';

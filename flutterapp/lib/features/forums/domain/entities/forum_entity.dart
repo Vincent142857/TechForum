@@ -5,18 +5,23 @@ import 'package:equatable/equatable.dart';
 class ForumEntity extends Equatable {
   final int? id;
   final String? title;
+  final int? groupId;
+  final String? groupName;
   final int? totalComments;
   final List<DiscussionEntity> discussions;
 
   const ForumEntity({
     required this.id,
     required this.title,
+    required this.groupId,
+    required this.groupName,
     required this.totalComments,
     required this.discussions,
   });
 
   @override
-  List<Object?> get props => [id, title, totalComments, discussions];
+  List<Object?> get props =>
+      [id, title, groupId, groupName, totalComments, discussions];
 }
 
 class DiscussionEntity extends Equatable {

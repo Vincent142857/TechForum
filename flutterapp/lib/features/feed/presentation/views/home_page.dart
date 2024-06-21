@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage>
                 if (tabIndex == 0) {
                   BlocProvider.of<ForumFilterBloc>(context).add(
                     const UpdateForums(
-                      forumFilter: 0,
+                      forumFilter: -1,
                     ),
                   );
                 } else {
@@ -329,8 +329,8 @@ class _HomePageState extends State<HomePage>
 
   Widget _buildImage(DiscussionEntity discussion) {
     return buildAvatar(
-      imageUrl: discussion.imageUrl,
-      avatar: discussion.avatar,
+      imageUrl: discussion.imageUrl ?? '',
+      avatar: discussion.avatar ?? '',
       width: 42,
       height: 42,
     );

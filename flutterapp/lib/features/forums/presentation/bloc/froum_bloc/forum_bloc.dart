@@ -1,13 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutterapp/core/usecases/forums/get_all_forum.dart';
-import 'package:flutterapp/core/usecases/posts/create_discussion.dart';
 import 'package:flutterapp/features/forums/domain/entities/forum_entity.dart';
 import 'package:flutterapp/features/forums/domain/usecases/get_all_forum.dart';
-import 'package:flutterapp/features/forums/domain/usecases/get_forum_by.dart';
-import 'package:flutterapp/features/posts/domain/usecases/create_discussion.dart';
-
-import '../../../../../core/usecases/forums/get_forum_by.dart';
 
 part 'forum_event.dart';
 part 'forum_state.dart';

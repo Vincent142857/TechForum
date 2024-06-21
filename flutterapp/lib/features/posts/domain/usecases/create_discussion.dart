@@ -16,6 +16,7 @@ class CreateDiscussionUseCase
       title: params.title,
       content: params.content,
       forumId: params.forumId,
+      author: params.author,
     );
   }
 }

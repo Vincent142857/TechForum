@@ -152,10 +152,10 @@ class _CommentsScreenState extends State<CommentsScreen> {
 
   Widget _buildImage(CommentEntity comment) {
     return buildAvatar(
-      imageUrl: comment.author.imageUrl,
-      avatar: comment.author.avatar,
-      width: 50,
-      height: 50,
+      imageUrl: comment.author.imageUrl ?? '',
+      avatar: comment.author.avatar ?? '',
+      width: 42,
+      height: 42,
     );
   }
 }

@@ -137,29 +137,23 @@ const EmailOption = () => {
 	}
 
 
-	useEffect(() => {
+	const handleSendEmail = async () => {
+
+		//validation
 		setErrFrom("");
 		if (subject === "" || subject === null) {
 			setErrFrom("Please enter title from email!");
 		}
-	}, [subject]);
 
-	useEffect(() => {
 		setErrTo("");
 		if (selectedEmail.length <= 0 || selectedEmail === null) {
 			setErrTo("Please select from email!");
 		}
-	}, [selectedEmail]);
-
-	useEffect(() => {
 		setErrMsg("");
 		if (message === "" || message === null) {
 			setErrMsg("Please enter body of email!");
 		}
-	}, [message]);
 
-
-	const handleSendEmail = async () => {
 		if (errFrom === "" && errTo === "" && errMsg === "") {
 			const emailOption = {
 				emails: selectedEmail.map(item => item.value),
@@ -218,7 +212,7 @@ const EmailOption = () => {
 				<Row>
 					<div className="d-flex justify-content-between">
 						{!showTest && (
-							<Button
+							<Button style={{ minWidth: 200 }}
 								className="col-2 me-3"
 								variant="secondary"
 								onClick={() => setShowTest(!showTest)}
@@ -227,7 +221,7 @@ const EmailOption = () => {
 							</Button>
 						)}
 						{!show && (
-							<Button
+							<Button style={{ minWidth: 200 }}
 								className="col-2 me-3"
 								variant="info"
 								onClick={() => setShow(!show)}
@@ -296,13 +290,13 @@ const EmailOption = () => {
 							</div>
 						</Row>
 						<Row className="d-flex justify-content-end">
-							<button
+							<button style={{ minWidth: 200 }}
 								className="btn btn-secondary col-3 me-5"
 								onClick={() => setShow(false)}
 							>
 								Cancel
 							</button>
-							<Button className="col-3 me-5" onClick={handleUpdateEmailOption}>
+							<Button style={{ minWidth: 200 }} className="col-3 me-5" onClick={handleUpdateEmailOption}>
 								Update
 							</Button>
 						</Row>
@@ -358,14 +352,14 @@ const EmailOption = () => {
 								</div>
 							</div>
 							<div className="d-flex justify-content-end">
-								<button
+								<button style={{ minWidth: 200 }}
 									className="btn btn-secondary col-md-2 me-5"
 									onClick={() => setShowTest(false)}
 								>
 									Cancel
 								</button>
 
-								<button
+								<button style={{minWidth:200}}
 									className="col-md-2 me-3 btn btn-group-vertical align-items-center"
 									onClick={handleSendEmail}
 								>

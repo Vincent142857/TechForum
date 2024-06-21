@@ -1,14 +1,12 @@
 part of 'group_bloc.dart';
 
-enum GroupEventStatus { initial, loading, success, failure }
+// enum GroupEventStatus { initial, loading, success, failure }
 
 abstract class GroupState extends Equatable {
   const GroupState();
   @override
   List<Object> get props => [];
 }
-
-class GroupInitial extends GroupState {}
 
 class GroupLoading extends GroupState {}
 

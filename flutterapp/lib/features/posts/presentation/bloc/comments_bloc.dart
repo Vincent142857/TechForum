@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutterapp/core/storage/storage.dart';
 import 'package:flutterapp/core/usecases/posts/create_comment.dart';
 import 'package:flutterapp/core/usecases/posts/create_discussion.dart';
 import 'package:flutterapp/core/usecases/posts/get_all_comment.dart';
@@ -50,6 +51,7 @@ class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
         title: event.title,
         content: event.content,
         forumId: event.forumId,
+        author: await _getUserId(),
       ))
           .then((discussion) {
         discussion.fold(
@@ -64,7 +66,7 @@ class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
           .call(ParamsComment(
         content: event.content,
         discussionId: event.discussionId,
-        imageURL: event.imageURL,
+        author: await _getUserId(),
       ))
           .then((comment) {
         comment.fold(
@@ -73,5 +75,9 @@ class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
         );
       });
     });
+  }
+
+  Future<String> _getUserId() async {
+    return await Storage().secureStorage.read(key: 'userId') ?? '';
   }
 }

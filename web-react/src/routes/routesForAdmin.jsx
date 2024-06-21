@@ -7,6 +7,7 @@ import TableUsers from "../components/adminPage/userManage/UsersListManagePage";
 import EmailOption from "../components/adminPage/emailOptionManage/EmailOptionPage";
 import BadgeManage from "../components/adminPage/badgeManage/badgeManage";
 import ConfigAvatar from "../components/adminPage/ConfigAvatar/ConfigAvatar";
+import { ROLES } from "../constants/";
 
 import BannedKeyword from "../components/adminPage/bannedKeyword/BannedKeyword";
 
@@ -17,6 +18,7 @@ const routes = [
 		icon: "fa-solid fa-building-columns",
 		component: <DashBoard />,
 		layout: "/admin",
+		roles: [ROLES.ADMIN, ROLES.MOD]
 	},
 	{
 		path: "/users",
@@ -24,6 +26,7 @@ const routes = [
 		icon: "fa-solid fa-people-group",
 		component: <TableUsers />,
 		layout: "/admin",
+		roles: [ROLES.ADMIN]
 	},
 	{
 		path: "/forums",
@@ -31,6 +34,7 @@ const routes = [
 		icon: "fa-solid fa-users",
 		component: <ForumManage />,
 		layout: "/admin",
+		roles: [ROLES.ADMIN]
 	},
 	{
 		path: "/discussions",
@@ -38,6 +42,7 @@ const routes = [
 		icon: "fa-solid fa-comments",
 		component: <DiscussionManage />,
 		layout: "/admin",
+		roles: [ROLES.ADMIN, ROLES.MOD]
 	},
 	{
 		path: "/tags",
@@ -45,6 +50,7 @@ const routes = [
 		icon: "fa-solid fa-tags",
 		component: <TagsStat />,
 		layout: "/admin",
+		roles: [ROLES.ADMIN, ROLES.MOD]
 	},
 	{
 		path: "/banned-keywords",
@@ -56,9 +62,10 @@ const routes = [
 	{
 		path: "/badges",
 		name: "Badge manage",
-		icon: "fa-solid fa-tags",
+		icon: "fa-solid fa-shield-cat",
 		component: <BadgeManage />,
 		layout: "/admin",
+		roles: [ROLES.ADMIN]
 	},
 	{
 		path: "/email-option",
@@ -66,6 +73,7 @@ const routes = [
 		icon: "fa-solid fa-envelope",
 		component: <EmailOption />,
 		layout: "/admin",
+		roles: [ROLES.ADMIN]
 	},
 	{
 		path: "/avatar-option",
@@ -73,6 +81,7 @@ const routes = [
 		icon: "fa-solid fa-gear",
 		component: <ConfigAvatar />,
 		layout: "/admin",
+		roles: [ROLES.ADMIN]
 	},
 ];
 

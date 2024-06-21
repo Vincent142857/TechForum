@@ -1,6 +1,10 @@
 package com.springboot.app.forums.controller.mobile;
 
+import com.springboot.app.dto.response.AckCodeType;
 import com.springboot.app.dto.response.ServiceResponse;
+import com.springboot.app.forums.dto.request.MobileCommentRequest;
+import com.springboot.app.forums.dto.request.MobileDiscussionRequest;
+import com.springboot.app.forums.dto.response.MobileDiscussionResponse;
 import com.springboot.app.forums.dto.response.MobileGroupResponse;
 import com.springboot.app.forums.dto.response.MobileForumResponse;
 import com.springboot.app.forums.dto.response.ViewCommentResponse;
@@ -10,10 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -56,5 +57,30 @@ public class MobileForumController {
 		return ResponseEntity.ok()
 				.contentType(MediaType.TEXT_HTML)
 				.body(response.getDataObject());
+	}
+
+
+	//create a new discussion
+	@PostMapping("/discussions/add")
+	public ResponseEntity<MobileDiscussionResponse> addDiscussion(@RequestBody MobileDiscussionRequest newDiscussion) {
+		logger.info("MobileDiscussionController.addDiscussion() called");
+		ServiceResponse<MobileDiscussionResponse> response = mobileForumsService.addNewDiscussion(newDiscussion);
+		if(response.getAckCode() != AckCodeType.SUCCESS) {
+			return ResponseEntity.badRequest().body(null);
+		} else {
+			return ResponseEntity.ok(response.getDataObject());
+		}
+	}
+
+	//create a new comment
+	@PostMapping("/comments/add")
+	public ResponseEntity<ViewCommentResponse> addComment(@RequestBody MobileCommentRequest newComment) {
+		logger.info("MobileDiscussionController.addComment() called");
+		ServiceResponse<ViewCommentResponse> response = mobileForumsService.addNewComment(newComment);
+		if(response.getAckCode() != AckCodeType.SUCCESS) {
+			return ResponseEntity.badRequest().body(null);
+		} else {
+			return ResponseEntity.ok(response.getDataObject());
+		}
 	}
 }

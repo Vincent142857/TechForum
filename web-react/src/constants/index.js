@@ -15,7 +15,7 @@ export const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 export const ROLES = {
   ADMIN: 'ROLE_ADMIN',
   USER: 'ROLE_USER',
-  MOD: 'ROLE_MOD'
+  MOD: 'ROLE_MODERATOR'
 }
 
 export const ACCOUNT_STATUS = {

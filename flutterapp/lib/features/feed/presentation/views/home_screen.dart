@@ -15,274 +15,73 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../../config/theme/theme_manager.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GroupBloc, GroupState>(
-      builder: (context, state) {
-        if (state is GroupLoading) {
-          return const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: CircularProgressIndicator(),
-          );
-        } else if (state is GroupSuccess && state.groups.isEmpty) {
-          return const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text('No groups found'),
-          );
-        } else if (state is GroupSuccess) {
-          return const Center(child: Text('Success'));
-        } else {
-          return const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text('Something went wrong'),
-          );
-        }
-      },
-    );
-  }
-
-//-------------------End of HomeScreen-------------------
-  BlocConsumer<ForumFilterBloc, ForumFilterState> _toForumGroup(
-      TabController tabController, String title) {
-    return BlocConsumer<ForumFilterBloc, ForumFilterState>(
-      listener: (context, state) {
-        if (state is ForumFilterLoaded) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Forums $title loaded'),
-            ),
-          );
-        }
-      },
-      builder: (context, state) {
-        if (state is ForumFilterLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (state is ForumFilterLoaded && state.forums.isEmpty) {
-          return const Center(
-            child: Text('No forums found'),
-          );
-        } else if (state is ForumFilterLoaded) {
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: state.forums.length,
-                itemBuilder: (context, index) {
-                  return _forumItemCard(context, state.forums[index]);
-                }),
-          );
-        } else {
-          return const Text('Something went wrong');
-        }
-      },
-    );
-  }
-
-  Container _forumItemCard(BuildContext context, ForumEntity forum) {
-    if (forum.discussions.isEmpty) {
-      return Container(
-        margin: const EdgeInsets.only(bottom: 8.0),
-        decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: Colors.grey,
-              width: 1,
-            ),
-          ),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Forums"),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      '${(forum.title)?.toUpperCase()}',
-                      style: const TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
+        body: BlocBuilder<GroupBloc, GroupState>(builder: (context, state) {
+          if (state is GroupLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is GroupSuccess) {
+            return DefaultTabController(
+              length: state.groups.length,
+              child: NestedScrollView(
+                headerSliverBuilder: (context, innerBoxIsScrolled) {
+                  return [
+                    SliverAppBar(
+                      pinned: true,
+                      floating: true,
+                      forceElevated: innerBoxIsScrolled,
+                      bottom: TabBar(
+                        isScrollable: true, // Cho phép cuộn ngang
+                        tabs: state.groups
+                            .map((tab) => Tab(text: tab.title))
+                            .toList(),
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => CreateDiscussion(
-                              forumId: forum.id ?? 1,
-                              title: forum.title ?? 'Discussion',
-                            ),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.add_circle_sharp),
-                    ),
-                  ],
+                  ];
+                },
+                body: TabBarView(
+                  children: state.groups
+                      .map((tab) => TabViewContent(tab: tab))
+                      .toList(),
                 ),
-                const SizedBox(
-                  height: 4,
-                ),
-                const Text('No discussions found'),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8.0),
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.grey,
-            width: 1,
-          ),
-        ),
-      ),
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '${(forum.title)?.toUpperCase()}',
-                    style: const TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => CreateDiscussion(
-                            forumId: forum.id ?? 1,
-                            title: forum.title ?? 'Discussion',
-                          ),
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.add_circle_sharp),
-                  ),
-                ],
               ),
-              const SizedBox(
-                height: 4,
-              ),
-              //list of discussions
-              ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: forum.discussions.length,
-                  itemBuilder: (context, index) {
-                    return _discussionItemCard(
-                        context, forum.discussions[index], forum.id);
-                  }),
-            ],
-          ),
-        ),
+            );
+          } else {
+            return const Center(
+              child: Text('Something went wrong'),
+            );
+          }
+        }),
       ),
     );
   }
+}
 
-  Container _discussionItemCard(
-      BuildContext context, DiscussionEntity discussion, int? forumId) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8.0),
-      child: SingleChildScrollView(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _buildImage(discussion),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          '${discussion.discussionTitle}',
-                          style: const TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          context.read<CommentsBloc>().add(LoadCommentsEvent(
-                                discussionId: discussion.discussionId!,
-                              ));
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => CommentsScreen(
-                                discussionId: discussion.discussionId ?? 1,
-                                discussionTitle:
-                                    discussion.discussionTitle ?? 'Discussion',
-                              ),
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.arrow_forward),
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  buildCreatedAt(discussion),
-                  //list of discussions
-                ],
-              ),
-            ),
-            Container(
-              height: 1,
-              color: Colors.grey,
-              margin: const EdgeInsets.symmetric(vertical: 8),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+class TabViewContent extends StatelessWidget {
+  final ForumGroupEntity tab;
 
-  Widget buildCreatedAt(DiscussionEntity discussion) {
-    DateTime createdAt = discussion.createdAt ?? DateTime.now();
-    String name = discussion.name ?? discussion.username ?? "Anonymous";
-    return Text(
-      '$name created at: ${DateFormat('dd-MM-yyyy HH:mm').format(createdAt)}',
-      style: const TextStyle(
-        fontSize: 14.0,
-      ),
-    );
-  }
+  const TabViewContent({super.key, required this.tab});
 
-  Widget _buildImage(DiscussionEntity discussion) {
-    return buildAvatar(
-      imageUrl: discussion.imageUrl,
-      avatar: discussion.avatar,
-      width: 50,
-      height: 50,
+  @override
+  Widget build(BuildContext context) {
+    // Replace this with your actual tab view content based on `tab`
+    return Center(
+      child: Text('Content of ${tab.title}'),
     );
   }
 }
