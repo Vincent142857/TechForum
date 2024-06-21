@@ -11,8 +11,10 @@ import com.springboot.app.accounts.entity.UserStat;
 import com.springboot.app.accounts.repository.UserRepository;
 import com.springboot.app.accounts.repository.UserStatRepository;
 import com.springboot.app.accounts.service.UserStatService;
+import com.springboot.app.forums.dto.request.DiscussionCheckRole;
 import com.springboot.app.forums.dto.request.LastComment;
 import com.springboot.app.forums.dto.response.Author;
+import com.springboot.app.forums.entity.*;
 import com.springboot.app.forums.repository.*;
 import com.springboot.app.forums.service.CommentService;
 import com.springboot.app.tags.Tag;
@@ -29,13 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.springboot.app.dto.response.PaginateResponse;
 import com.springboot.app.dto.response.ServiceResponse;
 import com.springboot.app.forums.dto.DiscussionDTO;
-import com.springboot.app.forums.entity.Comment;
-import com.springboot.app.forums.entity.CommentInfo;
-import com.springboot.app.forums.entity.CommentVote;
-import com.springboot.app.forums.entity.Discussion;
-import com.springboot.app.forums.entity.DiscussionStat;
-import com.springboot.app.forums.entity.Forum;
-import com.springboot.app.forums.entity.ForumStat;
 import com.springboot.app.forums.service.DiscussionService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -399,6 +394,34 @@ public class DiscussionServiceImpl implements DiscussionService {
 		CommentInfo lastComment = discussionStat.getLastComment();
 		commentInfoRepository.delete(lastComment);
 
+		return response;
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public ServiceResponse<DiscussionCheckRole> checkRole(Long discussionId){
+		ServiceResponse<DiscussionCheckRole> response = new ServiceResponse<>();
+		Discussion discussion = discussionRepository.findById(discussionId).orElse(null);
+		if(discussion == null) {
+			response.addMessage("Discussion not found");
+			return response;
+		}
+
+		Forum forum = discussion.getForum();
+		if(forum == null) {
+			response.addMessage("Forum not found");
+			return response;
+		}
+		ForumGroup forumGroup = forum.getForumGroup();
+		if(forumGroup == null) {
+			response.addMessage("Forum group not found");
+			return response;
+		}
+
+		DiscussionCheckRole discussionCheckRole = new DiscussionCheckRole();
+		discussionCheckRole.setDiscussionId(discussionId);
+		discussionCheckRole.setRoleName(forumGroup.getManager());
+		response.setDataObject(discussionCheckRole);
 		return response;
 	}
 

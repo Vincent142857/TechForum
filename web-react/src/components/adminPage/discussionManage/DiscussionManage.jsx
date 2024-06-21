@@ -4,14 +4,13 @@ import { debounce } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 //Service
 import { getPageDiscussion } from "../../../services/forumService/DiscussionService";
 import { getAllForum } from "../../../services/forumService/ForumService";
 import { createAxios } from "../../../services/createInstance";
 import { loginSuccess } from "../../../redux/authSlice";
-import { getUserModerator } from "../../../services/userService/UserService";
+import { checkRoleDiscussion } from "../../../services/forumService/DiscussionService";
 
 //Paginate
 import Pagination from "../../pagination/Pagination";
@@ -90,21 +89,24 @@ const DiscussionManage = () => {
 	const currentUser = useSelector((state) => state.auth.login?.currentUser);
 	let axiosJWT = createAxios(currentUser, dispatch, loginSuccess);
 
-	const [listModerator, setListModerator] = useState([]);
-	console.log(listModerator);
-	const ListUserModerator = async () => {
-		let res = await getUserModerator(currentUser?.accessToken, axiosJWT);
+	const handleCheckRole = async (discussionId) => {
+		const res = await checkRoleDiscussion(
+			discussionId,
+			currentUser?.accessToken,
+			axiosJWT
+		);
 		if (res && +res.status === 200) {
-			setListModerator(res.data);
+			if (currentUser?.username === res.data.data.roleName) {
+				navigate(`/admin/discussion/${discussionId}`);
+			} else {
+				toast.error("You don't have permission");
+			}
 		}
 	};
-
-	const handleCheckRole = (discussionId) => {};
 
 	useEffect(() => {
 		listDiscussions();
 		listForums();
-		ListUserModerator();
 	}, [page, size, orderBy, sort, search, forumId]);
 
 	return (
@@ -158,6 +160,7 @@ const DiscussionManage = () => {
 							<option value="5">5 per page</option>
 							<option value="8">8 per page</option>
 							<option value="10">10 per page</option>
+							<option value="15">15 per page</option>
 						</select>
 					</div>
 				</div>
@@ -229,16 +232,12 @@ const DiscussionManage = () => {
 					{discussionList.map((discussion) => (
 						<tr key={discussion.id}>
 							<td>
-								{/* <div onClick={handleCheckRole(discussion.id)}>
-									{discussion.title}
-								</div> */}
-								<Link
-									to={`/admin/discussion/${discussion.id}`}
-									className="text-decoration-none"
+								<div
+									onClick={() => handleCheckRole(discussion.id)}
+									style={{ cursor: "pointer", color: "blue" }}
 								>
 									{discussion.title}
-								</Link>
-								<br />
+								</div>
 								<span>
 									Started by <b>{discussion.createdBy}</b> about{" "}
 									{discussion.createdAt
@@ -248,7 +247,7 @@ const DiscussionManage = () => {
 							</td>
 							<td>{discussion.stat?.commentCount}</td>
 							<td>{formatDate(discussion.createdAt)}</td>
-							<td>
+							<td style={{ maxWidth: "300px" }}>
 								<LastCommentInfo id={discussion.id} type="discussion" />
 							</td>
 						</tr>

@@ -12,9 +12,13 @@ import { createAxios } from "../../services/createInstance";
 import { createComment } from "../../services/forumService/CommentService";
 import "./Discussion.scss";
 import { getAllComments } from "../../services/forumService/CommentService";
+import { getAllBannedKeywords } from "../../services/bannedKeywordService/BannedKeywordService";
 
 //Utils
-import { validateContent } from "../../utils/validForumAndDiscussionUtils";
+import {
+	validateContent,
+	replaceBannedWords,
+} from "../../utils/validForumAndDiscussionUtils";
 
 const ModalAddNewReply = (props) => {
 	const { show, handleClose, handleUpdateAddReply, replyToId = null } = props;
@@ -113,8 +117,31 @@ const ModalAddNewReply = (props) => {
 		toolbar: toolbarOptions,
 	};
 
+	const [list, setList] = useState([]);
+
+	const getBannedKeywords = async () => {
+		try {
+			const res = await getAllBannedKeywords(
+				currentUser?.accessToken,
+				axiosJWT
+			);
+			if (res && res.data) {
+				setList(res.data);
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const handleContentChange = (value) => {
+		const filteredContent = replaceBannedWords(value, list);
+		setContent(filteredContent);
+		setContentError(""); // Reset contentError when content changes
+	};
+
 	useEffect(() => {
 		getAllDataComments();
+		getBannedKeywords();
 	}, []);
 
 	return (
@@ -136,10 +163,7 @@ const ModalAddNewReply = (props) => {
 						theme="snow"
 						modules={module}
 						value={content}
-						onChange={(value) => {
-							setContent(value);
-							setContentError("");
-						}}
+						onChange={handleContentChange}
 						id="content"
 						placeholder="Enter content here"
 						className="content-editor"

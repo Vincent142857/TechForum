@@ -112,7 +112,6 @@ const Discussion = () => {
 								</thead>
 								<tbody>
 									{listDiscussions?.map((item) => {
-										console.log(item);
 										return (
 											<tr key={item.id} className="m-2">
 												<td>
