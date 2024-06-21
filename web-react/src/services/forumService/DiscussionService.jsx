@@ -148,6 +148,17 @@ const deleteDiscussion = async (id, accessToken, axiosJWT) => {
 	return res;
 };
 
+const checkRoleDiscussion = async (id, accessToken, axiosJWT) => {
+	const res = await axiosJWT.get(`/discussions/checkRole/${id}`, {
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${accessToken}`,
+		},
+	});
+	//
+	return res;
+};
+
 export {
 	createDiscussion,
 	getAllDiscussion,
@@ -158,4 +169,5 @@ export {
 	updateViews,
 	setDataListTags,
 	deleteDiscussion,
+	checkRoleDiscussion,
 };

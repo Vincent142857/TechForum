@@ -128,45 +128,51 @@ const ListDiscussions = () => {
 
 			<Row>
 				<Col md="9">
-					<div className="filter-item">
-						<button
-							className="btn btn-primary"
-							onClick={handleFilterDiscussionByForum}
-						>
-							Filter by Forum
-						</button>
-						{isFilterVisible && (
-							<select
-								className="form-control"
-								onChange={(e) => handleFilterDiscussionByForumChange(e)}
+					<div className="d-flex col-12 justify-content-between align-items-center">
+						<div className="col-6 d-flex justify-content-start align-items-center">
+							<button
+								className="btn btn-primary col-4"
+								onClick={handleFilterDiscussionByForum}
 							>
-								<option value="">Select Forum</option>
-								{forumList.map((forum) => (
-									<option key={forum.id} value={forum.id}>
-										{forum.title}
-									</option>
-								))}
-								{/* Add more options as needed */}
-							</select>
-						)}
-					</div>
-					<div className="filter-item d-flex">
-						<select
-							className="form-control"
-							onChange={(e) => setSize(e.target.value)}
-							value={size}
-						>
-							<option value="5">5 per page</option>
-							<option value="10">10 per page</option>
-							<option value="15">15 per page</option>
-							<option value="20">20 per page</option>
-						</select>
-						<input
-							type="text"
-							className="form-control"
-							placeholder="Search"
-							onChange={(e) => setSearch(e.target.value)}
-						/>
+								Filter Forum
+							</button>
+							{isFilterVisible && (
+								<select
+									className="form-control"
+									style={{ width: "30%" }}
+									onChange={(e) => handleFilterDiscussionByForumChange(e)}
+								>
+									<option value="">Select Forum</option>
+									{forumList.map((forum) => (
+										<option key={forum.id} value={forum.id}>
+											{forum.title}
+										</option>
+									))}
+									{/* Add more options as needed */}
+								</select>
+							)}
+						</div>
+						<div className="d-flex col-6">
+							<input
+								type="text"
+								className="form-control"
+								placeholder="Search....."
+								onChange={(e) => setSearch(e.target.value)}
+								style={{ height: "40px" }}
+							/>
+							<div className="ms-2 col-3">
+								<select
+									className="form-control"
+									onChange={(e) => setSize(e.target.value)}
+									value={size}
+								>
+									<option value="5">5 per page</option>
+									<option value="8">8 per page</option>
+									<option value="10">10 per page</option>
+									<option value="15">15 per page</option>
+								</select>
+							</div>
+						</div>
 					</div>
 					<Table striped bordered hover size="sm">
 						<thead>

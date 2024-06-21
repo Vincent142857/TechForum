@@ -104,3 +104,13 @@ export const validateKeyword = (keyword, existing) => {
 		return "Keyword already in use";
 	}
 };
+
+export const replaceBannedWords = (text, bannedWords) => {
+	let modifiedText = text;
+	bannedWords.forEach((banned) => {
+		const regex = new RegExp(banned.keyword, "gi");
+		const replacement = "*".repeat(banned.keyword.length);
+		modifiedText = modifiedText.replace(regex, replacement);
+	});
+	return modifiedText;
+};

@@ -6,6 +6,7 @@ import com.springboot.app.dto.response.PaginateResponse;
 import com.springboot.app.dto.response.ServiceResponse;
 import com.springboot.app.forums.dto.DiscussionDTO;
 import com.springboot.app.forums.dto.UploadedFileData;
+import com.springboot.app.forums.dto.request.DiscussionCheckRole;
 import com.springboot.app.forums.dto.request.LastComment;
 import com.springboot.app.forums.dto.search.SearchAll;
 import com.springboot.app.forums.entity.Comment;
@@ -37,5 +38,7 @@ public interface DiscussionService {
 	ServiceResponse<List<DiscussionDTO>> getDiscussionsByTagId(Long tagId);
 
 	ServiceResponse<LastComment> getLatCommentServiceResponse(Long id);
+
+	ServiceResponse<DiscussionCheckRole> checkRole(Long discussionId);
 
 }
