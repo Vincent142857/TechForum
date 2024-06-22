@@ -69,7 +69,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(Unauthenticated());
     });
     on<Register>((event, emit) async {
-      emit(RegisterState(status: RegisterEventStatus.loading, message: null));
+      emit(RegisterState(status: RegisterEventStatus.loading, message: ""));
       final username = event.username;
       final email = event.email;
       final password = event.password;

@@ -31,23 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         drawer: const AppDrawer(),
-        appBar: AppBar(
-          title: const Text("Tech Forums"),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          iconTheme: Theme.of(context).iconTheme,
-          actions: [
-            Consumer<ThemeService>(builder: (context, ThemeService theme, _) {
-              return IconButton(
-                  onPressed: () {
-                    theme.toggleTheme();
-                  },
-                  icon: Icon(theme.darkTheme!
-                      ? Icons.sunny
-                      : CupertinoIcons.moon_stars));
-            })
-          ],
-        ),
         body: BlocBuilder<GroupBloc, GroupState>(builder: (context, state) {
           if (state is GroupLoading) {
             return const Center(
@@ -55,12 +38,28 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           } else if (state is GroupSuccess) {
             return DefaultTabController(
-              length: state.groups.length,
+              length: state.groups.length + 1,
               child: NestedScrollView(
                 headerSliverBuilder: (context, innerBoxIsScrolled) {
                   return [
                     SliverAppBar(
-                      expandedHeight: 100.0,
+                      title: const Text('Tech Forums'),
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      iconTheme: Theme.of(context).iconTheme,
+                      actions: [
+                        Consumer<ThemeService>(
+                            builder: (context, ThemeService theme, _) {
+                          return IconButton(
+                              onPressed: () {
+                                theme.toggleTheme();
+                              },
+                              icon: Icon(theme.darkTheme!
+                                  ? Icons.sunny
+                                  : CupertinoIcons.moon_stars));
+                        })
+                      ],
+                      expandedHeight: 30.0,
                       pinned: true,
                       floating: false,
                       forceElevated: innerBoxIsScrolled,
@@ -75,24 +74,26 @@ class _HomeScreenState extends State<HomeScreen> {
                           } else {
                             BlocProvider.of<ForumFilterBloc>(context).add(
                               UpdateForums(
-                                forumFilter: state.groups[tabIndex].id ?? 0,
+                                forumFilter: state.groups[tabIndex - 1].id,
                               ),
                             );
                           }
                         },
                         isScrollable: true, // Cho phép cuộn ngang
-                        tabs: state.groups
-                            .map((tab) =>
-                                TabItem(title: tab.title, color: tab.color))
-                            .toList(),
+                        tabs: [
+                          const TabItem(title: "All", color: "blue"),
+                          ...state.groups.map((tab) =>
+                              TabItem(title: tab.title, color: tab.color))
+                        ],
                       ),
                     ),
                   ];
                 },
                 body: TabBarView(
-                  children: state.groups
-                      .map((tab) => _toForumGroup(tab.title))
-                      .toList(),
+                  children: [
+                    _toForumGroup("All"),
+                    ...state.groups.map((tab) => _toForumGroup(tab.title)),
+                  ],
                 ),
               ),
             );

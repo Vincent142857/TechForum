@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapp/features/auth/domain/entities/user_entity.dart';
+import 'package:flutterapp/features/auth/presentation/views/register_screen.dart';
 import 'package:flutterapp/features/auth/presentation/views/welcome_screen.dart';
 import 'package:formz/formz.dart';
 
@@ -69,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => const WelcomeScreen(),
+                            builder: (context) => const RegisterScreen(),
                           ),
                         );
                       },
@@ -116,8 +117,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         hintText: 'Enter your password',
                         filled: true,
                         fillColor: _isFocusedPassword
-                            ? Color.fromARGB(143, 55, 108, 148)
-                            : Color.fromARGB(93, 55, 108, 148),
+                            ? const Color.fromARGB(143, 55, 108, 148)
+                            : const Color.fromARGB(93, 55, 108, 148),
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
                           borderSide: BorderSide.none,
