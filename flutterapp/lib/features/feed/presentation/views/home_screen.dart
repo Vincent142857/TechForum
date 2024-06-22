@@ -60,8 +60,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 headerSliverBuilder: (context, innerBoxIsScrolled) {
                   return [
                     SliverAppBar(
+                      expandedHeight: 100.0,
                       pinned: true,
-                      floating: true,
+                      floating: false,
                       forceElevated: innerBoxIsScrolled,
                       bottom: TabBar(
                         onTap: (tabIndex) {
@@ -90,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 body: TabBarView(
                   children: state.groups
-                      .map((tab) => TabViewContent(tab: tab))
+                      .map((tab) => _toForumGroup(tab.title))
                       .toList(),
                 ),
               ),
@@ -102,6 +103,235 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         }),
       ),
+    );
+  }
+
+  //----------------------------------------
+  BlocConsumer<ForumFilterBloc, ForumFilterState> _toForumGroup(String title) {
+    return BlocConsumer<ForumFilterBloc, ForumFilterState>(
+      listener: (context, state) {
+        if (state is ForumFilterLoaded) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Forums loaded'),
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
+        if (state is ForumFilterLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state is ForumFilterLoaded && state.forums.isEmpty) {
+          return const Center(
+            child: Text('No forums found'),
+          );
+        } else if (state is ForumFilterLoaded) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: state.forums.length,
+                itemBuilder: (context, index) {
+                  return _forumItemCard(context, state.forums[index]);
+                }),
+          );
+        } else {
+          return const Text('Something went wrong');
+        }
+      },
+    );
+  }
+
+  Container _forumItemCard(BuildContext context, ForumEntity forum) {
+    if (forum.discussions.isEmpty) {
+      return Container(
+        margin: const EdgeInsets.only(bottom: 8.0),
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: Colors.grey,
+              width: 1,
+            ),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                children: [
+                  Text(
+                    '${(forum.title)?.toUpperCase()}',
+                    style: const TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => CreateDiscussion(
+                            forumId: forum.id ?? 1,
+                            title: forum.title ?? 'Discussion',
+                          ),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.add_circle_sharp),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              const Text('You are the first to post a discussion.'),
+            ],
+          ),
+        ),
+      );
+    }
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8.0),
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey,
+            width: 1,
+          ),
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '${(forum.title)?.toUpperCase()}',
+                style: const TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => CreateDiscussion(
+                        forumId: forum.id ?? 1,
+                        title: forum.title ?? 'Discussion',
+                      ),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.add_circle_sharp),
+              ),
+            ],
+          ),
+          //list of discussions
+          ListView.builder(
+              shrinkWrap: true,
+              itemCount: forum.discussions.length,
+              itemBuilder: (context, index) {
+                return _discussionItemCard(
+                    context, forum.discussions[index], forum.id);
+              }),
+        ],
+      ),
+    );
+  }
+
+  Container _discussionItemCard(
+      BuildContext context, DiscussionEntity discussion, int? forumId) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 4.0),
+      child: SingleChildScrollView(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: _buildImage(discussion),
+            ),
+            Flexible(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: TextButton(
+                          onPressed: () {
+                            context.read<CommentsBloc>().add(LoadCommentsEvent(
+                                  discussionId: discussion.discussionId!,
+                                ));
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => CommentsScreen(
+                                  discussionId: discussion.discussionId ?? 1,
+                                  discussionTitle: discussion.discussionTitle ??
+                                      'Discussion',
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            '#${discussion.discussionTitle}',
+                            style: const TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  buildCreatedAt(discussion),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  //list of discussions
+                ],
+              ),
+            ),
+            Container(
+              height: 1,
+              color: Colors.grey,
+              margin: const EdgeInsets.symmetric(vertical: 8),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildCreatedAt(DiscussionEntity discussion) {
+    DateTime createdAt = discussion.createdAt ?? DateTime.now();
+    String name = discussion.name ?? discussion.username ?? "Anonymous";
+    return Text(
+      '$name created at: ${DateFormat('dd-MM-yyyy HH:mm').format(createdAt)}',
+      style: const TextStyle(
+        fontSize: 12.0,
+      ),
+    );
+  }
+
+  Widget _buildImage(DiscussionEntity discussion) {
+    return buildAvatar(
+      imageUrl: discussion.imageUrl ?? '',
+      avatar: discussion.avatar ?? '',
+      width: 42,
+      height: 42,
     );
   }
 }
