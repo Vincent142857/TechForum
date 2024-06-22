@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return [
                     SliverAppBar(
                       pinned: true,
-                      floating: true,
+                      floating: false,
                       forceElevated: innerBoxIsScrolled,
                       bottom: TabBar(
                         onTap: (tabIndex) {
