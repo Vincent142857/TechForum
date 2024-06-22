@@ -49,12 +49,15 @@ class AuthDataSourceImp implements AuthDataSource {
 
       Map jsonResponse = json.decode(res.body);
       print(res.body);
-      if (res.statusCode == 201) {
+      if (res.statusCode == 200) {
+        print("User created successfully");
         return "User created successfully";
       } else {
+        print("User creation failed");
         throw Exception();
       }
     } catch (err) {
+      print("User creation failed: $err");
       response = err.toString();
     }
     return response;

@@ -35,15 +35,15 @@ class LoginFailure extends AuthState {
 //register state
 class RegisterState extends AuthState {
   final RegisterEventStatus status;
-  final String? message;
+  final String message;
 
   RegisterState({
     required this.status,
-    this.message,
+    this.message = "",
   });
 
   @override
-  List<Object> get props => [status, message!];
+  List<Object> get props => [status, message];
 }
 
 class ProfPicLoading extends AuthState {}

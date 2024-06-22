@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterapp/features/auth/presentation/views/login_screen.dart';
 import 'package:flutterapp/features/auth/presentation/views/welcome_screen.dart';
 
 import '../bloc/auth_bloc.dart';
@@ -151,8 +152,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     hintStyle: const TextStyle(color: Colors.white),
                     filled: true,
                     fillColor: _isFocusedPasswordConfirm
-                        ? Color.fromARGB(156, 104, 151, 187)
-                        : Color.fromARGB(172, 110, 114, 117),
+                        ? const Color.fromARGB(156, 104, 151, 187)
+                        : const Color.fromARGB(172, 110, 114, 117),
                     border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(8.0)),
                       borderSide: BorderSide.none,
@@ -186,6 +187,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         username: usernameController.text,
                         email: emailController.text,
                         password: passwordController.text));
+                    //to login
+                    Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
@@ -201,7 +204,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: () {
                     Navigator.of(context).pop(
                       MaterialPageRoute(
-                        builder: (context) => const WelcomeScreen(),
+                        builder: (context) => const LoginScreen(),
                       ),
                     );
                   },
