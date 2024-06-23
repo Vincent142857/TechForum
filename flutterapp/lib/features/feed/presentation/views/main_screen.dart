@@ -17,7 +17,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  String? ownerId;
+  late String ownerId;
   Future<String> fetchId() async {
     String? ownerId = await Storage().secureStorage.read(key: 'userId');
     return ownerId ?? "Anonymous";
@@ -34,7 +34,7 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     fetchId().then((value) {
       setState(() {
-        ownerId = value;
+        ownerId = value ?? '';
       });
     });
     super.initState();
@@ -44,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
     HomeScreen(),
     ForumScreen(),
     MemberListScreen(),
-    ProfileScreen(ownerId: ''),
+    ProfileScreen(ownerId: "admin"),
   ];
 
   void _onItemTapped(int index) {
@@ -69,7 +69,7 @@ class _MainScreenState extends State<MainScreen> {
         selectedItemColor: Colors.blue,
         showUnselectedLabels: true,
         showSelectedLabels: true,
-        items: const [
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',

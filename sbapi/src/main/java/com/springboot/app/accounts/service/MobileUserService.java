@@ -10,6 +10,7 @@ import java.util.List;
 public interface MobileUserService {
 
 	ServiceResponse<List<MobileMemberResponse>> getAllMembers();
+	ServiceResponse<List<MobileMemberResponse>> getMembersBy(String search);
 
 	ServiceResponse<MobileUserInfoResponse> getMemberByUsername(String username);
 

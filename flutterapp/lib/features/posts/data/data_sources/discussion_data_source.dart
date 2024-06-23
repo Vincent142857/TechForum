@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutterapp/core/network/api_urls.dart';
+import 'package:flutterapp/features/posts/data/models/dis_res_model.dart';
+import 'package:flutterapp/features/posts/domain/entities/dis_req_entity.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutterapp/core/exceptions/error.dart';
@@ -10,7 +12,7 @@ import '../models/comment_model.dart';
 
 abstract class DiscussionDataSource {
   //create a new discussion
-  Future<String?> createDiscussion(
+  Future<DiscussionResponseEntity?> createDiscussion(
       String title, String content, int forumId, String author);
 
   //create  a new comment
@@ -48,8 +50,9 @@ class DiscussionDataSourceImpl implements DiscussionDataSource {
   }
 
   @override
-  Future<String?> createDiscussion(
+  Future<DiscussionResponseEntity?> createDiscussion(
       String title, String content, int forumId, String author) async {
+    print("Create discussion in forum: $forumId");
     try {
       http.Response res = await client.post(
           '$uri/discussions/add',
@@ -62,7 +65,8 @@ class DiscussionDataSourceImpl implements DiscussionDataSource {
       Map jsonResponse = json.decode(res.body);
       print(res.body);
       if (res.statusCode == 200) {
-        return "Add Discussion Successfully";
+        print('DiscussionResponseModel created successfully');
+        return DiscussionResponseModel.fromMap(jsonResponse);
       }
     } catch (err) {
       print('Error createDiscussion: ${err.toString()}');

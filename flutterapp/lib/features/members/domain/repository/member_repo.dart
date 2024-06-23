@@ -5,4 +5,5 @@ import '../entities/member_entity.dart';
 
 abstract class MemberRepo {
   Future<Either<Failure, List<MemberEntity>>> getAllMember();
+  Future<Either<Failure, List<MemberEntity>>> searchMember(String query);
 }

@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterapp/features/forums/presentation/bloc/forum_filter/forum_filter_bloc.dart';
+import 'package:flutterapp/features/forums/presentation/bloc/froum_bloc/forum_bloc.dart';
 import 'package:flutterapp/features/posts/presentation/bloc/comments_bloc.dart';
+import 'package:flutterapp/features/posts/presentation/views/comments_screen.dart';
 import 'package:flutterapp/features/posts/presentation/widgets/input_text_widget.dart';
 import 'package:flutterapp/features/posts/presentation/widgets/input_widget.dart';
 
 class CreateDiscussion extends StatelessWidget {
-  const CreateDiscussion(
-      {super.key, required this.forumId, required this.title});
+  const CreateDiscussion({
+    super.key,
+    required this.forumId,
+    required this.title,
+  });
 
   final int forumId;
   final String title;
@@ -18,11 +24,30 @@ class CreateDiscussion extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add new post discussion'),
+        title: Text('Add new post $title'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            // to home
+            context.read<ForumBloc>().add(GetAllForumsEvent());
+            context.read<ForumFilterBloc>().add(UpdateForums());
+            Navigator.of(context).pop();
+          },
+        ),
       ),
       body: BlocListener<CommentsBloc, CommentsState>(
         listener: (context, state) {
           if (state is CreateDiscussionLoaded) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => BlocProvider.value(
+                  value: BlocProvider.of<CommentsBloc>(context),
+                  child: CommentsScreen(
+                      discussionId: state.discussionId,
+                      discussionTitle: titleController.text),
+                ),
+              ),
+            );
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text(
@@ -44,21 +69,20 @@ class CreateDiscussion extends StatelessWidget {
         },
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(10.0),
             child: Column(
               children: [
                 buildInputField('Title', titleController),
                 buildInputFieldTextArea('Description', contentController),
                 ElevatedButton(
                   onPressed: () {
-                    // create discussion
-                    context.read<CommentsBloc>().add(AddDiscussionEvent(
-                          title: titleController.text,
-                          content: contentController.text,
-                          forumId: forumId,
-                        ));
-                    //to home
-                    Navigator.pop(context);
+                    context.read<CommentsBloc>().add(
+                          AddDiscussionEvent(
+                            title: titleController.text,
+                            content: contentController.text,
+                            forumId: forumId,
+                          ),
+                        );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).primaryColor,
@@ -73,60 +97,6 @@ class CreateDiscussion extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Column _inputField(String label, TextEditingController controller) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '$label: ',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18.0,
-          ),
-        ),
-        Container(
-          height: 50,
-          margin: const EdgeInsets.only(bottom: 10.0),
-          width: double.infinity,
-          child: TextFormField(
-            decoration: InputDecoration(
-              hintText: 'Enter $label',
-            ),
-            controller: controller,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Column _inputFieldTextArea(String label, TextEditingController controller) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '$label: ',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18.0,
-          ),
-        ),
-        Container(
-          height: 200,
-          margin: const EdgeInsets.only(bottom: 10.0),
-          width: double.infinity,
-          child: TextField(
-            keyboardType: TextInputType.multiline,
-            maxLines: 10,
-            decoration: InputDecoration(
-              hintText: 'Enter $label',
-            ),
-            controller: controller,
-          ),
-        ),
-      ],
     );
   }
 }

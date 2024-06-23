@@ -12,6 +12,7 @@ public class MobileUserInfoResponse {
 	private String username;
 	private String email;
 	private String name;
+	private String phone;
 	private String imageUrl;
 	private String avatar;
 	private AccountStatus status;

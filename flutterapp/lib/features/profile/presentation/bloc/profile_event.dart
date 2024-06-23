@@ -16,3 +16,12 @@ class GetProfileEvent extends ProfileEvent {
   @override
   List<Object> get props => [username];
 }
+
+class UpdateProfileEvent extends ProfileEvent {
+  final ParamsEditUserPro userPro;
+
+  const UpdateProfileEvent({required this.userPro});
+
+  @override
+  List<Object> get props => [userPro];
+}

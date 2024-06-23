@@ -24,6 +24,7 @@ import 'features/forums/domain/usecases/get_all_forum.dart';
 import 'features/members/data/repository/member_repo_impl.dart';
 import 'features/members/domain/repository/member_repo.dart';
 import 'features/members/domain/usecases/get_all_memeber.dart';
+import 'features/members/domain/usecases/search_member_usecase.dart';
 import 'features/members/presentation/bloc/member_bloc.dart';
 import 'features/posts/data/data_sources/discussion_data_source.dart';
 import 'features/posts/domain/usecases/create_comment.dart';
@@ -32,6 +33,7 @@ import 'features/posts/domain/usecases/get_comments_by.dart';
 import 'features/profile/data/data_sources/profile_data_source.dart';
 import 'features/profile/data/repository/profile_repo_impl.dart';
 import 'features/profile/domain/repository/profile_repo.dart';
+import 'features/profile/domain/usecases/edit_info_usecase.dart';
 import 'features/profile/presentation/bloc/profile_bloc.dart';
 
 final serviceLocator = GetIt.instance;
@@ -49,12 +51,14 @@ void init() {
   serviceLocator.registerFactory(
     () => ProfileBloc(
       getUserProUseCase: serviceLocator(),
+      updateInfoUseCase: serviceLocator(),
     ),
   );
 
   serviceLocator.registerFactory(
     () => MemberBloc(
       getAllMemberUseCase: serviceLocator(),
+      searchMemberUseCase: serviceLocator(),
     ),
   );
 
@@ -70,10 +74,15 @@ void init() {
     ),
   );
 
-  serviceLocator.registerFactory(() => CommentsBloc(
+  serviceLocator.registerFactory(
+    () => CommentsBloc(
       getAllCommentsUseCase: serviceLocator(),
       createDiscussionUseCase: serviceLocator(),
-      createCommentUseCase: serviceLocator()));
+      createCommentUseCase: serviceLocator(),
+      forumBloc: serviceLocator(),
+      getAllForumUseCase: serviceLocator(),
+    ),
+  );
 
   //----------------------------features
   //useCases
@@ -91,6 +100,12 @@ void init() {
 
   serviceLocator.registerLazySingleton(
       () => GetAllMemberUseCase(repository: serviceLocator()));
+
+  serviceLocator.registerLazySingleton(
+      () => SearchMemberUseCase(repository: serviceLocator()));
+
+  serviceLocator.registerLazySingleton(
+      () => UpdateInfoUseCase(repository: serviceLocator()));
 
   serviceLocator.registerLazySingleton(
       () => GetAllGroupsUseCase(repository: serviceLocator()));

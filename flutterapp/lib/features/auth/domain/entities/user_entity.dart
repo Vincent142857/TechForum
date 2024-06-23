@@ -46,10 +46,13 @@ class Email extends FormzInput<String, EmailValidationError> {
   );
 
   @override
-  EmailValidationError? validator(String? value) {
-    return _emailRegExp.hasMatch(value ?? '')
-        ? null
-        : EmailValidationError.invalid;
+  EmailValidationError? validator(String value) {
+    if (value.isEmpty) {
+      return EmailValidationError.empty;
+    } else if (!_emailRegExp.hasMatch(value)) {
+      return EmailValidationError.invalid;
+    }
+    return null;
   }
 }
 
@@ -66,10 +69,13 @@ class Password extends FormzInput<String, PasswordValidationError> {
       RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$');
 
   @override
-  PasswordValidationError? validator(String? value) {
-    return _passwordRegExp.hasMatch(value ?? '')
-        ? null
-        : PasswordValidationError.invalid;
+  PasswordValidationError? validator(String value) {
+    if (value.isEmpty) {
+      return PasswordValidationError.empty;
+    } else if (!_passwordRegExp.hasMatch(value ?? '')) {
+      return PasswordValidationError.invalid;
+    }
+    return null;
   }
 }
 

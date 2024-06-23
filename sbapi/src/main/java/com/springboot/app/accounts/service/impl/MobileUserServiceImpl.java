@@ -47,6 +47,17 @@ public class MobileUserServiceImpl implements MobileUserService {
 	}
 
 	@Override
+	public ServiceResponse<List<MobileMemberResponse>> getMembersBy(String search) {
+		ServiceResponse<List<MobileMemberResponse>> response = new ServiceResponse<>();
+
+		List<User> users = userRepository.findAllUsersBy(search);
+
+		List<MobileMemberResponse> members = users.stream().map(this::toMobileMemberResponse).toList();
+		response.setDataObject(members);
+		return response;
+	}
+
+	@Override
 	public ServiceResponse<MobileUserInfoResponse> getMemberByUsername(String username) {
 		ServiceResponse<MobileUserInfoResponse> response = new ServiceResponse<>();
 		User user = userRepository.findByUsername(username).orElse(null);
@@ -130,6 +141,7 @@ public class MobileUserServiceImpl implements MobileUserService {
 		userInfo.setAvatar(user.getAvatar());
 		userInfo.setImageUrl(user.getImageUrl());
 
+		userInfo.setPhone(user.getPerson().getPhone());
 		userInfo.setAddress(user.getPerson().getAddress());
 		userInfo.setStatus(user.getAccountStatus());
 

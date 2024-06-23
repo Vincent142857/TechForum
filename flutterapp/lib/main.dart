@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterapp/features/auth/presentation/views/register_screen.dart';
 import 'package:flutterapp/features/forums/presentation/bloc/forum_filter/forum_filter_bloc.dart';
 import 'package:flutterapp/features/forums/presentation/bloc/froum_bloc/forum_bloc.dart';
 import 'package:flutterapp/features/forums/presentation/bloc/group_bloc/group_bloc.dart';
@@ -70,7 +71,7 @@ class MyApp extends StatelessWidget {
                     } else if (state is Unauthenticated) {
                       return const LoginScreen();
                     } else {
-                      return Container();
+                      return const RegisterScreen();
                     }
                   },
                 ),
