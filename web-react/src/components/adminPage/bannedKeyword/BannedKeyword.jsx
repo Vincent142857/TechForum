@@ -17,6 +17,9 @@ import ModalDeleteBanned from "./ModalDeleteBanned";
 //Paginate
 import Pagination from "../../pagination/Pagination";
 
+//Utils
+import { formatDate } from "../../../utils/FormatDateTimeHelper";
+
 const BannedKeyword = () => {
 	//Login
 	const dispatch = useDispatch();
@@ -205,7 +208,7 @@ const BannedKeyword = () => {
 					{listBanned?.map((item) => (
 						<tr key={item.id}>
 							<td>{item.id}</td>
-							<td>{item.createdAt}</td>
+							<td>{formatDate(item.createdAt)}</td>
 							<td>{item.keyword}</td>
 							<td>
 								<button onClick={() => handleEditModalBanned(item)}>
