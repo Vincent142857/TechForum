@@ -103,7 +103,6 @@ public class AuthController {
 		userService.updateLastLogin(userDetails.getId()); // update last login
 
 		return ResponseEntity.ok()
-//                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
 				.header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString())
 				.body(new JwtResponse(jwtCookie.getValue(), userDetails.getId(), userDetails.getUsername(),
 						userDetails.getEmail(), roles, avatar, imageUrl, name));
@@ -118,15 +117,10 @@ public class AuthController {
 		log.info("User logout: {}", sessionUser.getId());
 
 		ServiceResponse<Void> response = refreshTokenService.deleteByToken(refreshToken, sessionUser.getId());
-//		if (response.getAckCode() != AckCodeType.SUCCESS) {
-//			String errorMessage = String.join(", ", response.getMessages());
-//			return ResponseEntity.badRequest().body(new ObjectResponse("400","User not logged out. "+errorMessage,null));
-//		}
 		ResponseCookie jwtCookie = jwtUtils.getCleanJwtCookie();
 		ResponseCookie jwtRefreshCookie = jwtUtils.getCleanJwtRefreshCookie();
 
 		return ResponseEntity.ok()
-//                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
 				.header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString())
 				.body(new ObjectResponse("200",sessionUser.getUsername()+" logged out successfully!",null));
 	}
@@ -134,7 +128,6 @@ public class AuthController {
 	@PostMapping("/refreshtoken")
 	public ResponseEntity<ObjectResponse> refreshtoken(HttpServletRequest request) {
 		String refreshToken = jwtUtils.getJwtRefreshFromCookies(request);
-//		log("refreshToken: " + refreshToken);
 		if ((refreshToken != null) && (!refreshToken.isEmpty())) {
 			return refreshTokenService.findByToken(refreshToken).map(refreshTokenService::verifyExpiration)
 					.map(RefreshToken::getUser).map(user -> {
@@ -142,7 +135,6 @@ public class AuthController {
 						RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user.getId());
 						ResponseCookie jwtRefreshCookie = jwtUtils.generateRefreshJwtCookie(newRefreshToken.getToken());
 						return ResponseEntity.ok()
-//								.header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
 								.header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString())
 								.body(new ObjectResponse("200","Token is refreshed successfully!",jwtCookie.getValue()));
 					})

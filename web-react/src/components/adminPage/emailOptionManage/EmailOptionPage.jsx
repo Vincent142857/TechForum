@@ -27,6 +27,11 @@ const EmailOption = () => {
 	const [tlsEnable, setTlsEnable] = useState(true);
 	const [authentication, setAuthentication] = useState(true);
 
+	const [errHost, setErrHost] = useState("");
+	const [errPort, setErrPort] = useState("");
+	const [errUsername, setErrUsername] = useState("");
+	const [errPass, setErrPass] = useState("");
+
 	const [show, setShow] = useState(false);
 	const [showTest, setShowTest] = useState(false);
 
@@ -60,6 +65,27 @@ const EmailOption = () => {
 	};
 
 	const handleUpdateEmailOption = async () => {
+		setErrHost("");
+		if (host || host === 0) {
+			setErrHost("Please enter host of email!");
+		}
+		setErrPort("");
+		if (port || port === 0) {
+			setErrPort("Please enter port of email!");
+		}
+
+		setErrUsername("");
+		if (username || username === '') {
+			setErrUsername("Please enter username of email!");
+		}
+		setErrPass("");
+		if (password || password === '') {
+			setErrPass("Please enter password of email");
+		}
+
+		if (errHost != "" || errPort != "" || errPass != "" || errUsername != "") {
+			return;
+		}
 
 		const emailOption = {
 			host: host,
@@ -72,9 +98,11 @@ const EmailOption = () => {
 		const accessToken = currentUser?.accessToken;
 		let res = await updateEmailOption(emailOption, accessToken, axiosJWT);
 		console.log(`Check res`, res.data);
-		if (+res.status === 200) {
+		if (+res?.status === 200 || +res?.data?.status === 200) {
 			setEmailOption(res.data);
-			toast.success(res?.message);
+			getEmailOption();
+			toast.success("Updated successfully");
+			setShow(false);
 		} else {
 			console.log(`Error: `, res?.data?.message);
 		}
@@ -161,12 +189,12 @@ const EmailOption = () => {
 				template: message,
 			};
 
-			console.log(`Here`, JSON.stringify(emailOption.emails));
 			const accessToken = currentUser?.accessToken;
 
 			let res = await sendEmail(emailOption, accessToken, axiosJWT);
 			if (+res?.status === 200 || +res?.data?.status === 200) {
 				toast.success("Sent email successfully");
+				setShowTest(false);
 				setSubject("");
 				setMessage("");
 				setSelectedEmail([]);
@@ -247,6 +275,7 @@ const EmailOption = () => {
 									required
 									onChange={(e) => setHost(e.target.value)}
 								/>
+								{errHost && errHost != "" && <small className="text-danger">{errHost}</small>}
 							</div>
 							<div className="form-group mb-3 col-md-6">
 								<label htmlFor="port">
@@ -260,6 +289,7 @@ const EmailOption = () => {
 									required
 									onChange={(e) => setPort(e.target.value)}
 								/>
+								{errPort && errPort != "" && <small className="text-danger">{errPort}</small>}
 							</div>
 						</Row>
 						<Row className="p-3">
@@ -274,6 +304,7 @@ const EmailOption = () => {
 									required
 									onChange={(e) => setUsername(e.target.value)}
 								/>
+								{errUsername && errUsername != "" && <small className="text-danger">{errUsername}</small>}
 							</div>
 							<div className="form-group mb-3 col-md-6">
 								<label htmlFor="password">
@@ -285,8 +316,9 @@ const EmailOption = () => {
 									name="password"
 									className="form-control"
 									required
-									onChange={(e) => setHost(e.target.value)}
+									onChange={(e) => setPassword(e.target.value)}
 								/>
+								{errPass && errPass != "" && <small className="text-danger">{errPass}</small>}
 							</div>
 						</Row>
 						<Row className="d-flex justify-content-end">
@@ -360,7 +392,7 @@ const EmailOption = () => {
 								</button>
 
 								<button style={{ minWidth: 200 }}
-									className="col-md-2 me-3 btn btn-group-vertical align-items-center"
+									className="col-md-2 me-3 btn btn-group-vertical align-items-center btn-primary"
 									onClick={handleSendEmail}
 								>
 									Send

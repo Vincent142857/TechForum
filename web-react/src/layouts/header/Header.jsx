@@ -181,35 +181,15 @@ function Header() {
 				>
 					<Nav navbar>
 						{isShowRouteAdminMod() && (
-						<NavItem>
-							<Link to="/admin" className="nav-link btn-magnify">
-								<i className="fa-solid fa-chart-simple fa-xl d-lg-inline-block d-none"></i>
-								<p>
-									<span className="d-lg-none d-md-block">Stats Dashboard</span>
-								</p>
-							</Link>
-						</NavItem>
+							<NavItem>
+								<Link to="/admin" className="nav-link btn-magnify">
+									<i className="fa-solid fa-chart-simple fa-xl d-lg-inline-block d-none"></i>
+									<p>
+										<span className="d-lg-none d-md-block">Stats Dashboard</span>
+									</p>
+								</Link>
+							</NavItem>
 						)}
-
-						{/*<Dropdown*/}
-						<Dropdown
-							nav
-							isOpen={dropdownOpen}
-							toggle={(e) => dropdownToggle(e)}
-						>
-							<DropdownToggle caret nav>
-								<i className="fa-regular fa-bell fa-xl d-lg-inline-block d-none"></i>
-								<p>
-									<span className="d-lg-none d-md-block">Notification</span>
-								</p>
-							</DropdownToggle>
-							<DropdownMenu right>
-								<DropdownItem tag="a">Action 1</DropdownItem>
-								<DropdownItem tag="a">Action 2</DropdownItem>
-								<DropdownItem tag="a">Action 3</DropdownItem>
-							</DropdownMenu>
-						</Dropdown>
-						{/*</Dropdown>*/}
 
 						{currentUser?.username != null ? (
 							<Dropdown
