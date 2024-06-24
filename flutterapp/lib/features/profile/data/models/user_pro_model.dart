@@ -43,7 +43,9 @@ class UserProModel extends UserProEntity {
       totalFollowers: (json['totalFollowers'] ?? 0) as int,
       totalFollowing: (json['totalFollowing'] ?? 0) as int,
       bio: (json['bio'] ?? '') as String,
-      birthDate: DateTime.parse(json['birthDate']) ?? DateTime.now(),
+      birthDate: json['birthDate'] != null
+          ? DateTime.parse(json['birthDate'])
+          : DateTime.now(),
       gender: (json['gender'] ?? '') as String,
       comments: comments,
     );
@@ -63,7 +65,7 @@ class CommentModel extends CommentEntity {
     required super.vote,
   });
 
-  factory CommentModel.fromJson(Map<dynamic, dynamic> json) {
+  factory CommentModel.fromJson(Map<String, dynamic> json) {
     final vote = json['vote'] != null
         ? VoteModel.fromJson(json['vote'])
         : const VoteModel(id: -1, voteName: '', voteValue: 0);

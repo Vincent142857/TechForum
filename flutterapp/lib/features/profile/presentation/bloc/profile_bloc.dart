@@ -23,8 +23,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         super(ProfileInitial()) {
     on<GetProfileEvent>((event, emit) async {
       emit(ProfileLoading());
-      final result = await _getUserProUseCase
-          .call(ParamsGetUserPro(username: event.username));
+      var username = event.username;
+      if (username == null || username == '') {
+        username = await _getUserId();
+      }
+      final result =
+          await _getUserProUseCase.call(ParamsGetUserPro(username: username));
 
       result.fold((failure) => emit(ProfileError()),
           (userPro) => emit(ProfileLoaded(userPro: userPro)));

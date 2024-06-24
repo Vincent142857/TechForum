@@ -96,10 +96,14 @@ class _ProfileScreenState extends State<ProfileScreen>
   // Build Profile----------------------------------------------------------------
   Widget buildProfile(UserProEntity user) {
     String imagePath = "";
-    if (user.avatar != null && user.avatar != "") {
-      imagePath = '${ApiUrls.avatarUrl}/${user.avatar}';
+    String imageUrl = user.imageUrl ?? "";
+    String avatar = user.avatar ?? "";
+    if (avatar != "") {
+      imagePath = '${ApiUrls.avatarUrl}/${avatar}';
+    } else if (imageUrl != "") {
+      imagePath = imageUrl;
     } else {
-      imagePath = user.imageUrl ??
+      imagePath =
           "https://lh3.googleusercontent.com/a/ACg8ocIKA_Jkp2pWe0wuRjRJvAGJ0_tdjLSK2iBDmIVGTjRAe6B6EJDW=s96-c";
     }
 
@@ -440,7 +444,9 @@ class _ProfileScreenState extends State<ProfileScreen>
               children: [
                 const Icon(Icons.date_range, size: 16),
                 const SizedBox(width: 4),
-                buildCreatedAt(author, dateAdded),
+                Flexible(
+                  child: buildCreatedAt(author, dateAdded),
+                ),
               ],
             ),
           ),

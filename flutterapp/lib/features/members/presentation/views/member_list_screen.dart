@@ -43,13 +43,13 @@ class _MemberListScreenState extends State<MemberListScreen> {
               onChanged: (value) {
                 //delay search
                 Timer(const Duration(seconds: 1), () => _onSearch(value));
-                // context.read<MemberBloc>().add(SearchMemberEvent(query: value));
               },
             ),
           ),
         ),
       ),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Column(
           children: [
             SizedBox(
@@ -78,9 +78,9 @@ class _MemberListScreenState extends State<MemberListScreen> {
                         crossAxisSpacing: 4.0,
                         mainAxisSpacing: 4.0,
                       ),
-                      itemCount: state.memberEntity.length,
+                      itemCount: state.members.length,
                       itemBuilder: (context, index) =>
-                          MemberItem(user: state.memberEntity[index]),
+                          MemberItem(user: state.members[index]),
                     );
                   } else if (state is MemberFailure) {
                     return Center(child: Text(state.message));

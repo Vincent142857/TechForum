@@ -17,12 +17,12 @@ public class MobileDiscussionController {
     private MobileDiscussionService mobileDiscussionService;
 
     @GetMapping("/all")
-    public ResponseEntity<ObjectResponse> getAllDiscussions(@RequestParam(value = "title", defaultValue = "", required = false) String title) {
+    public ResponseEntity<List<MobileAllDiscussion>> getAllDiscussions(@RequestParam(value = "title", defaultValue = "", required = false) String title) {
         ServiceResponse<List<MobileAllDiscussion>> response = mobileDiscussionService.getAllDiscussion(title);
         if(response.getDataObject() == null || response.getDataObject().isEmpty()){
-            return ResponseEntity.ok(new ObjectResponse("401","No discussions found", null));
+            return ResponseEntity.ok( null);
         }
 
-        return ResponseEntity.ok(new ObjectResponse("200","Discussions found", response.getDataObject()));
-     }
+        return ResponseEntity.ok(response.getDataObject());
+    }
 }

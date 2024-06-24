@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapp/features/feed/presentation/widgets/app_drawer_widget.dart';
 import 'package:flutterapp/features/feed/presentation/widgets/avatar_widget.dart';
+import 'package:flutterapp/features/feed/presentation/widgets/build_datetime.dart';
 import 'package:flutterapp/features/feed/presentation/widgets/tab_item_widget.dart';
 import 'package:flutterapp/features/forums/domain/entities/forum_entity.dart';
 import 'package:flutterapp/features/forums/domain/entities/forum_group_entity.dart';
@@ -251,80 +252,75 @@ class _HomeScreenState extends State<HomeScreen>
       BuildContext context, DiscussionEntity discussion, int? forumId) {
     int discussionId = discussion.discussionId ?? 1;
     String title = discussion.discussionTitle ?? 'Discussion';
+    String author = discussion.name ?? discussion.username ?? 'Anonymous';
+    DateTime createdAt = discussion.createdAt ?? DateTime.now();
 
     return Container(
       margin: const EdgeInsets.only(bottom: 4.0),
-      child: SingleChildScrollView(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: _buildImage(discussion),
-            ),
-            Flexible(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                        child: TextButton(
-                          onPressed: () {
-                            context.read<CommentsBloc>().add(LoadCommentsEvent(
-                                  discussionId: discussionId,
-                                ));
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => CommentsScreen(
-                                  discussionId: discussionId,
-                                  discussionTitle: title,
+      child: Card(
+        child: SingleChildScrollView(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: _buildImage(discussion),
+              ),
+              Flexible(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: TextButton(
+                            onPressed: () {
+                              context
+                                  .read<CommentsBloc>()
+                                  .add(LoadCommentsEvent(
+                                    discussionId: discussionId,
+                                  ));
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => CommentsScreen(
+                                    discussionId: discussionId,
+                                    discussionTitle: title,
+                                  ),
                                 ),
+                              );
+                            },
+                            child: Text(
+                              '#$title',
+                              style: const TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
                               ),
-                            );
-                          },
-                          child: Text(
-                            '#$title',
-                            style: const TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  buildCreatedAt(discussion),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  //list of discussions
-                ],
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    buildCreatedAt(author, createdAt),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    //list of discussions
+                  ],
+                ),
               ),
-            ),
-            Container(
-              height: 1,
-              color: Colors.grey,
-              margin: const EdgeInsets.symmetric(vertical: 8),
-            ),
-          ],
+              Container(
+                height: 1,
+                color: Colors.grey,
+                margin: const EdgeInsets.symmetric(vertical: 8),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
-  }
-
-  Widget buildCreatedAt(DiscussionEntity discussion) {
-    DateTime createdAt = discussion.createdAt ?? DateTime.now();
-    String name = discussion.name ?? discussion.username ?? "Anonymous";
-    return Text(
-      '$name created at: ${DateFormat('dd-MM-yyyy HH:mm').format(createdAt)}',
-      style: const TextStyle(
-        fontSize: 12.0,
       ),
     );
   }

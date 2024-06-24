@@ -10,7 +10,6 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../profile/presentation/views/profile_screen.dart';
-import '../views/feed_screen.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({super.key});

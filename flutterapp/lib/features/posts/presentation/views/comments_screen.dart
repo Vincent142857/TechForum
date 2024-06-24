@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:flutterapp/features/feed/presentation/views/home_screen.dart';
 import 'package:flutterapp/features/feed/presentation/views/main_screen.dart';
 import 'package:flutterapp/features/feed/presentation/widgets/avatar_widget.dart';
 import 'package:flutterapp/features/feed/presentation/widgets/build_datetime.dart';

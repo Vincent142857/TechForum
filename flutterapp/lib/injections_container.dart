@@ -20,7 +20,9 @@ import 'features/auth/domain/usecases/login_user.dart';
 import 'features/auth/domain/usecases/register_user.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/forums/data/repository/forum_repo_impl.dart';
+import 'features/forums/domain/usecases/get_all_discussion.dart';
 import 'features/forums/domain/usecases/get_all_forum.dart';
+import 'features/forums/presentation/bloc/discussion_bloc/discussion_bloc.dart';
 import 'features/members/data/repository/member_repo_impl.dart';
 import 'features/members/domain/repository/member_repo.dart';
 import 'features/members/domain/usecases/get_all_memeber.dart';
@@ -57,7 +59,6 @@ void init() {
 
   serviceLocator.registerFactory(
     () => MemberBloc(
-      getAllMemberUseCase: serviceLocator(),
       searchMemberUseCase: serviceLocator(),
     ),
   );
@@ -84,6 +85,12 @@ void init() {
     ),
   );
 
+  serviceLocator.registerFactory(
+    () => DiscussionBloc(
+      getAllDiscussionCase: serviceLocator(),
+    ),
+  );
+
   //----------------------------features
   //useCases
   serviceLocator
@@ -98,8 +105,8 @@ void init() {
   serviceLocator.registerLazySingleton(
       () => GetUserProUseCase(repository: serviceLocator()));
 
-  serviceLocator.registerLazySingleton(
-      () => GetAllMemberUseCase(repository: serviceLocator()));
+  // serviceLocator.registerLazySingleton(
+  //     () => GetAllMemberUseCase(repository: serviceLocator()));
 
   serviceLocator.registerLazySingleton(
       () => SearchMemberUseCase(repository: serviceLocator()));
@@ -121,6 +128,9 @@ void init() {
 
   serviceLocator.registerLazySingleton(
       () => CreateCommentUseCase(repository: serviceLocator()));
+
+  serviceLocator.registerLazySingleton(
+      () => GetAllDiscussionCase(repository: serviceLocator()));
 
   //----------------------------features
   //Repository

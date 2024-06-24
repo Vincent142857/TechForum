@@ -10,11 +10,15 @@ final class DiscussionLoading extends DiscussionState {}
 
 class DiscussionSuccess extends DiscussionState {
   final List<DiscussionAllEntity> discussions;
+  final String search;
 
-  const DiscussionSuccess({this.discussions = const <DiscussionAllEntity>[]});
+  const DiscussionSuccess({
+    this.discussions = const <DiscussionAllEntity>[],
+    this.search = '',
+  });
 
   @override
-  List<Object> get props => [discussions];
+  List<Object> get props => [discussions, search];
 }
 
 class DiscussionFailure extends DiscussionState {

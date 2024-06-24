@@ -3,6 +3,7 @@ import 'package:flutterapp/core/exceptions/error.dart';
 import 'package:flutterapp/core/exceptions/failure.dart';
 import 'package:flutterapp/features/forums/data/models/forum_group_model.dart';
 import 'package:flutterapp/features/forums/data/models/forum_model.dart';
+import 'package:flutterapp/features/forums/domain/entities/discussion_entity.dart';
 import 'package:flutterapp/features/forums/domain/entities/forum_entity.dart';
 import 'package:flutterapp/features/forums/domain/repository/forum_repo.dart';
 
@@ -39,6 +40,17 @@ class ForumRepoImpl implements ForumRepo {
     try {
       final forums = await forumDataSource.getAllForumByGroup(groupId);
       return Right(forums);
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<DiscussionAllEntity>>> getAllDiscussion(
+      String title) async {
+    try {
+      final discussions = await forumDataSource.getAllDiscussions(title);
+      return Right(discussions);
     } on ServerException {
       return Left(ServerFailure());
     }

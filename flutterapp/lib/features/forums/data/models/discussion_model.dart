@@ -1,23 +1,38 @@
-import 'dart:convert';
-
 import 'package:flutterapp/features/forums/domain/entities/discussion_entity.dart';
 
 class DiscussionAllModel extends DiscussionAllEntity {
   const DiscussionAllModel({
-    required super.id,
-    required super.title,
-    required super.createdAt,
+    super.id,
+    super.title,
+    super.createdDate,
+    super.author,
+  });
+
+  factory DiscussionAllModel.fromMap(Map<String, dynamic> json) {
+    final jsonAuthor = json['author'] ?? {};
+    AuthorModel author = AuthorModel.fromMap(jsonAuthor);
+    return DiscussionAllModel(
+      id: (json['id'] ?? 0) as int,
+      title: (json['title'] ?? '') as String,
+      createdDate: DateTime.parse(json['createdDate']),
+      author: author,
+    );
+  }
+
+  factory DiscussionAllModel.fromJson(source) =>
+      DiscussionAllModel.fromMap(source);
+}
+
+class AuthorModel extends AuthorEntity {
+  const AuthorModel({
     required super.username,
     required super.avatar,
     required super.imageUrl,
     required super.badgeName,
   });
 
-  factory DiscussionAllModel.fromMap(Map<String, dynamic> json) {
-    return DiscussionAllModel(
-      id: (json['id'] ?? 0) as int,
-      title: (json['title'] ?? '') as String,
-      createdAt: DateTime.parse(json['createdAt']),
+  factory AuthorModel.fromMap(Map<dynamic, dynamic> json) {
+    return AuthorModel(
       username: (json['username'] ?? '') as String,
       avatar: (json['avatar'] ?? '') as String,
       imageUrl: (json['imageUrl'] ?? '') as String,
@@ -25,18 +40,5 @@ class DiscussionAllModel extends DiscussionAllEntity {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      "id": id,
-      "title": title,
-      "createdAt": createdAt,
-      "username": username,
-      "avatar": avatar,
-      "imageUrl": imageUrl,
-      "badgeName": badgeName,
-    };
-  }
-
-  factory DiscussionAllModel.fromJson(source) =>
-      DiscussionAllModel.fromMap(source);
+  factory AuthorModel.fromJson(source) => AuthorModel.fromMap(source);
 }

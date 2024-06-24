@@ -14,6 +14,7 @@ import 'config/theme/theme_manager.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/views/login_screen.dart';
 import 'features/feed/presentation/views/main_screen.dart';
+import 'features/forums/presentation/bloc/discussion_bloc/discussion_bloc.dart';
 import 'injections_container.dart' as dependencyInjection;
 import 'injections_container.dart';
 
@@ -32,11 +33,12 @@ class MyApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (_) =>
-                serviceLocator<ProfileBloc>()..add(ProfileStartEvent()),
+            create: (_) => serviceLocator<ProfileBloc>()
+              ..add(const GetProfileEvent(username: '')),
           ),
           BlocProvider(
-            create: (_) => serviceLocator<MemberBloc>()..add(GetMemberEvent()),
+            create: (_) =>
+                serviceLocator<MemberBloc>()..add(const SearchMemberEvent()),
           ),
           BlocProvider(
             create: (_) => serviceLocator<GroupBloc>()..add(GetGroupsEvent()),
@@ -53,6 +55,10 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (_) =>
                 serviceLocator<CommentsBloc>()..add(const LoadCommentsEvent()),
+          ),
+          BlocProvider(
+            create: (_) => serviceLocator<DiscussionBloc>()
+              ..add(const GetAllDiscussionsEvent()),
           ),
         ],
         child: ChangeNotifierProvider<ThemeService>(

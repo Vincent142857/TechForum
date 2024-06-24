@@ -78,11 +78,11 @@ class AuthDataSourceImp implements AuthDataSource {
 
     if (res.statusCode == 200) {
       String userId = jsonResponse['username'];
-      // String avatar = jsonResponse['avatar']
-      //     ? '${ApiUrls.avatarUrl}/${jsonResponse['avatar']}'
-      //     : (jsonResponse['imageUrl'] ?? '');
+      String avatar = jsonResponse['avatar'] != null
+          ? '${ApiUrls.avatarUrl}/${jsonResponse['avatar']}'
+          : (jsonResponse['imageUrl'] ?? '');
       _saveUserId(userId);
-      // _saveAvatar(avatar);
+      _saveAvatar(avatar);
       return jsonResponse['accessToken'];
     } else if (res.statusCode != HttpStatus.ok) {
       var body = json.decode(res.body);

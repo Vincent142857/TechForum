@@ -18,12 +18,15 @@ class DiscussionBloc extends Bloc<GetAllDiscussionsEvent, DiscussionState> {
       emit(DiscussionLoading());
       try {
         await _getAllDiscussionCase
-            .call(ParamsGetDiscussionTitle(title: title))
+            .call(ParamsGetDiscussionTitle(title: event.search))
             .then((discussions) {
           discussions.fold(
             (l) => emit(
                 const DiscussionFailure(message: "Error loading discussion")),
-            (discussions) => emit(DiscussionSuccess(discussions: discussions)),
+            (discussions) => emit(DiscussionSuccess(
+              discussions: discussions,
+              search: event.search,
+            )),
           );
         });
       } catch (err) {
