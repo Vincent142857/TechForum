@@ -16,6 +16,7 @@ class UserProEntity extends Equatable {
   final int? totalFollowers;
   final int? totalFollowing;
 
+  final String? phone;
   final String? bio;
   final String? gender;
   final DateTime birthDate;
@@ -27,6 +28,7 @@ class UserProEntity extends Equatable {
     required this.username,
     required this.name,
     required this.email,
+    required this.phone,
     required this.avatar,
     required this.imageUrl,
     required this.status,
@@ -48,6 +50,7 @@ class UserProEntity extends Equatable {
         username,
         name,
         email,
+        phone,
         avatar,
         imageUrl,
         status,
@@ -72,7 +75,7 @@ class CommentEntity extends Equatable {
   final int discussionId;
   final String discussionTitle;
   final String content;
-  final bool firstComment;
+  final bool? firstComment;
   final VoteEntity vote;
 
   const CommentEntity({

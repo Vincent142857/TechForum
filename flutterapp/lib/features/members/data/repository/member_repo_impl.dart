@@ -20,4 +20,14 @@ class MemberRepoImpl implements MemberRepo {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, List<MemberEntity>>> searchMember(String query) async {
+    try {
+      final members = await memberDataSource.searchMember(query);
+      return Right(members);
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
 }

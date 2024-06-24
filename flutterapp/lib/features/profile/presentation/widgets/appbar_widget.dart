@@ -4,8 +4,6 @@ import 'package:flutterapp/config/theme/theme_manager.dart';
 import 'package:provider/provider.dart';
 
 AppBar buildAppBar(BuildContext context) {
-  final icon = CupertinoIcons.moon_stars;
-
   return AppBar(
     leading: BackButton(
       onPressed: () {

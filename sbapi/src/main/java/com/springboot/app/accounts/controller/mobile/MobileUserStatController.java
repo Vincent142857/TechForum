@@ -25,8 +25,10 @@ public class MobileUserStatController {
 	private MobileUserService mobileUserService;
 
 	@GetMapping("/all")
-	public ResponseEntity<List<MobileMemberResponse>> getAllMembers() {
-		ServiceResponse<List<MobileMemberResponse>> response = mobileUserService.getAllMembers();
+	public ResponseEntity<List<MobileMemberResponse>> getAllMembers(
+			@RequestParam(value="search",defaultValue = "",required = false) String search
+	) {
+		ServiceResponse<List<MobileMemberResponse>> response = mobileUserService.getMembersBy(search);
 		if (response.getDataObject() != null && !response.getDataObject().isEmpty()) {
 			return ResponseEntity.ok(response.getDataObject());
 		}

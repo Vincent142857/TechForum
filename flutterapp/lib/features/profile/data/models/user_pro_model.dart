@@ -6,6 +6,7 @@ class UserProModel extends UserProEntity {
     required super.username,
     required super.name,
     required super.email,
+    required super.phone,
     required super.avatar,
     required super.imageUrl,
     required super.status,
@@ -21,7 +22,7 @@ class UserProModel extends UserProEntity {
     required super.comments,
   });
 
-  factory UserProModel.fromJson(Map<String, dynamic> json) {
+  factory UserProModel.fromJson(Map<dynamic, dynamic> json) {
     List jsonResponse = json["comments"] ?? [];
     List<CommentModel> comments =
         jsonResponse.map((e) => CommentModel.fromJson(e)).toList();
@@ -31,6 +32,7 @@ class UserProModel extends UserProEntity {
       username: (json['username'] ?? '') as String,
       name: (json['name'] ?? '') as String,
       email: (json['email'] ?? '') as String,
+      phone: (json['phone'] ?? '') as String,
       avatar: (json['avatar'] ?? '') as String,
       imageUrl: (json['imageUrl'] ?? '') as String,
       status: (json['status'] ?? '') as String,
@@ -41,7 +43,7 @@ class UserProModel extends UserProEntity {
       totalFollowers: (json['totalFollowers'] ?? 0) as int,
       totalFollowing: (json['totalFollowing'] ?? 0) as int,
       bio: (json['bio'] ?? '') as String,
-      birthDate: DateTime.parse(json['birthDate'] ?? ''),
+      birthDate: DateTime.parse(json['birthDate']) ?? DateTime.now(),
       gender: (json['gender'] ?? '') as String,
       comments: comments,
     );
@@ -61,18 +63,19 @@ class CommentModel extends CommentEntity {
     required super.vote,
   });
 
-  factory CommentModel.fromJson(Map<String, dynamic> json) {
-    final jsonVote = json['vote'] ?? {};
-    final vote = VoteModel.fromJson(jsonVote);
+  factory CommentModel.fromJson(Map<dynamic, dynamic> json) {
+    final vote = json['vote'] != null
+        ? VoteModel.fromJson(json['vote'])
+        : const VoteModel(id: -1, voteName: '', voteValue: 0);
     return CommentModel(
       commentId: (json['commentId'] ?? 0) as int,
       author: (json['author'] ?? "") as String,
-      createdAt: DateTime.parse(json['createdAt'] ?? ''),
-      updatedAt: DateTime.parse(json['updatedAt'] ?? ''),
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
       discussionId: (json['discussionId'] ?? 0) as int,
       discussionTitle: (json['discussionTitle'] ?? '') as String,
       content: (json['content'] ?? '') as String,
-      firstComment: (json['firstComment'] ?? false) as bool,
+      firstComment: (json['firstComment'] != null ? true : false),
       vote: vote,
     );
   }

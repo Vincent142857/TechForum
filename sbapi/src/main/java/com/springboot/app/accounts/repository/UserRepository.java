@@ -9,6 +9,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -29,4 +30,7 @@ public interface UserRepository extends JpaRepository<User, Long>, PagingAndSort
 
 	@Query("SELECT u FROM User u WHERE (:username IS NULL OR :username = '' OR u.username LIKE %:username% OR u.name LIKE %:username%) AND u.username <> 'admin'")
 	Page<User> searchByUsernameOrNameWithIgnoreAdmin(@Param("username") String username, Pageable pageable);
+
+	@Query("SELECT u FROM User u WHERE (:username IS NULL OR :username = '' OR u.username LIKE %:username% OR u.name LIKE %:username%) AND u.username <> 'admin'")
+	List<User> findAllUsersBy(@Param("username") String username);
 }

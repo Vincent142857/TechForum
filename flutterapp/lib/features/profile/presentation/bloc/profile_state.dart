@@ -20,3 +20,12 @@ class ProfileLoaded extends ProfileState {
 }
 
 class ProfileError extends ProfileState {}
+
+class ProfileUpdated extends ProfileState {
+  final UserProEntity userPro;
+
+  const ProfileUpdated({required this.userPro});
+
+  @override
+  List<Object> get props => [userPro];
+}

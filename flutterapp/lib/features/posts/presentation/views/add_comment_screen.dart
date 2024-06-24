@@ -4,13 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapp/features/posts/presentation/bloc/comments_bloc.dart';
+import 'package:flutterapp/features/posts/presentation/views/comments_screen.dart';
 import 'package:flutterapp/features/posts/presentation/widgets/input_text_widget.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddComment extends StatefulWidget {
-  const AddComment({super.key, required this.discussionId});
+  const AddComment(
+      {super.key, required this.discussionId, required this.title});
 
   final int discussionId;
+  final String title;
 
   @override
   State<AddComment> createState() => _AddCommentState();
@@ -19,6 +22,8 @@ class AddComment extends StatefulWidget {
 class _AddCommentState extends State<AddComment> {
   File? image;
   TextEditingController contentController = TextEditingController();
+
+  late int discussionId = widget.discussionId;
 
   Future pickImage() async {
     try {
@@ -43,6 +48,13 @@ class _AddCommentState extends State<AddComment> {
       body: BlocListener<CommentsBloc, CommentsState>(
         listener: (context, state) {
           if (state is AddCommentLoaded) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => CommentsScreen(
+                    discussionId: state.discussionId,
+                    discussionTitle: widget.title),
+              ),
+            );
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text(
@@ -73,15 +85,16 @@ class _AddCommentState extends State<AddComment> {
                     // create Comment
                     context.read<CommentsBloc>().add(AddCommentEvent(
                           content: contentController.text,
-                          discussionId: widget.discussionId,
-                        ));
-
-                    //reload state
-                    context.read<CommentsBloc>().add(LoadCommentsEvent(
-                          discussionId: widget.discussionId,
+                          discussionId: discussionId,
                         ));
                     //to home
-                    Navigator.pop(context);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => CommentsScreen(
+                            discussionId: discussionId,
+                            discussionTitle: 'Discussion $discussionId'),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).primaryColor,

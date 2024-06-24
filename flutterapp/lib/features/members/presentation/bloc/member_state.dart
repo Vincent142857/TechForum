@@ -19,4 +19,11 @@ class MemberSuccess extends MemberState {
   const MemberSuccess({required this.memberEntity});
 }
 
-class MemberFailure extends MemberState {}
+class MemberFailure extends MemberState {
+  final String message;
+
+  const MemberFailure({this.message = ''});
+
+  @override
+  List<Object> get props => [message];
+}

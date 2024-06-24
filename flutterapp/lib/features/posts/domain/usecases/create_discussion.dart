@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutterapp/core/exceptions/failure.dart';
+import 'package:flutterapp/features/posts/domain/entities/dis_req_entity.dart';
 import 'package:flutterapp/features/posts/domain/repository/discussion_repo.dart';
 
 import '../../../../core/usecases/posts/create_discussion.dart';
@@ -11,7 +12,8 @@ class CreateDiscussionUseCase
   CreateDiscussionUseCase({required this.repository});
 
   @override
-  Future<Either<Failure, String>> call(ParamsDiscussion params) async {
+  Future<Either<Failure, DiscussionResponseEntity>> call(
+      ParamsDiscussion params) async {
     return await repository.createDiscussion(
       title: params.title,
       content: params.content,

@@ -15,25 +15,41 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  late var emailController = TextEditingController();
+  late final passwordController = TextEditingController();
   bool _hidePassword = true;
   bool _isFocusedEmail = false;
   bool _isFocusedPassword = false;
 
-  // late MyFormState _state;
-  // void _onEmailChanged() {
-  //   setState(() {
-  //     _state = _state.copyWith(email: Email.dirty(emailController.text));
-  //   });
-  // }
-  //
-  // void _onPasswordChanged() {
-  //   setState(() {
-  //     _state =
-  //         _state.copyWith(password: Password.dirty(passwordController.text));
-  //   });
-  // }
+  late MyFormState _state;
+  void _onEmailChanged() {
+    setState(() {
+      _state = _state.copyWith(email: Email.dirty(emailController.text));
+    });
+  }
+
+  void _onPasswordChanged() {
+    setState(() {
+      _state =
+          _state.copyWith(password: Password.dirty(passwordController.text));
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _state = MyFormState();
+    emailController = TextEditingController(text: _state.email.value)
+      ..addListener(_onEmailChanged);
+    passwordController.addListener(_onPasswordChanged);
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,11 +99,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 16.0),
-                    TextField(
+                    TextFormField(
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
-                        hintText: 'Enter your email',
+                        helperText: "A valid email e.g. hunter@gmail.com",
+                        hintText: 'Enter your username or email',
                         filled: true,
                         fillColor: _isFocusedEmail
                             ? const Color.fromARGB(143, 55, 108, 148)
@@ -97,6 +114,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderSide: BorderSide.none,
                         ),
                       ),
+                      // validator: (value) =>
+                      // _state.email.validator(value ?? '').text(),
                       onTap: () {
                         setState(() {
                           _isFocusedEmail = true;
@@ -178,7 +197,7 @@ class MyFormState with FormzMixin {
     Email? email,
     this.password = const Password.pure(),
     this.status = FormzSubmissionStatus.initial,
-  }) : email = email ?? Email.pure();
+  }) : email = email ?? const Email.pure();
 
   final Email email;
   final Password password;

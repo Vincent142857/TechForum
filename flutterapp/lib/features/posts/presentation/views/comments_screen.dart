@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:flutterapp/features/feed/presentation/views/home_screen.dart';
+import 'package:flutterapp/features/feed/presentation/views/main_screen.dart';
 import 'package:flutterapp/features/feed/presentation/widgets/avatar_widget.dart';
 import 'package:flutterapp/features/feed/presentation/widgets/build_datetime.dart';
+import 'package:flutterapp/features/forums/presentation/bloc/forum_filter/forum_filter_bloc.dart';
+import 'package:flutterapp/features/forums/presentation/bloc/froum_bloc/forum_bloc.dart';
 import 'package:flutterapp/features/posts/domain/entities/comment_entity.dart';
 import 'package:flutterapp/features/posts/presentation/bloc/comments_bloc.dart';
 import 'package:flutterapp/features/posts/presentation/views/add_comment_screen.dart';
+
+import '../../../forums/presentation/bloc/group_bloc/group_bloc.dart';
 
 class CommentsScreen extends StatefulWidget {
   const CommentsScreen(
@@ -26,13 +32,43 @@ class _CommentsScreenState extends State<CommentsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.read<GroupBloc>().add(GetGroupsEvent());
+            // to home
+            context.read<ForumBloc>().add(GetAllForumsEvent());
+            context.read<ForumFilterBloc>().add(UpdateForums());
+            // to home
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => BlocProvider.value(
+                  value: BlocProvider.of<ForumFilterBloc>(context),
+                  child: const MainScreen(),
+                ),
+              ),
+            );
+          },
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             SizedBox(
               height: 700,
-              child: BlocBuilder<CommentsBloc, CommentsState>(
+              child: BlocConsumer<CommentsBloc, CommentsState>(
+                listener: (context, state) {
+                  if (state is CreateDiscussionLoaded) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Discussion added successfully',
+                          style: TextStyle(color: Colors.green),
+                        ),
+                      ),
+                    );
+                  }
+                },
                 builder: (context, state) {
                   if (state is CommentsLoading) {
                     return const Center(
@@ -124,11 +160,12 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     IconButton(
                       icon: const Icon(Icons.comment),
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => AddComment(
                               discussionId: widget.discussionId,
+                              title: widget.discussionTitle,
                             ),
                           ),
                         );
