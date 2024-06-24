@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapp/config/theme/theme_manager.dart';
 import 'package:flutterapp/core/storage/storage.dart';
+import 'package:flutterapp/features/auth/presentation/views/login_screen.dart';
 import 'package:flutterapp/features/feed/presentation/views/home_screen.dart';
 import 'package:flutterapp/features/members/presentation/views/member_list_screen.dart';
 import 'package:image_picker/image_picker.dart';
@@ -119,6 +120,11 @@ class _AppDrawerState extends State<AppDrawer> {
                     TextButton(
                       onPressed: () {
                         context.read<AuthBloc>().add(LoggedOut());
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),
+                          ),
+                        );
                       },
                       child: const Text('Log out'),
                     ),

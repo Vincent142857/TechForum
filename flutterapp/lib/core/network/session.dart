@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutterapp/core/network/api_urls.dart';
 import 'package:flutterapp/core/storage/storage.dart';
+import 'package:flutterapp/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:http/http.dart' as http;
 
 const uri = '${ApiUrls.API_BASE_URL}/auth';
@@ -15,6 +16,7 @@ class NetworkService {
     });
     //check if the response has error 401
     if (response.statusCode == 401) {
+      print("Error 401");
       //handle the error
       String? newAccessToken = await _refreshToken();
       if (newAccessToken != null) {
@@ -25,10 +27,14 @@ class NetworkService {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
         });
+      } else {
+        await _deleteUserId();
+        await _deleteToken();
+        await _deleteCookies();
       }
     }
     //update cookie
-    updateCookie(response);
+    // updateCookie(response);
     return response;
   }
 
@@ -42,6 +48,7 @@ class NetworkService {
     });
     //check if the response has error 401
     if (response.statusCode == 401) {
+      print("Error 401");
       //handle the error
       String? newAccessToken = await _refreshToken();
       if (newAccessToken != null) {
@@ -52,10 +59,14 @@ class NetworkService {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $newAccessToken',
         });
+      } else {
+        await _deleteUserId();
+        await _deleteToken();
+        await _deleteCookies();
       }
     }
     //update cookie
-    updateCookie(response);
+    // updateCookie(response);
     return response;
   }
 
@@ -71,7 +82,7 @@ class NetworkService {
 
   Future<String?> _refreshToken() async {
     String? cookies = await Storage().secureStorage.read(key: 'cookies');
-
+    // print('cookies: $cookies');
     try {
       final response =
           await http.post(Uri.parse('$uri/refreshtoken'), headers: {
@@ -81,12 +92,16 @@ class NetworkService {
         final Map body = json.decode(response.body);
         String? newAccessToken = body['accessToken'];
         //update cookie
-        // updateCookie(response);
+        updateCookie(response);
         return newAccessToken;
       }
     } catch (e) {
       // Handle errors (e.g., log them, rethrow them, etc.)
       print(e);
+      await _deleteUserId();
+      await _deleteToken();
+      await _deleteCookies();
+      return null;
     }
     return null;
   }
@@ -98,5 +113,18 @@ class NetworkService {
   //get access token
   Future<String?> getAccessToken() async {
     return await Storage().secureStorage.read(key: 'token');
+  }
+
+  //delete access token
+  Future<void> _deleteUserId() async {
+    await Storage().secureStorage.delete(key: 'userId');
+  }
+
+  Future<void> _deleteToken() async {
+    await Storage().secureStorage.delete(key: 'token');
+  }
+
+  Future<void> _deleteCookies() async {
+    await Storage().secureStorage.delete(key: 'cookies');
   }
 }

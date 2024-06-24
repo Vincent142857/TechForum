@@ -80,9 +80,6 @@ class AuthDataSourceImp implements AuthDataSource {
       String userId = jsonResponse['username'];
       _saveUserId(userId);
       return jsonResponse['accessToken'];
-    } else if (res.statusCode != HttpStatus.ok) {
-      var body = json.decode(res.body);
-      throw Exception('${res.statusCode}, error: ${body['message']}');
     } else {
       throw ServerException('Unexpected error');
     }
