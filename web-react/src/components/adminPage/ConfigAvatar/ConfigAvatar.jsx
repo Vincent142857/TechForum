@@ -43,7 +43,7 @@ const ConfigAvatar = () => {
   }
 
   useEffect(() => {
-    if ( maxFileSize === null) {
+    if (maxFileSize === null) {
       setErrMaxSize("Max File Size is required");
     } else if (+maxFileSize < 100 || +maxFileSize > 1000000) {
       setErrMaxSize("Max File Size must be between 100 and 1000000");
@@ -53,7 +53,7 @@ const ConfigAvatar = () => {
   }, [maxFileSize]);
 
   useEffect(() => {
-    if ( maxHeight === null) {
+    if (maxHeight === null) {
       setErrHeight("Max Height is required");
     } else if (+maxHeight < 100 || maxHeight > 1200) {
       setErrHeight("Max Height must be between 100 and 1200");
@@ -64,7 +64,7 @@ const ConfigAvatar = () => {
   }, [maxHeight]);
 
   useEffect(() => {
-    if ( maxWidth === null) {
+    if (maxWidth === null) {
       setErrWidth("Max Width is required");
     } else if (maxWidth < 100 || maxWidth > 1200) {
       setErrWidth("Max Width must be between 100 and 1200");
@@ -75,7 +75,7 @@ const ConfigAvatar = () => {
 
 
   const editAvatarOption = async () => {
-    if (errMaxSize!=="" || errHeight!=="" || errWidth!=="") {
+    if (errMaxSize !== "" || errHeight !== "" || errWidth !== "") {
       toast.error("Invalid data");
       return;
     }
@@ -103,7 +103,7 @@ const ConfigAvatar = () => {
 
   return (
     <article className="dashboard content">
-      <h1>ConfigAvatar</h1>
+      <h1>Avatar Option</h1>
 
       <section className="mb-3">
         {avatarOption != null ? (

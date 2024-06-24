@@ -250,7 +250,7 @@ const EmailOption = () => {
 							</div>
 							<div className="form-group mb-3 col-md-6">
 								<label htmlFor="port">
-									Port of port: <span className="text-danger">(*)</span>
+									Port of email: <span className="text-danger">(*)</span>
 								</label>
 								<input
 									value={port}
@@ -359,7 +359,7 @@ const EmailOption = () => {
 									Cancel
 								</button>
 
-								<button style={{minWidth:200}}
+								<button style={{ minWidth: 200 }}
 									className="col-md-2 me-3 btn btn-group-vertical align-items-center"
 									onClick={handleSendEmail}
 								>
