@@ -69,7 +69,6 @@ const Discussion = () => {
 	};
 
 	const handelCheckLoginAndAddNewDiscussion = () => {
-		console.log(currentUser?.accessToken);
 		if (currentUser?.accessToken) {
 			setShowModelAddDiscussion(true);
 		} else {

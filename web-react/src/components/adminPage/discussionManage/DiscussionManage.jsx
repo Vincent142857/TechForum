@@ -96,7 +96,10 @@ const DiscussionManage = () => {
 			axiosJWT
 		);
 		if (res && +res.status === 200) {
-			if (currentUser?.username === res.data.data.roleName) {
+			if (
+				currentUser?.username === res.data.data.roleName ||
+				currentUser?.username === "admin"
+			) {
 				navigate(`/admin/discussion/${discussionId}`);
 			} else {
 				toast.error("You don't have permission");

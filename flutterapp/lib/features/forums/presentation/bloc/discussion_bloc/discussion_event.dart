@@ -7,13 +7,12 @@ abstract class DiscussionEvent extends Equatable {
 }
 
 class GetAllDiscussionsEvent extends DiscussionEvent {
-  final List<DiscussionAllEntity> discussions;
+  final String search;
 
-  const GetAllDiscussionsEvent(
-      {this.discussions = const <DiscussionAllEntity>[]});
+  const GetAllDiscussionsEvent({required this.search});
 
   @override
-  List<Object> get props => [discussions];
+  List<Object> get props => [search];
 }
 
 class GetDiscussionsComplete extends DiscussionEvent {}

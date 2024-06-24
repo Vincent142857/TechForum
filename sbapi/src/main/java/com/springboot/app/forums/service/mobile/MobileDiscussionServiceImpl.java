@@ -36,15 +36,17 @@ public class MobileDiscussionServiceImpl implements MobileDiscussionService{
             mobileAllDiscussion.setCreatedDate(discussion.getCreatedAt());
 
             User user = userRepository.findByUsername(discussion.getCreatedBy()).orElse(null);
-            Badge badge = user.getStat().getBadge();
+            Author author = new Author();
             if (user != null) {
-                Author author = new Author();
+                Badge badge = user.getStat().getBadge();
+                if(badge != null){
+                    author.setBadgeName(badge.getName());
+                    author.setBadgeIcon(badge.getIcon());
+                    author.setBadgeColor(badge.getColor());
+                }
                 author.setUsername(user.getUsername());
                 author.setAvatar(user.getAvatar());
                 author.setImageUrl(user.getImageUrl());
-                author.setBadgeName(badge.getName());
-                author.setBadgeIcon(badge.getIcon());
-                author.setBadgeColor(badge.getColor());
                 mobileAllDiscussion.setAuthor(author);
             }
             return mobileAllDiscussion;

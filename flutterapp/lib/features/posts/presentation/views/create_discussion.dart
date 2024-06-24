@@ -29,8 +29,8 @@ class CreateDiscussion extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             // to home
-            context.read<ForumBloc>().add(GetAllForumsEvent());
-            context.read<ForumFilterBloc>().add(UpdateForums());
+            context.read<ForumBloc>().add(const GetAllForumsEvent());
+            context.read<ForumFilterBloc>().add(const UpdateForums());
             Navigator.of(context).pop();
           },
         ),
@@ -76,13 +76,25 @@ class CreateDiscussion extends StatelessWidget {
                 buildInputFieldTextArea('Description', contentController),
                 ElevatedButton(
                   onPressed: () {
-                    context.read<CommentsBloc>().add(
-                          AddDiscussionEvent(
-                            title: titleController.text,
-                            content: contentController.text,
-                            forumId: forumId,
+                    if (titleController.text.isEmpty ||
+                        contentController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Title and Description cannot be empty',
+                            style: TextStyle(color: Colors.red),
                           ),
-                        );
+                        ),
+                      );
+                    } else {
+                      context.read<CommentsBloc>().add(
+                            AddDiscussionEvent(
+                              title: titleController.text,
+                              content: contentController.text,
+                              forumId: forumId,
+                            ),
+                          );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).primaryColor,

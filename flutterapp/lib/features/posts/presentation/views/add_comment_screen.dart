@@ -83,18 +83,31 @@ class _AddCommentState extends State<AddComment> {
                 ElevatedButton(
                   onPressed: () {
                     // create Comment
-                    context.read<CommentsBloc>().add(AddCommentEvent(
-                          content: contentController.text,
-                          discussionId: discussionId,
-                        ));
-                    //to home
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => CommentsScreen(
-                            discussionId: discussionId,
-                            discussionTitle: 'Discussion $discussionId'),
-                      ),
-                    );
+                    if (contentController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Description cannot be empty',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      );
+                    } else {
+                      context.read<CommentsBloc>().add(
+                            AddCommentEvent(
+                              content: contentController.text,
+                              discussionId: discussionId,
+                            ),
+                          );
+                      //to home
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => CommentsScreen(
+                              discussionId: discussionId,
+                              discussionTitle: 'Discussion $discussionId'),
+                        ),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).primaryColor,
