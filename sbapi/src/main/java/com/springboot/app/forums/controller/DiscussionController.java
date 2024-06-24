@@ -3,6 +3,9 @@ package com.springboot.app.forums.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.springboot.app.accounts.entity.User;
+import com.springboot.app.accounts.enumeration.AccountStatus;
+import com.springboot.app.accounts.repository.UserRepository;
 import com.springboot.app.forums.dto.request.DiscussionCheckRole;
 import com.springboot.app.forums.dto.request.DiscussionUpdateDTO;
 import com.springboot.app.forums.repository.DiscussionRepository;
@@ -49,6 +52,8 @@ public class DiscussionController {
 	private CommentRepository commentRepository;
     @Autowired
     private DiscussionRepository discussionRepository;
+    @Autowired
+    private UserRepository userRepository;
 
 	@PostMapping("/add")
 	public ResponseEntity<ObjectResponse> addDiscussion(@Valid @RequestBody AddDiscussionRequest newDiscussion) {
@@ -69,6 +74,13 @@ public class DiscussionController {
 			username = userSession.getUsername();
 		} catch (Exception e) {
 			logger.error("Error getting user session: {}", e.getMessage());
+		}
+
+
+		User user = userRepository.findByUsername(username).orElse(null);
+		if(user != null && user.getAccountStatus().equals(AccountStatus.LOCKED)){
+			return ResponseEntity.ok(new ObjectResponse("407",
+					String.format("User with username %s is locked", username), null));
 		}
 
 		Discussion discussion = newDiscussion.getDiscussion();
