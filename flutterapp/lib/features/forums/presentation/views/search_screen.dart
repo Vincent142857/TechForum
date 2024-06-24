@@ -13,7 +13,7 @@ class _ForumScreenState extends State<ForumScreen> {
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
-            title: const Text('Forums'),
+            title: const Text('All Discussion'),
             actions: [
               IconButton(
                 icon: const Icon(Icons.search),
@@ -21,8 +21,8 @@ class _ForumScreenState extends State<ForumScreen> {
               ),
             ],
           ),
-          body: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
+          body: const SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Column(
                 // children: [
                 //   SizedBox(
