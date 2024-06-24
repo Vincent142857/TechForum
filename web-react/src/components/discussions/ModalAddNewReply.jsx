@@ -69,7 +69,10 @@ const ModalAddNewReply = (props) => {
 				currentUser?.accessToken,
 				axiosJWT
 			);
-
+			if (+res?.data?.status === 407) {
+				toast.error(res?.data?.message);
+				return;
+			}
 			if (res && +res.data?.status === 201) {
 				handleClose();
 				setContent("");

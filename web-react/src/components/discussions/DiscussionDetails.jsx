@@ -130,7 +130,6 @@ const DiscussionDetails = () => {
 		let res = await getAllCommentByDiscussionId(pageData);
 		if (res?.data?.length > 0) {
 			setListComment(res.data);
-			console.log(res.data);
 			setPageSize(res.pageSize);
 			setTotalPages(res.totalPages);
 		} else {
@@ -182,6 +181,10 @@ const DiscussionDetails = () => {
 				currentUser?.accessToken,
 				axiosJWT
 			);
+			if (+res?.data?.status === 407) {
+				toast.error(res?.data?.message);
+				return;
+			}
 			if (res && +res.data?.status === 201) {
 				setIsShowAddNewComment(false);
 				setContent("");
@@ -191,7 +194,7 @@ const DiscussionDetails = () => {
 				setComments([res.data.data, ...comments]);
 				toast.success(res.data.message);
 			} else {
-				toast.error("Error when creating Comment");
+				toast.error("Can not create Comment");
 			}
 		} catch (error) {
 			console.error("Error:", error);

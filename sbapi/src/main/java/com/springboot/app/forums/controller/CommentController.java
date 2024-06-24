@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import com.springboot.app.accounts.entity.User;
+import com.springboot.app.accounts.enumeration.AccountStatus;
+import com.springboot.app.accounts.repository.UserRepository;
 import com.springboot.app.forums.dto.AddDiscussionRequest;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -44,6 +47,8 @@ public class CommentController {
 
 	@Autowired
 	private CommentService commentService;
+    @Autowired
+    private UserRepository userRepository;
 
 	@PostMapping("/add")
 	public ResponseEntity<ObjectResponse> addComment(@Valid @RequestBody AddCommentRequest newComment) {
@@ -60,6 +65,14 @@ public class CommentController {
 		} catch (Exception e) {
 			logger.error("Error getting user session: {}", e.getMessage());
 		}
+
+		User user = userRepository.findByUsername(username).orElse(null);
+		if(user != null && user.getAccountStatus().equals(AccountStatus.LOCKED)){
+			return ResponseEntity.ok(new ObjectResponse("407",
+					String.format("User with username %s is locked", username), null));
+		}
+
+
 		ServiceResponse<Comment> response = commentService.addComment(discussion.getId(), newComment.getComment(),
 				username, newComment.getReplyToId());
 		CommentDTO commentDTO = modelMapper.map(response.getDataObject(), CommentDTO.class);
