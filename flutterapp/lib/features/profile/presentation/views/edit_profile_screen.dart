@@ -24,6 +24,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late TextEditingController _addressController;
   DateTime? _selectedDate;
 
+  String? _nameError;
+  String? _emailError;
+  String? _phoneError;
+  String? _bioError;
+  String? _genderError;
+  String? _addressError;
+  String? _dateError;
+
   @override
   void initState() {
     super.initState();
@@ -49,6 +57,45 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         _selectedDate = pickedDate;
       });
     });
+  }
+
+  void _validateUpdateProfile() {
+    setState(() {
+      _nameError = _nameController.text.isEmpty ? 'Name cannot be empty' : null;
+      _emailError =
+          _emailController.text.isEmpty ? 'Email cannot be empty' : null;
+      _phoneError =
+          _phoneController.text.isEmpty ? 'Phone cannot be empty' : null;
+      _bioError = _bioController.text.isEmpty ? 'Bio cannot be empty' : null;
+      _genderError =
+          _genderController.text.isEmpty ? 'Gender cannot be empty' : null;
+      _addressError =
+          _addressController.text.isEmpty ? 'Address cannot be empty' : null;
+      _dateError = _selectedDate == null ? 'Date cannot be empty' : null;
+    });
+
+    if (_nameError != null &&
+        _emailError != null &&
+        _addressError != null &&
+        _bioError != null &&
+        _genderError != null &&
+        _phoneError != null &&
+        _dateError != null) {
+      // Update the user's profile with the new information
+      context.read<ProfileBloc>().add(UpdateProfileEvent(
+            userPro: ParamsEditUserPro(
+                username: widget.user.username,
+                name: _nameController.text,
+                phone: _phoneController.text,
+                email: _emailController.text,
+                bio: _bioController.text,
+                birthday: _selectedDate,
+                address: _addressController.text,
+                gender: _genderController.text),
+          ));
+      // Navigate back to the ProfileScreen
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -79,22 +126,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 children: [
                   TextField(
                     controller: _nameController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Name',
+                      errorText: _nameError,
                     ),
                   ),
                   const SizedBox(height: 12.0),
                   TextField(
                     controller: _emailController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Email',
+                      errorText: _emailError,
                     ),
                   ),
                   const SizedBox(height: 12.0),
                   TextField(
                     controller: _bioController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Bio',
+                      errorText: _bioError,
                     ),
                     maxLines: 3,
                   ),
@@ -118,39 +168,37 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ],
                     ),
                   ),
+                  if (_dateError != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 1.0),
+                      child: Text(
+                        _dateError!,
+                        style: const TextStyle(
+                          color: Color.fromARGB(255, 244, 165, 160),
+                          fontSize: 12.0,
+                        ),
+                      ),
+                    ),
                   const SizedBox(height: 12.0),
                   TextField(
                     controller: _genderController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Gender',
+                      errorText: _genderError,
                     ),
                   ),
                   const SizedBox(height: 12.0),
                   TextField(
                     controller: _addressController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Address',
+                      errorText: _addressError,
                     ),
                     maxLines: 2,
                   ),
                   const SizedBox(height: 16.0),
                   ElevatedButton(
-                    onPressed: () {
-                      // Update the user's profile with the new information
-                      context.read<ProfileBloc>().add(UpdateProfileEvent(
-                            userPro: ParamsEditUserPro(
-                                username: widget.user.username,
-                                name: _nameController.text,
-                                phone: _phoneController.text,
-                                email: _emailController.text,
-                                bio: _bioController.text,
-                                birthday: _selectedDate,
-                                address: _addressController.text,
-                                gender: _genderController.text),
-                          ));
-                      // Navigate back to the ProfileScreen
-                      Navigator.pop(context);
-                    },
+                    onPressed: _validateUpdateProfile,
                     child: const Text('Save'),
                   ),
                 ],
