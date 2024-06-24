@@ -20,6 +20,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _hidePassword = true;
   bool _isFocusedEmail = false;
   bool _isFocusedPassword = false;
+  String? _emailError;
+  String? _passwordError;
 
   late MyFormState _state;
   void _onEmailChanged() {
@@ -51,6 +53,30 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  void _validateAndLogin() {
+    const emailPattern = r'^[^@]+@[^@]+\.[^@]+';
+    final emailRegExp = RegExp(emailPattern);
+
+    setState(() {
+      if (emailController.text.contains('@')) {
+        _emailError = emailController.text.isEmpty
+            ? 'Email cannot be empty'
+            : (!emailRegExp.hasMatch(emailController.text)
+                ? 'Enter a valid email address'
+                : null);
+      } else {
+        _emailError = emailController.text.isEmpty ? 'Username cannot be empty' : null;
+      }
+      _passwordError = passwordController.text.isEmpty ? 'Password cannot be empty' : null;
+    });
+
+    if (_emailError == null && _passwordError == null) {
+      context.read<AuthBloc>().add(LoggedIn(
+        email: emailController.text,
+        password: passwordController.text,
+      ));
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,6 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
                           borderSide: BorderSide.none,
                         ),
+                        errorText: _emailError,
                       ),
                       // validator: (value) =>
                       // _state.email.validator(value ?? '').text(),
@@ -152,6 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             });
                           },
                         ),
+                        errorText: _passwordError,
                       ),
                       onTap: () {
                         setState(() {
@@ -167,11 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 18.0),
                     ElevatedButton(
-                      onPressed: () {
-                        context.read<AuthBloc>().add(LoggedIn(
-                            email: emailController.text,
-                            password: passwordController.text));
-                      },
+                      onPressed: _validateAndLogin,
                       child: const Text(
                         'SIGN IN',
                         style: TextStyle(

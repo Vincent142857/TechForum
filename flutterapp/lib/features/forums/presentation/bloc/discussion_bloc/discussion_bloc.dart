@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutterapp/core/usecases/search/get_all_discussion.dart';
 import 'package:flutterapp/features/forums/domain/entities/discussion_entity.dart';
@@ -18,12 +17,15 @@ class DiscussionBloc extends Bloc<GetAllDiscussionsEvent, DiscussionState> {
       emit(DiscussionLoading());
       try {
         await _getAllDiscussionCase
-            .call(ParamsGetDiscussionTitle(title: title))
+            .call(ParamsGetDiscussionTitle(title: event.search))
             .then((discussions) {
           discussions.fold(
             (l) => emit(
                 const DiscussionFailure(message: "Error loading discussion")),
-            (discussions) => emit(DiscussionSuccess(discussions: discussions)),
+            (discussions) => emit(DiscussionSuccess(
+              discussions: discussions,
+              search: event.search,
+            )),
           );
         });
       } catch (err) {
