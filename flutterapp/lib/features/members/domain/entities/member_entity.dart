@@ -10,6 +10,7 @@ class MemberEntity extends Equatable {
   final int totalDiscussions;
   final int totalComments;
   final int reputation;
+  final String status;
 
   const MemberEntity({
     required this.userId,
@@ -21,6 +22,7 @@ class MemberEntity extends Equatable {
     required this.totalDiscussions,
     required this.totalComments,
     required this.reputation,
+    required this.status,
   });
 
   @override
@@ -33,6 +35,7 @@ class MemberEntity extends Equatable {
         imageUrl,
         totalDiscussions,
         totalComments,
-        reputation
+        reputation,
+        status,
       ];
 }

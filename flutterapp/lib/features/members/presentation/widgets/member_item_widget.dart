@@ -38,6 +38,9 @@ class MemberItem extends StatelessWidget {
                   height: 100,
                 ),
               ),
+              SizedBox(
+                height: 10,
+              ),
               InkWell(
                   onTap: () {
                     context
@@ -55,7 +58,15 @@ class MemberItem extends StatelessWidget {
                   },
                   child: buildName(user)),
               Center(
-                child: buildFollowButton(),
+                child: TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    user.status,
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),

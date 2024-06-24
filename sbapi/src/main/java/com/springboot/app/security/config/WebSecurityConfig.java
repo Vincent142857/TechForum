@@ -86,8 +86,7 @@ public class WebSecurityConfig {
                         auth.requestMatchers("/","/api/auth/**").permitAll()
                                 .requestMatchers("/api/reset-password/**").permitAll()
                                 .requestMatchers("/api/user-stat/**", "/api/view/**").permitAll()
-                                .requestMatchers("/api/mobile/**").permitAll()
-                                //FIXME: openApi specifications for development, please remove in production
+                                .requestMatchers("/api/mobiles/**").permitAll()
                                 .requestMatchers("/api/test/**").permitAll()
                                 .requestMatchers("/swagger-ui/**", "/v3/**").permitAll()
                                 .anyRequest().authenticated()

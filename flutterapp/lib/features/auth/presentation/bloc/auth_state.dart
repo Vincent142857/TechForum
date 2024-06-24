@@ -1,9 +1,5 @@
 part of 'auth_bloc.dart';
 
-enum LoginEventStatus { initial, loading, success, failure }
-
-enum RegisterEventStatus { initial, loading, success, failure }
-
 abstract class AuthState extends Equatable {
   @override
   List<Object> get props => [];
@@ -33,17 +29,13 @@ class LoginFailure extends AuthState {
 }
 
 //register state
-class RegisterState extends AuthState {
-  final RegisterEventStatus status;
-  final String? message;
+class RegisterSuccess extends AuthState {}
 
-  RegisterState({
-    required this.status,
-    this.message = "",
-  });
-
+class RegisterFailure extends AuthState {
+  final String message;
+  RegisterFailure({this.message = ''});
   @override
-  List<Object> get props => [status, message!];
+  List<Object> get props => [message];
 }
 
 class ProfPicLoading extends AuthState {}

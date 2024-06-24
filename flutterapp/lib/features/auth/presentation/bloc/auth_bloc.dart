@@ -65,11 +65,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await _deleteToken();
       await _deleteUserId();
       await _deleteCookies();
-      await _deleteAvatarUrl();
       emit(Unauthenticated());
     });
     on<Register>((event, emit) async {
-      emit(RegisterState(status: RegisterEventStatus.loading, message: null));
       final username = event.username;
       final email = event.email;
       final password = event.password;
@@ -82,11 +80,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         ),
       );
       res.fold(
-          (l) => emit(RegisterState(
-              status: RegisterEventStatus.failure,
-              message: "Username or email already exists.")),
-          (res) => emit(RegisterState(
-              status: RegisterEventStatus.success, message: res)));
+          (l) => emit(
+              RegisterFailure(message: "Username or email already exists.")),
+          (res) => emit(RegisterSuccess()));
     });
     on<ChangeProfPic>((event, emit) {
       emit(ProfPicLoading());
@@ -112,10 +108,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _deleteCookies() async {
     await Storage().secureStorage.delete(key: 'cookies');
-  }
-
-  Future<void> _deleteAvatarUrl() async {
-    await Storage().secureStorage.delete(key: 'avatarUrl');
   }
 
   Future<void> _saveToken(String token) async {

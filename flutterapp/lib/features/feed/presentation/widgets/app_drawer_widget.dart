@@ -1,12 +1,15 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterapp/config/theme/theme_manager.dart';
 import 'package:flutterapp/core/storage/storage.dart';
 import 'package:flutterapp/features/feed/presentation/views/home_screen.dart';
 import 'package:flutterapp/features/members/presentation/views/member_list_screen.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../profile/presentation/views/profile_screen.dart';
@@ -64,21 +67,16 @@ class _AppDrawerState extends State<AppDrawer> {
                   Icons.person,
                   size: 70,
                 ),
-                trailing: Column(
-                  children: [
-                    image != null
-                        ? TextButton(
-                            onPressed: () {
-                              context
-                                  .read<AuthBloc>()
-                                  .add(ChangeProfPic(image!));
-                            },
-                            child: const Text('Submit'))
-                        : TextButton(
-                            onPressed: () => pickImage(),
-                            child: const Text('Change Pic')),
-                  ],
-                ),
+                trailing: Consumer<ThemeService>(
+                    builder: (context, ThemeService theme, _) {
+                  return IconButton(
+                      onPressed: () {
+                        theme.toggleTheme();
+                      },
+                      icon: Icon(theme.darkTheme!
+                          ? Icons.sunny
+                          : CupertinoIcons.moon_stars));
+                }),
               ),
               BlocBuilder<AuthBloc, AuthState>(
                 builder: (context, state) {
@@ -118,37 +116,6 @@ class _AppDrawerState extends State<AppDrawer> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
-                          ),
-                          (route) => false,
-                        );
-                      },
-                      child: const Text('Home'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        // Navigator.of(context).push(
-                        //   MaterialPageRoute(
-                        //     builder: (context) => const ForumsScreen(),
-                        //   ),
-                        // );
-                      },
-                      child: const Text('Forums'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const MemberListScreen(),
-                          ),
-                        );
-                      },
-                      child: const Text('Members'),
-                    ),
                     TextButton(
                       onPressed: () {
                         context.read<AuthBloc>().add(LoggedOut());

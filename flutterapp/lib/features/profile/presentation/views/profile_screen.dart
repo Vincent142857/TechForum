@@ -117,8 +117,8 @@ class _ProfileScreenState extends State<ProfileScreen>
         const SizedBox(height: 14),
         buildName(user),
         const SizedBox(height: 14),
-        Center(child: buildUpgradeButton()),
-        const SizedBox(height: 14),
+        // Center(child: buildUpgradeButton()),
+        // const SizedBox(height: 14),
         NumbersWidget(user: user),
         const SizedBox(height: 24),
         //buildAbout(user),
@@ -160,33 +160,38 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 
   // Build Name----------------------------------------------------------------
-  Widget buildName(UserProEntity user) => Column(
-        children: [
-          Text(
-            user.name ?? user.username ?? "Anonymous",
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            user.email ?? "No email",
-            style: const TextStyle(color: Colors.grey),
-          ),
-          const SizedBox(height: 4),
-          const Center(
-            child: Text(
-              "No bio",
-              style: TextStyle(
-                fontSize: 16,
-                height: 2, // Adjust the line height as desired
-                fontWeight: FontWeight.normal,
-                fontStyle: FontStyle.italic,
-                color: Color.fromARGB(255, 172, 161, 161),
-              ),
-              textAlign: TextAlign.center, // Center-align the text
+  Widget buildName(UserProEntity user) {
+    String? name = user.name != ''
+        ? user.name
+        : (user.username != '' ? user.username : "Anonymous");
+    return Column(
+      children: [
+        Text(
+          name ?? "Anonymous",
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          user.email ?? "No email",
+          style: const TextStyle(color: Colors.grey),
+        ),
+        const SizedBox(height: 4),
+        const Center(
+          child: Text(
+            "No bio",
+            style: TextStyle(
+              fontSize: 16,
+              height: 2, // Adjust the line height as desired
+              fontWeight: FontWeight.normal,
+              fontStyle: FontStyle.italic,
+              color: Color.fromARGB(255, 172, 161, 161),
             ),
-          )
-        ],
-      );
+            textAlign: TextAlign.center, // Center-align the text
+          ),
+        )
+      ],
+    );
+  }
 
   Widget buildUpgradeButton() => ButtonWidget(
         text: 'Follow',
@@ -337,24 +342,24 @@ class _ProfileScreenState extends State<ProfileScreen>
               ],
             ),
             const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditProfileScreen(user: user),
-                  ),
-                );
-              },
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.edit),
-                  SizedBox(width: 8),
-                  Text('Edit Profile'),
-                ],
-              ),
-            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) => EditProfileScreen(user: user),
+            //       ),
+            //     );
+            //   },
+            //   child: const Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       Icon(Icons.edit),
+            //       SizedBox(width: 8),
+            //       Text('Edit Profile'),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),

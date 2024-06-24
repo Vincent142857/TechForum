@@ -11,5 +11,4 @@ class Storage {
   String token = ''; //access token
   String userId = ''; //username
   String cookies = '';
-  String avatarUrl = '';
 }

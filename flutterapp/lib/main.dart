@@ -77,7 +77,7 @@ class MyApp extends StatelessWidget {
                     } else if (state is Unauthenticated) {
                       return const LoginScreen();
                     } else {
-                      return const RegisterScreen();
+                      return Container();
                     }
                   },
                 ),
