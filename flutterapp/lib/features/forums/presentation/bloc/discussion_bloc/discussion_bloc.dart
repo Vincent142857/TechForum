@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutterapp/core/usecases/search/get_all_discussion.dart';
 import 'package:flutterapp/features/forums/domain/entities/discussion_entity.dart';

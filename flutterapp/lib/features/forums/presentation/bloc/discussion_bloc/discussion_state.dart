@@ -14,7 +14,7 @@ class DiscussionSuccess extends DiscussionState {
 
   const DiscussionSuccess({
     this.discussions = const <DiscussionAllEntity>[],
-    this.search = '',
+    this.search = "",
   });
 
   @override
