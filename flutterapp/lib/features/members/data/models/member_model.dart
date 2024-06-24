@@ -14,6 +14,7 @@ class MemberModel extends MemberEntity {
     required int totalDiscussions,
     required int totalComments,
     required int reputation,
+    required String status,
   }) : super(
           userId: userId,
           username: username,
@@ -24,6 +25,7 @@ class MemberModel extends MemberEntity {
           totalDiscussions: totalDiscussions,
           totalComments: totalComments,
           reputation: reputation,
+          status: status,
         );
 
   factory MemberModel.fromMap(Map<String, dynamic> json) {
@@ -37,21 +39,8 @@ class MemberModel extends MemberEntity {
       totalDiscussions: (json['totalDiscussions'] ?? 0) as int,
       totalComments: (json['totalComments'] ?? 0) as int,
       reputation: (json['reputation'] ?? 0) as int,
+      status: (json['status'] ?? "") as String,
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'userId': userId,
-      'username': username,
-      'name': name,
-      'email': email,
-      'avatar': avatar,
-      'imageUrl': imageUrl,
-      'totalDiscussions': totalDiscussions,
-      'totalComments': totalComments,
-      'reputation': reputation,
-    };
   }
 
   factory MemberModel.fromJson(source) =>

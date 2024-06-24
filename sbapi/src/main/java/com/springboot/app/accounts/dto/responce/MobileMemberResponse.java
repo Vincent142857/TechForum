@@ -1,5 +1,6 @@
 package com.springboot.app.accounts.dto.responce;
 
+import com.springboot.app.accounts.enumeration.AccountStatus;
 import lombok.Data;
 
 @Data
@@ -13,4 +14,5 @@ public class MobileMemberResponse {
 	private Long totalDiscussions;
 	private Long totalComments;
 	private Long reputation;
+	private AccountStatus status;
 }

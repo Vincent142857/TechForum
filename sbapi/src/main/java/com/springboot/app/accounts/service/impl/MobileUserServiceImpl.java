@@ -184,7 +184,7 @@ public class MobileUserServiceImpl implements MobileUserService {
 		member.setName(user.getName());
 		member.setAvatar(user.getAvatar());
 		member.setImageUrl(user.getImageUrl());
-
+		member.setStatus(user.getAccountStatus());
 		member.setTotalDiscussions(user.getStat().getDiscussionCount());
 		member.setTotalComments(user.getStat().getCommentCount());
 		member.setReputation(user.getStat().getReputation());

@@ -45,20 +45,6 @@ class _HomeScreenState extends State<HomeScreen>
                   return [
                     SliverAppBar(
                       title: const Text("Tech Forums"),
-                      elevation: 0,
-                      iconTheme: Theme.of(context).iconTheme,
-                      actions: [
-                        Consumer<ThemeService>(
-                            builder: (context, ThemeService theme, _) {
-                          return IconButton(
-                              onPressed: () {
-                                theme.toggleTheme();
-                              },
-                              icon: Icon(theme.darkTheme!
-                                  ? Icons.sunny
-                                  : CupertinoIcons.moon_stars));
-                        })
-                      ],
                       expandedHeight: 30.0,
                       pinned: true,
                       floating: false,
@@ -112,13 +98,6 @@ class _HomeScreenState extends State<HomeScreen>
     return BlocConsumer<ForumFilterBloc, ForumFilterState>(
       listener: (context, state) {
         context.read<ForumBloc>().add(GetAllForumsEvent());
-        // if (state is ForumFilterLoaded) {
-        //   ScaffoldMessenger.of(context).showSnackBar(
-        //     const SnackBar(
-        //       content: Text('Forums loaded'),
-        //     ),
-        //   );
-        // }
       },
       builder: (context, state) {
         if (state is ForumFilterLoading) {
