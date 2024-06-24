@@ -35,4 +35,7 @@ public interface DiscussionRepository extends JpaRepository<Discussion, Long> {
 	@Query("SELECT d FROM Discussion d JOIN d.tags t WHERE t.id = :tagId")
 	List<Discussion> findDiscussionsByTagId(@Param("tagId") Long tagId);
 
+	@Query("SELECT d FROM Discussion d WHERE (:title IS NULL OR :title = '' OR d.title LIKE %:title%)")
+	List<Discussion> searchDiscussionByTitle(@Param("title") String title);
+
 }

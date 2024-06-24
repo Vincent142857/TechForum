@@ -73,7 +73,7 @@ public class DicussionViewController {
 			@RequestParam(value = "size", defaultValue = "10", required = false) int size,
 			@RequestParam(value = "orderBy", defaultValue = "id", required = false) String orderBy,
 			@RequestParam(value = "sort", defaultValue = "ASC", required = false) String sort,
-			@RequestParam(value = "discussionId", defaultValue = "", required = true) Long discussionId) {
+			@RequestParam(value = "discussionId", defaultValue = "", required = false) Long discussionId) {
 		if (discussionId == null || discussionId == 0) {
 			return ResponseEntity.badRequest().body(new ObjectResponse("400", "Discussion ID is required", null));
 		}

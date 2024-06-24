@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        drawer: AppDrawer(),
+        drawer: const AppDrawer(),
         body: BlocBuilder<GroupBloc, GroupState>(builder: (context, state) {
           if (state is GroupLoading) {
             return const Center(
@@ -81,10 +81,8 @@ class _HomeScreenState extends State<HomeScreen>
                         isScrollable: true, // Cho phép cuộn ngang
                         tabs: [
                           const TabItem(title: "All", color: "blue"),
-                          ...state.groups
-                              .map((tab) =>
-                                  TabItem(title: tab.title, color: tab.color))
-                              .toList()
+                          ...state.groups.map((tab) =>
+                              TabItem(title: tab.title, color: tab.color))
                         ],
                       ),
                     ),
@@ -93,9 +91,7 @@ class _HomeScreenState extends State<HomeScreen>
                 body: TabBarView(
                   children: [
                     _toForumGroup("All"),
-                    ...state.groups
-                        .map((tab) => _toForumGroup(tab.title))
-                        .toList(),
+                    ...state.groups.map((tab) => _toForumGroup(tab.title)),
                   ],
                 ),
               ),

@@ -25,6 +25,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emit(ProfileLoading());
       final result = await _getUserProUseCase
           .call(ParamsGetUserPro(username: event.username));
+
       result.fold((failure) => emit(ProfileError()),
           (userPro) => emit(ProfileLoaded(userPro: userPro)));
     });
