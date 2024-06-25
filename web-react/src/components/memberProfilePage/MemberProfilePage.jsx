@@ -106,7 +106,7 @@ const MemberProfile = () => {
       setUserInfo(res?.data);
     } else {
       toast.error("Update info user failed");
-      console.log(`Update Error`, res.message);
+      console.log(`Update Error`, res?.message);
     }
     return null;
   }
@@ -252,7 +252,7 @@ const MemberProfile = () => {
                 />
                 {username === currentUser.username &&
                   <div onClick={() => setShowModalImage(true)}>
-                    <i className="fa-solid fa-pen-to-square"></i>
+                    <i className="fa-solid fa-pen-to-square text-danger"></i>
                   </div>
                 }
                 <h5 className="title">{username}</h5>

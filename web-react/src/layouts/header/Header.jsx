@@ -40,7 +40,7 @@ function Header() {
 		logOut(dispatch, id, navigate, accessToken, axiosJWT);
 	};
 	const [isOpen, setIsOpen] = React.useState(false);
-	const [dropdownOpen, setDropdownOpen] = React.useState(false);
+	// const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
 	const [dropdownOpenAccount, setDropdownOpenAccount] = React.useState(false);
 
@@ -57,10 +57,10 @@ function Header() {
 		setIsOpen(!isOpen);
 	};
 
-	const dropdownToggle = (e) => {
-		e.preventDefault();
-		setDropdownOpen(!dropdownOpen);
-	};
+	// const dropdownToggle = (e) => {
+	// 	e.preventDefault();
+	// 	setDropdownOpen(!dropdownOpen);
+	// };
 
 	const dropdownToggleAccount = (e) => {
 		e.preventDefault();

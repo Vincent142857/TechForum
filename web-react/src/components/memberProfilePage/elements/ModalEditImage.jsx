@@ -90,6 +90,7 @@ const ModalEditImage = (props) => {
             id="file"
             onChange={(event) => loadFile(event)}
           />
+          <p className="mt-3">Note: the size of the image file.</p>
         </Col>
       </Modal.Body>
 

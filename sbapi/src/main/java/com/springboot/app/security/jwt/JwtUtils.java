@@ -118,7 +118,7 @@ public class JwtUtils {
 	private ResponseCookie generateCookie(String name, String value, String path) {
 		ResponseCookie cookie = ResponseCookie.from(name, value)
 				.path(path)
-				.maxAge(24 * 60 * 60)
+				.maxAge(7*24 * 60 * 60)
 				.httpOnly(true)
 				.build();
 		return cookie;

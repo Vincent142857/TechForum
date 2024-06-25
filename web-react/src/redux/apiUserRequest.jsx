@@ -28,7 +28,7 @@ export const getAllUsers = async (accessToken, dispatch, axiosJWT, pageData) => 
     return res.data;
   } catch (err) {
     dispatch(getUsersFailed());
-    console.log(`Error`,JSON.stringify(err?.message));
+    console.log(`Error`, JSON.stringify(err?.message));
   }
 };
 
@@ -54,10 +54,11 @@ export const uploadAvatar = async (dispatch, accessToken, axiosJWT, data, userna
         'Content-Type': 'multipart/form-data',
       },
     });
-    dispatch(uploadAvatarSuccess(res.data.data));
+    if (+res?.data?.status === 200) {
+      dispatch(uploadAvatarSuccess(res?.data?.data));
+    }
     return res.data;
   } catch (err) {
     dispatch(uploadAvatarFailed());
-    console.error("Error upload avatar", JSON.stringify(err.message));
   }
 }
