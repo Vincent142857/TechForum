@@ -94,6 +94,10 @@ class NetworkService {
         //update cookie
         updateCookie(response);
         return newAccessToken;
+      } else {
+        await _deleteUserId();
+        await _deleteToken();
+        await _deleteCookies();
       }
     } catch (e) {
       // Handle errors (e.g., log them, rethrow them, etc.)

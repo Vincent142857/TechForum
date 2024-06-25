@@ -86,7 +86,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                   } else if (state is CommentsError) {
                     return const Center(child: Text('Error connection'));
                   } else {
-                    return const Center(child: Text('EMPTY'));
+                    return const Center(child: Text("Loading..."));
                   }
                 },
               ),

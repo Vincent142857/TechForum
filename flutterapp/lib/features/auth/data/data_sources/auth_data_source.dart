@@ -48,7 +48,7 @@ class AuthDataSourceImp implements AuthDataSource {
           }));
 
       Map jsonResponse = json.decode(res.body);
-      print(res.body);
+      // print(res.body);
       if (res.statusCode == 200) {
         print("User created successfully");
         return "User created successfully";
@@ -74,7 +74,7 @@ class AuthDataSourceImp implements AuthDataSource {
         }));
 
     Map jsonResponse = json.decode(res.body);
-    print(res.body);
+    // print(res.body);
 
     if (res.statusCode == 200) {
       String userId = jsonResponse['username'];

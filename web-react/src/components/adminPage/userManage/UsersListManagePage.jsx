@@ -126,11 +126,11 @@ function UserListManage() {
       return toast.error("Can't delete admin");
     }
     let res = await deleteUser(currentUser?.accessToken, user.id, axiosJWT);
-    if (+res?.status ===200 || +res?.data?.status === 200) {
+    if (+res?.status === 200 || +res?.data?.status === 200) {
       setShowModal(false);
       toast.success("Deleted successfully!");
       setUserDelete({});
-      getAllUsersData();
+      await getAllUsersData("");
     } else {
       toast.error(res?.message);
     }
@@ -148,18 +148,16 @@ function UserListManage() {
     }
   }
 
-  const handleUpdateRole = async(dataRole) => {
+  const handleUpdateRole = async (dataRole) => {
     let res = await updateNewRoleForUser(dataRole, axiosJWT, currentUser?.accessToken);
-    console.log(`Update role`, JSON.stringify(res.data));
     if (+res?.status === 200 || +res?.data?.status === 200) {
       toast.success("Updated new role successfully");
       setShowModalRole(false);
       setUserEdit({});
       getAllUsersData("");
     } else {
-      toast.error(res?.data?.message)
+      toast.error("Can not update new role for User")
     }
-
   }
 
 

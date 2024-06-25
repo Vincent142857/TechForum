@@ -28,7 +28,6 @@ const convertRoleToArray = (role) => {
 const ModalEditRole = (props) => {
 
   const { show, handleClose, handleUpdateRole, user } = props;
-  console.log(`User Role`, JSON.stringify(user));
 
   const [role, setRole] = useState(null);
   const [errMsg, setErrMsg] = useState(null);
